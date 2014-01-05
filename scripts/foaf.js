@@ -268,12 +268,14 @@ var FoafBx = React.createClass({
 	},
 
 	render: function () {
-//				<Person pgs={this.state.primaryTopicsPointedGraphs}/>
 	   console.log("rendering FoafBx with primarytopics");
 		console.log(this.state.primaryTopicsPointedGraphs);
 		return (
 			<div className="PersonalProfileDocument">
 				<h2 className="document">{this.props.url}</h2>
+				<h3>Primary Topic</h3>
+				<Person pgs={this.state.primaryTopicsPointedGraphs}/>
+				<h3>Friends</h3>
 				<Friends primaryTopicsPointedGraphs={this.state.primaryTopicsPointedGraphs}/>
 			</div>
 			);
