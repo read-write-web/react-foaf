@@ -146,7 +146,7 @@ var MiniPerson = React.createClass({
 			function (jumpedPG) {
 				console.log("MiniPerson.  PG(_," + component.props.personPointedGraph.pointer + ","
 					+ component.props.personPointedGraph.webGraph + ",_).jumpAsync=PG(_," + jumpedPG.pointer + "," + jumpedPG.webGraph + ",_)");
-				component.setState({
+				component.replaceState({
 					jumpedPointedGraph: jumpedPG,
 				})
 			},
@@ -291,7 +291,7 @@ var FoafBx = React.createClass({
 			function (pg) {
 				console.log("received graph for url=" + url);
 				var pt = pg.rel(FOAF("primaryTopic"))
-				component.setState({
+				component.replaceState({
 					primaryTopicsPointedGraphs: pt
 				})
 				//need loading function to display advances in download
