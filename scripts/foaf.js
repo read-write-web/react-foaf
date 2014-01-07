@@ -1,7 +1,8 @@
 /** @jsx React.DOM */
 
 
-$rdf.Fetcher.crossSiteProxyTemplate = "http://localhost:9000/srv/cors?url=";
+//$rdf.Fetcher.crossSiteProxyTemplate = "http://localhost:9000/srv/cors?url=";
+$rdf.Fetcher.crossSiteProxyTemplate = "http://data.fm/proxy?uri=";
 $rdf.Fetcher.onlyUseProxy = true;
 
 var foafSpec = "http://xmlns.com/foaf/spec/";
