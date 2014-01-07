@@ -82,8 +82,10 @@ var Friends = React.createClass({
 		console.log("rendering theses friends");
 		console.log(foafs);
 		return (
-			<div className="foaf">
-			{ foafs }
+			<div className="contacts clearfix">
+				<ul className="clearfix">
+			    { foafs }
+			   </ul>
 			</div>
 			);
 	}
@@ -118,7 +120,7 @@ var MiniPerson = React.createClass({
 	},
 
 	render: function () {
-		var pix = ( <img/> );
+		var pix = <img src="img/avatar.png" alt="Picture"/> ;
 
 		console.log("in mini person");
 		if (this.state && this.state.jumped) {
@@ -138,7 +140,7 @@ var MiniPerson = React.createClass({
 			console.log(pixSyms);
 
 			if (pixSyms && pixSyms.length > 0) {
-				pix = ( <img src={pixSyms[0].value}/> )
+				pix = ( <img src={pixSyms[0].value} alt="Picture"/> )
 			}
 		}
 
@@ -155,8 +157,15 @@ var MiniPerson = React.createClass({
 			lastName: relLiteral(FOAF("lastName")),
 			firstName: relLiteral(FOAF("firstName"))
 		};
+
+		var nameInfo = _.chain(_.keys(name))
+			.filter(function(key) { return !!name[key] })
+			.map(function(key) {
+				return ( <div className={key}>{name[key]}</div> )
+			}).value()
+
 		console.log("displaying mini person");
-		console.log(name);
+		console.log(nameInfo);
 
 
 		var info = undefined;
@@ -184,11 +193,10 @@ var MiniPerson = React.createClass({
 		console.log(info);
 
 		return (
-			<span class="miniagent">
-				{info}
-				<Name names={name}/>
-			   {pix}
-			</span>
+			<li className="contact clearfix">
+				<div className="picture">{pix}</div>
+			{nameInfo}
+			</li>
 			)
 	}
 });
@@ -274,12 +282,13 @@ var FoafBx = React.createClass({
 	render: function () {
 	   console.log("rendering FoafBx with primarytopics");
 		console.log(this.state.primaryTopicsPointedGraphs);
+
+		//removed
+		//				<Person pgs={this.state.primaryTopicsPointedGraphs}/>
 		return (
 			<div className="PersonalProfileDocument">
 				<SearchBox url={this.state.url} onUserInput={this.fetchURL}/>
-				<h3>Primary Topic</h3>
-				<Person pgs={this.state.primaryTopicsPointedGraphs}/>
-				<h3>Friends</h3>
+				<div id="actionNeeded">Action needed</div>
 				<Friends primaryTopicsPointedGraphs={this.state.primaryTopicsPointedGraphs}/>
 			</div>
 			);
@@ -300,37 +309,50 @@ var SearchBox = React.createClass({
 		this.setState({text: e.target.value});
 	},
 	render: function() {
-		return (
-			<form onSubmit={this.handleSubmit}>
-				<input
-				type="text"
-				placeholder="Enter URL of foaf profile..."
-				value={this.state.url}
-				width="100"
-				ref="url"
-			   onChange={this.onChange}
-				/>
-				<button>submit</button>
-		   </form>
-			)
+		return ( <form id="search" onSubmit={this.handleSubmit}>
+			<div id="add">+</div>
+			<input type="text"
+			       placeholder="Enter URL of foaf profile..."
+			       value={this.state.url}
+			       width="100"
+			       ref="url"
+			       onChange={this.onChange}
+			/>
+			<button type="submit" class="fontawesome-ok"></button>
+		</form> );
+
+//		return (
+//			<form onSubmit={this.handleSubmit}>
+//				<input
+//				type="text"
+//				placeholder="Enter URL of foaf profile..."
+//				value={this.state.url}
+//				width="100"
+//				ref="url"
+//			   onChange={this.onChange}
+//				/>
+//				<button>submit</button>
+//		   </form>
+//			)
 	}
 });
 
 
 
-$rdf.fetcher(store,1000,true).fetch(foafSpec).then(
-	function (pg) {
-		console.log("received foaf");
-		console.log(pg);
-		React.renderComponent(
-			<FoafBx/>,
-			document.getElementById('container')
-		)
-	},
-	function (err) {
-		console.log(err)
-	}
-);
+//$rdf.fetcher(store,1000,true).fetch(foafSpec).then(
+//	function (pg) {
+//		console.log("received foaf");
+//		console.log(pg);
+//	},
+//	function (err) {
+//		console.log(err)
+//	}
+//);
+
+React.renderComponent(
+	<FoafBx/>,
+	document.getElementById('container')
+)
 
 
 
