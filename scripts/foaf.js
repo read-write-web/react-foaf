@@ -92,11 +92,48 @@ var Friends = React.createClass({
 
 });
 
+/**
+ *  not such a good idea to pass a list
+ * @type {*}
+ */
+var MiniPersonPix = React.createClass({
+
+	render: function() {
+		console.log("in Mini Person Pix with ");
+
+		var personPGs = this.props.personPGs;
+		console.log(personPGs)
+
+		var pixSyms = _.chain(personPGs).map(function (pg) {
+			return pg.rels(FOAF("logo"), FOAF("img"), FOAF("depiction"))
+		}).flatten().map(
+			function (imgPG) {
+				var thumbs = _.chain(imgPG.rel(FOAF("thumbnail"))).map(function (thumbPG) {
+					return (thumbPG.pointer.termType == "symbol") ? [thumbPG.pointer] :
+						(imgPG.pointer.termType == "symbol") ? [imgPG.pointer] : []
+
+				}).flatten().value()
+				return (thumbs.length == 0) ? [imgPG.pointer] : thumbs
+			}
+		).flatten().value();
+		console.log("pixSyms:");
+		console.log(pixSyms);
+
+		var pix = (pixSyms && pixSyms.length > 0) ?
+			(<img src={pixSyms[0].value} alt="Picture"/>):
+			(<img src="img/avatar.png" alt="Picture"/>);
+
+		return ( <div className="picture">
+		        { pix }
+		       </div>);
+	}
+});
+
 var MiniPerson = React.createClass({
 
 	getInitialState: function () {
 		return {
-			jumped: undefined,
+			jumpedPointedGraph: undefined,
 			error: undefined
 		}
 	},
@@ -109,7 +146,9 @@ var MiniPerson = React.createClass({
 			function (jumpedPG) {
 				console.log("MiniPerson.  PG(_," + component.props.personPointedGraph.pointer + ","
 					+ component.props.personPointedGraph.webGraph + ",_).jumpAsync=PG(_," + jumpedPG.pointer + "," + jumpedPG.webGraph + ",_)");
-				component.setState({jumped: jumpedPG })
+				component.setState({
+					jumpedPointedGraph: jumpedPG,
+				})
 			},
 			function (err) {
 				console.log("MiniPerson. error in PG(_," + component.props.personPointedGraph.pointer + "," +
@@ -120,29 +159,6 @@ var MiniPerson = React.createClass({
 	},
 
 	render: function () {
-		var pix = <img src="img/avatar.png" alt="Picture"/> ;
-
-		console.log("in mini person");
-		if (this.state && this.state.jumped) {
-			var jumpedPersonPg = this.state.jumped;
-			console.log(jumpedPersonPg);
-			var pixSyms = _.chain(jumpedPersonPg.rels(FOAF("logo"), FOAF("img"), FOAF("depiction"))).map(
-				function (imgPG) {
-					var thumbs = _.chain(imgPG.rel(FOAF("thumbnail"))).map(function (thumbPG) {
-						return (thumbPG.pointer.termType == "symbol") ? [thumbPG.pointer] :
-							(imgPG.pointer.termType == "symbol") ? [imgPG.pointer] : []
-
-					}).flatten().value()
-					return (thumbs.length == 0)?[imgPG.pointer]:thumbs
-				}
-			).flatten().value();
-			console.log("pixSyms:");
-			console.log(pixSyms);
-
-			if (pixSyms && pixSyms.length > 0) {
-				pix = ( <img src={pixSyms[0].value} alt="Picture"/> )
-			}
-		}
 
 		var personPg = this.props.personPointedGraph;
 		var relLiteral = function (relSym) {
@@ -161,13 +177,14 @@ var MiniPerson = React.createClass({
 		var nameInfo = _.chain(_.keys(name))
 			.filter(function(key) { return !!name[key] })
 			.map(function(key) {
+				// note: className is the JSX equivalent for the html class= to avoid name clashes
 				return ( <div className={key}>{name[key]}</div> )
 			}).value()
 
 		console.log("displaying mini person");
 		console.log(nameInfo);
 
-
+		var loadingStr=""
 		var info = undefined;
 		if (this.props.personPointedGraph.isLocalPointer()) {
 			if (this.props.personPointedGraph.pointer.termType == "bnode") {
@@ -178,27 +195,33 @@ var MiniPerson = React.createClass({
 				info = (<p>locally defined</p>)
 			}
 		} else {
-			jumpedState = this.state.jumped;
+			jumpedState = this.state.jumpedPointedGraph;
 			if (jumpedState) {
 				if (!jumpedState.isLocalPointer()) {
-					info = (<p>we don't have definitional info yet</p>)
+					info = (<p>there was not definitional info in the remote graph</p>)
 				} else {
-					info = (<p>definitional info</p>)
+					info = (<p>definitional info, page was loaded</p>)
 				}
 			} else {
 				info = (<p>no remote info yet</p>)
+				loadingStr = "loading"
 			}
 		}
 		console.log("built up info about mini agent:");
 		console.log(info);
 
+	   var clazz = "contact clearfix "+loadingStr+((this.state.error)?" error":"");
+		console.log(clazz);
+		var originalAndJumpedPG =  _.compact([this.props.personPointedGraph, this.state.jumpedPointedGraph ])
+		console.log(originalAndJumpedPG)
 		return (
-			<li className="contact clearfix">
-				<div className="picture">{pix}</div>
-			{nameInfo}
+			<li className={clazz}>
+			  <MiniPersonPix personPGs={ originalAndJumpedPG } />
+			  {nameInfo}
 			</li>
 			)
 	}
+
 });
 
 
@@ -261,7 +284,7 @@ var FoafBx = React.createClass({
 		console.log("FoafBx.handleUserIntput("+url+")");
 		if (!url) return
 		var fetcher = $rdf.fetcher(store, 10000, true);
-		var future = fetcher.fetch(url, url, true);
+		var future = fetcher.fetch(url, url);
 		var component = this;
 		component.setState({url: url})
 		future.then(
@@ -271,10 +294,11 @@ var FoafBx = React.createClass({
 				component.setState({
 					primaryTopicsPointedGraphs: pt
 				})
+				//need loading function to display advances in download
 			},
 			function (err) {
 				console.log("returned from componentDidMount of " + url + " with error " + err);
-				console.log(err)
+				console.log(err)  //need error handling
 			})
 
 	},
@@ -303,7 +327,7 @@ var SearchBox = React.createClass({
 		this.props.onUserInput(
 			this.state.text //this.refs.url.getDOMNode().value
 		);
-		return false;
+		return false; //don't send result to web server
 	},
 	onChange: function(e) {
 		this.setState({text: e.target.value});

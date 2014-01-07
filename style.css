@@ -27,7 +27,7 @@ body {
 	background: #EDEDED;
 	width: 100%;
 	height: 100%;
-	font-family: "Noto Sans";
+	font-family: "Noto Sans", sans-serif;
 }
 
 .clearfix:before, .clearfix:after { content: ""; display: table; }
@@ -80,7 +80,7 @@ a, a:visited {
 	padding: 20px;
 	box-sizing: border-box;
 	outline: none;
-	font-family: "Noto Sans";
+	font-family: "Noto Sans", sans-serif;
 	font-size: 20px;
 	float: left;
 }
@@ -142,7 +142,7 @@ a, a:visited {
 	font-size: 10px;
 	float: left;
 	width: 32%;
-	height: 188px;
+	height: 220px;
 	background: white;
 	margin: 0 2% 2% 0;
 	box-sizing: border-box;
@@ -152,6 +152,14 @@ a, a:visited {
 
 .contacts li:nth-child(3n + 3) {
 	margin: 0 0 2% 0;
+}
+
+.loading {
+	opacity: 0.4;
+}
+
+.error {
+	background: rgb(255, 230, 230) !important;
 }
 
 .name {
@@ -176,7 +184,7 @@ a, a:visited {
 
 .moreInfo {
 	clear: both;
-	margin: 10px;
+	margin: 45px 10px 0;
 	color: #e2e2e2;
 }
 
@@ -184,6 +192,36 @@ a, a:visited {
 	color: black;
 }
 
+.contact a,
+.contact a:visited {
+	color: #e2e2e2;
+}
+
+.contact:hover a,
+.contact:hover a:visited {
+	color: #3fabd3;
+}
+
+.lastInteraction {
+	text-align: center;
+	margin-bottom: 10px;
+}
+
+.lastInteraction span {
+	font-weight: bold;
+}
+
+.message {
+	font-style: italic;
+	padding: 7px 10px;
+	margin: 5px 0;
+	background: #f8f8f8;
+
+}
+
+.contact:hover .message {
+	background: #fffdcb;
+}
 
 .nextStep {
 	position: absolute;
