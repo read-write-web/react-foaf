@@ -8,7 +8,7 @@ a pointer to the cors proxy in [scripts/foaf.js](scripts/foaf.js). Currently
 it is
 
 ```javascript
-$rdf.Fetcher.crossSiteProxyTemplate = "http://localhost:9000/srv/cors?url=";
+$rdf.Fetcher.crossSiteProxyTemplate = "http://data.fm/proxy?uri=";
 ```
 
 You can get a CORS proxy to work by running [rww-play](https://github.com/stample/rww-play)
