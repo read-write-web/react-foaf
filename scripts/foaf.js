@@ -58,7 +58,7 @@ function foafAttributeName(uri) {
 
 var IMG = React.createClass({
 	render: function () {
-		return (<img src={this.props.url}/>)
+		return (<img height="300px" width="300px"src={this.props.url}/>)
 	}
 });
 
@@ -237,34 +237,38 @@ var FoafBx = React.createClass({
 
 	getInitialState: function() {
 		return {
+			url : "",
 			primaryTopicsPointedGraphs: []
 		};
 	},
 
-	componentWillMount: function() {
-		console.log("in FoafBx.getInitialState");
-		var url = this.props.url;
+   componentWillMount: function() {
+		console.log("in FoafBx.componentWillMount");
+		url = this.state.url;
+	   console.log("this.props.url="+url);
+		this.fetchURL(url);
+	},
+
+	fetchURL: function(url) {
+		console.log("FoafBx.handleUserIntput("+url+")");
+		if (!url) return
 		var fetcher = $rdf.fetcher(store, 10000, true);
 		var future = fetcher.fetch(url, url, true);
 		var component = this;
+		component.setState({url: url})
 		future.then(
 			function (pg) {
 				console.log("received graph for url=" + url);
-				console.log(pg);
-				// you only have 1 primary topic in a graph
-				//if you have more then they are owl:sameAs each other
-				//I'd deal with yet
-				var primaryTopics = pg.rel(FOAF("primaryTopic"));
-				console.log("primary topics are:");
-				console.log(primaryTopics);
+				var pt = pg.rel(FOAF("primaryTopic"))
 				component.setState({
-					primaryTopicsPointedGraphs: primaryTopics
+					primaryTopicsPointedGraphs: pt
 				})
 			},
 			function (err) {
 				console.log("returned from componentDidMount of " + url + " with error " + err);
 				console.log(err)
 			})
+
 	},
 
 	render: function () {
@@ -272,7 +276,7 @@ var FoafBx = React.createClass({
 		console.log(this.state.primaryTopicsPointedGraphs);
 		return (
 			<div className="PersonalProfileDocument">
-				<h2 className="document">{this.props.url}</h2>
+				<SearchBox url={this.state.url} onUserInput={this.fetchURL}/>
 				<h3>Primary Topic</h3>
 				<Person pgs={this.state.primaryTopicsPointedGraphs}/>
 				<h3>Friends</h3>
@@ -282,12 +286,44 @@ var FoafBx = React.createClass({
 	}
 });
 
-$rdf.fetcher(store,1000,true).fetch(foafSpec,foafSpec,true).then(
+var SearchBox = React.createClass({
+	getInitialState: function() {
+		return {text: this.props.url};
+	},
+	handleSubmit: function(e) {
+		this.props.onUserInput(
+			this.state.text //this.refs.url.getDOMNode().value
+		);
+		return false;
+	},
+	onChange: function(e) {
+		this.setState({text: e.target.value});
+	},
+	render: function() {
+		return (
+			<form onSubmit={this.handleSubmit}>
+				<input
+				type="text"
+				placeholder="Enter URL of foaf profile..."
+				value={this.state.url}
+				width="100"
+				ref="url"
+			   onChange={this.onChange}
+				/>
+				<button>submit</button>
+		   </form>
+			)
+	}
+});
+
+
+
+$rdf.fetcher(store,1000,true).fetch(foafSpec).then(
 	function (pg) {
 		console.log("received foaf");
 		console.log(pg);
 		React.renderComponent(
-			<FoafBx url="http://bblfish.net/people/henry/card"/>,
+			<FoafBx/>,
 			document.getElementById('container')
 		)
 	},
@@ -295,3 +331,6 @@ $rdf.fetcher(store,1000,true).fetch(foafSpec,foafSpec,true).then(
 		console.log(err)
 	}
 );
+
+
+
