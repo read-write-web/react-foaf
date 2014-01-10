@@ -854,7 +854,7 @@ textarea:focus {
 /* ------------------------------- */
 /* SEARCH */
 #search {
-  width: 800px;
+  width: 600px;
   height: 60px;
   background: white;
   box-shadow: 6px 6px rgba(0, 0, 0, 0.2);
@@ -2080,7 +2080,7 @@ textarea:focus {
 /* ------------------------------- */
 /* SEARCH */
 #search {
-  width: 800px;
+  width: 700px;
   height: 60px;
   background: white;
   box-shadow: 6px 6px rgba(0, 0, 0, 0.2);
@@ -3407,4 +3407,78 @@ ul {
   width: 100%;
   margin: 0;
   padding: 0;
+}
+
+/* ------------------------------- */
+/* SEARCH */
+#filterUser {
+    width: 700px;
+    height: 60px;
+    background: white;
+    box-shadow: 6px 6px rgba(0, 0, 0, 0.2);
+    margin: 40px auto;
+    border: 10px solid #e3e3e3;
+    box-sizing: content-box;
+}
+#add {
+    font-weight: bold;
+    height: 60px;
+    width: 60px;
+    text-align: center;
+    line-height: 60px;
+    background: #333333;
+    color: white;
+    font-size: 50px;
+    float: left;
+    cursor: pointer;
+    transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    -webkit-transition: all 0.2s;
+}
+#add:hover {
+    background: #3fabd3;
+    -webkit-transform: rotate(-5deg) scale(1.1);
+    -moz-transform: rotate(-5deg) scale(1.1);
+    -ms-transform: rotate(-5deg) scale(1.1);
+    -o-transform: rotate(-5deg) scale(1.1);
+}
+#filterUser input[type="text"] {
+    height: 60px;
+    width: 580px;
+    border: 0;
+    box-shadow: none;
+    padding: 20px;
+    box-sizing: border-box;
+    outline: none;
+    font-family: "Noto Sans", sans-serif;
+    font-size: 20px;
+    float: left;
+}
+#filterUser input[type="text"]:focus {
+    box-shadow: none;
+    outline: none;
+}
+#filterUser button[type="submit"] {
+    height: 60px;
+    width: 60px;
+    text-align: center;
+    line-height: 60px;
+    background: #333333;
+    color: white;
+    font-size: 30px;
+    float: right;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    -webkit-transition: all 0.2s;
+}
+#filterUser button[type="submit"]:hover {
+    box-shadow: none;
+    outline: none;
+    background: #0bb988;
+    -webkit-transform: rotate(-5deg) scale(1.1);
+    -moz-transform: rotate(-5deg) scale(1.1);
+    -ms-transform: rotate(-5deg) scale(1.1);
+    -o-transform: rotate(-5deg) scale(1.1);
 }
