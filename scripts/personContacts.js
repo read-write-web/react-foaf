@@ -8,7 +8,6 @@ var PersonContacts = React.createClass({
     },
 
     handleUserInput: function(text) {
-        console.log("handleUserInput");
         this.replaceState({
             filterText: text
         });
@@ -16,14 +15,9 @@ var PersonContacts = React.createClass({
 
     render: function () {
         var self = this;
-        console.log("rendering friends " + this.state.filterText);
-        var foafs = _.chain([this.props.personPG])
-            .map(function (friendPg) {
-                return friendPg.jumpRel(FOAF("knows"))
-            }).flatten().map(function (foafPg) {
+        var foafs = _.chain(this.props.personPG.jumpRel(FOAF("knows"))).map(function (foafPg) {
                 return (<PersonContactOnProfile personPG={foafPg} handlerClick={self.props.changeUser} filterText={self.state.filterText}/>)
             }).value();
-        console.log(foafs)
         return (
             <div id="contacts">
                 <div className="title center-text title-case">{this.props.userName}'s contacts</div>

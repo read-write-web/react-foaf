@@ -33,8 +33,6 @@ var AttributeRel = React.createClass({
 					</tr>
 					)
 			});
-		console.log("in render of AttributeRel for rel=" + this.props.rel + " and values=>");
-		console.log(values);
 		return (
 			<tr>
 				<td>{ foafAttributeName(this.props.rel) }</td>
@@ -51,7 +49,6 @@ var foafSimpleRels = [ FOAF("name"), FOAF("nick"), FOAF("weblog") ];
 function foafAttributeName(uri) {
 	return _.map(new $rdf.PointedGraph(store, uri, $rdf.sym(foafSpec)).rel(RDFS("label")),
 		function (valpg) {
-			console.log("foafAttributeName(" + uri + ")=" + valpg.pointer.value);
 			return valpg.pointer.value
 		}
 	)[0]; //foaf has labels for all its concepts. Todo: internationalisation
@@ -71,8 +68,6 @@ var Friends = React.createClass({
 	},
 
 	render: function () {
-		console.log("rendering friends ");
-		console.log(this.props);
 		var foafs = _.chain(this.props.primaryTopicsPointedGraphs)
 			.map(function (friendPg) {
 				return friendPg.jumpRel(FOAF("knows"))
@@ -80,8 +75,6 @@ var Friends = React.createClass({
 				return (<MiniPerson personPointedGraph={foafPg}/>)
 			}).value();
 
-		console.log("rendering theses friends");
-		console.log(foafs);
 		return (
 			<div className="contacts clearfix">
 				<ul className="clearfix">
@@ -100,10 +93,8 @@ var Friends = React.createClass({
 var MiniPersonPix = React.createClass({
 
 	render: function() {
-		console.log("in Mini Person Pix with ");
 
 		var personPGs = this.props.personPGs;
-		console.log(personPGs)
 
 		var pixSyms = _.chain(personPGs).map(function (pg) {
 			return pg.rels(FOAF("logo"), FOAF("img"), FOAF("depiction"))
@@ -117,8 +108,6 @@ var MiniPersonPix = React.createClass({
 				return (thumbs.length == 0) ? [imgPG.pointer] : thumbs
 			}
 		).flatten().value();
-		console.log("pixSyms:");
-		console.log(pixSyms);
 
 		var pix = (pixSyms && pixSyms.length > 0) ?
 			(<img src={pixSyms[0].value} alt="Picture"/>):
@@ -142,17 +131,13 @@ var MiniPerson = React.createClass({
 
 	componentWillMount: function () {
 		var component = this;
-		console.log("in componentWillMount for MiniPerson( " + component.props.personPointedGraph.pointer + ")");
 		this.props.personPointedGraph.jumpAsync(false).then(
 			function (jumpedPG) {
-				console.log("MiniPerson.  PG(_," + component.props.personPointedGraph.pointer + ","
-					+ component.props.personPointedGraph.webGraph + ",_).jumpAsync=PG(_," + jumpedPG.pointer + "," + jumpedPG.webGraph + ",_)");
 				component.replaceState({
 					jumpedPointedGraph: jumpedPG,
 				})
 			},
 			function (err) {
-				console.log("MiniPerson. error in PG(_," + component.props.personPointedGraph.pointer + "," +
 					component.props.personPointedGraph.webGraph + ",_).jumpAsync=" + err);
 				component.setState({error: err})
 			}
@@ -182,8 +167,6 @@ var MiniPerson = React.createClass({
 				return ( <div className={key}>{name[key]}</div> )
 			}).value()
 
-		console.log("displaying mini person");
-		console.log(nameInfo);
 
 		var loadingStr=""
 		var info = undefined;
@@ -208,13 +191,9 @@ var MiniPerson = React.createClass({
 				loadingStr = "loading"
 			}
 		}
-		console.log("built up info about mini agent:");
-		console.log(info);
 
 	   var clazz = "contact clearfix "+loadingStr+((this.state.error)?" error":"");
-		console.log(clazz);
 		var originalAndJumpedPG =  _.compact([this.props.personPointedGraph, this.state.jumpedPointedGraph ])
-		console.log(originalAndJumpedPG)
 		return (
 			<li className={clazz}>
 			  <MiniPersonPix personPGs={ originalAndJumpedPG } />
@@ -227,7 +206,6 @@ var MiniPerson = React.createClass({
 
 var Name = React.createClass({
 	render: function () {
-		console.log("in render Name");
 		return (
 			<p>
 			{this.props.names ? (this.props.names.name + "") : "nothing"}
@@ -239,16 +217,13 @@ var Name = React.createClass({
 var PersonOld = React.createClass({
 
     render: function () {
-        console.log("in Person render with pgs=");
-        console.log(this.props.personPG);
+
         if (this.props.personPG && this.props.personPG.length > 0) {
-            console.log("about to display content of pg for person");
             var pg = this.props.pgs[0];
 //			var depictions = pg.rel(FOAF("depiction"))
             var atts = _.map(foafSimpleRels, function (rel) {
                 return ( <AttributeRel rel={rel} pg={pg}/> )
             });
-            console.log(atts);
             return (
                 <span>
                     <table>
@@ -277,7 +252,6 @@ var PersonPix = React.createClass({
     },
 
     render: function() {
-        console.log("Render Person Pix")
         return (
             <div className="picture float-right">
                 <img src={this.state.imgUrl} alt="Picture"/>
@@ -317,7 +291,6 @@ var PersonBasicInfo = React.createClass({
 
     // Render.
     render: function() {
-        console.log("Render the person Info");
         return (
             <div className="basic">
                 <div className="name title-case">{this.state.name}</div>
@@ -498,15 +471,11 @@ var PersonWebId = React.createClass({
 var PersonContactOnProfileBasicInfo = React.createClass({
 
     render: function() {
-        console.log('Render Basic info !!!!!!!!!!!!!');
 
         var personPgList = this.props.personPGs;
-        console.log(personPgList);
         var names = foafUtils.getNames(personPgList);
         var companyList = foafUtils.getworkplaceHomepages(personPgList);
         var noValue = "...";
-        console.log(names);
-        console.log(companyList);
         var name = (names && names.name && names.name.length>0)? names.name[0]:noValue;
         var surname = (names && names.givenname && names.givenname.length>0)? names.givenname[0]:noValue;
         var company = (companyList && companyList.length>0)? companyList[0]:noValue;
@@ -569,18 +538,13 @@ var PersonContactOnProfile = React.createClass({
 
     componentWillMount: function () {
         var component = this;
-        console.log("in componentWillMount for MiniPerson( " + component.props.personPG.pointer + ")");
         component.props.personPG.jumpAsync(false).then(
             function (jumpedPG) {
-                console.log("MiniPerson.  PG(_," + component.props.personPG.pointer + ","
-                    + component.props.personPG.webGraph + ",_).jumpAsync=PG(_," + jumpedPG.pointer + "," + jumpedPG.webGraph + ",_)");
                 component.setState({
                     jumpedPointedGraph: jumpedPG
                 })
             },
             function (err) {
-                console.log("MiniPerson. error in PG(_," + component.props.personPG.pointer + "," +
-                    component.props.personPG.webGraph + ",_).jumpAsync=" + err);
                 component.setState({error: err})
             }
         )
@@ -594,7 +558,6 @@ var PersonContactOnProfile = React.createClass({
         var loadingStr = "";
         var info = undefined;
         if (this.props.personPG.isLocalPointer()) {
-            console.log("this.props.personPG.isLocalPointer() TRUEEEEEE")
             if (this.props.personPG.pointer.termType == "bnode") {
                 info = (<p>not a webid</p>)
             } else if (this.props.personPG.pointer.termType == "literal") {
@@ -611,26 +574,20 @@ var PersonContactOnProfile = React.createClass({
                     info = (<p>definitional info, page was loaded</p>)
                 }
             } else {
-                console.log("LOADINGGGGGGG")
                 info = (<p>no remote info yet</p>)
                 loadingStr = "loading"
             }
         }
-        console.log("built up info about mini agent:");
-        console.log(info);
 
         // Set appropriate class of li items.
         return "contact clearfix float-left "+ loadingStr + ((this.state.error)?" error":"");
     },
 
     render: function() {
-        console.log('render profile $$$$$$$$$$$$$$$$$$$$$$$$$$')
         var originalAndJumpedPG =  _.compact([this.props.personPG, this.state.jumpedPointedGraph ])
-        console.log(originalAndJumpedPG);
 
         // Define appropriate class for the view.
         var clazz = this.setElementClasses();
-        console.log(clazz);
 
         return (
             <li className={clazz} onClick={this.handleClick}>
@@ -653,8 +610,6 @@ var PersonContacts = React.createClass({
     },
 
     render: function () {
-        console.log("rendering friends ");
-        console.log(this.props.personPG);
         var foafs = _.chain([this.props.personPG])
             .map(function (friendPg) {
                 return friendPg.jumpRel(FOAF("knows"))
@@ -662,8 +617,6 @@ var PersonContacts = React.createClass({
                 return (<PersonContactOnProfile personPG={foafPg}/>)
             }).value();
 
-        console.log("rendering theses friends");
-        console.log(foafs);
         return (
             <div id="contacts">
                 <div className="title center-text title-case">Edward's contacts</div>
@@ -678,10 +631,7 @@ var PersonContacts = React.createClass({
 var Person = React.createClass({
 
     render: function () {
-        console.log("in Person render with pgs=");
-        console.log(this.props.personPG);
         if (this.props.personPG && this.props.personPG.length > 0) {
-            console.log("about to display content of pg for person");
             var pg = this.props.personPG[0];
             return (
                 <div id="profile" className="clearfix center">
@@ -719,15 +669,11 @@ var FoafBx = React.createClass({
 	},
 
    componentWillMount: function() {
-		console.log("in FoafBx.componentWillMount");
         url = this.state.url;
-	    console.log("this.props.url="+url);
 		this.fetchURL(url);
 	},
 
 	fetchURL: function(url) {
-        console.log("in FoafBx.fetchURL");
-		console.log("FoafBx.handleUserIntput("+url+")");
 		if (!url) return
         var component = this;
         var fetcher = $rdf.fetcher(store, 10000, true);
@@ -735,7 +681,6 @@ var FoafBx = React.createClass({
 		component.setState({url: url})
 		future.then(
 			function (pg) {
-				console.log("received graph for url=" + url);
 				var pt = pg.rel(FOAF("primaryTopic"))
 				component.replaceState({
 					primaryTopicsPointedGraphs: pt,
@@ -751,9 +696,6 @@ var FoafBx = React.createClass({
 	},
 
    render: function () {
-       console.log("rendering FoafBx with primarytopics");
-       console.log(this.state.primaryTopicsPointedGraphs);
-
        //removed
        //				<Person pgs={this.state.primaryTopicsPointedGraphs}/>
        return (

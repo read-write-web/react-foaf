@@ -3,7 +3,7 @@
 var PersonContactOnProfileBasicInfo = React.createClass({
 
     render: function() {
-        console.log('Render Basic info !!!!!!!!!!!!!');
+
 
         // Get info.
         var names = this.props.getBasicInfo();

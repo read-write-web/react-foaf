@@ -2,7 +2,7 @@
 
 var PersonContactOnProfileMoreInfo = React.createClass({
     render: function() {
-        console.log('Render More info');
+
         var moreInfo = this.props.getMoreInfo();
 
         return (

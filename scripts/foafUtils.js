@@ -8,7 +8,6 @@ function GEOLOC(name) { return $rdf.sym("http://www.w3.org/2003/01/geo/wgs84_pos
 function RDFS(name) { return $rdf.sym("http://www.w3.org/2000/01/rdf-schema#"+name) }
 
 foafUtils.getEmails = function(pgList) {
-    console.log("foafUtils.getEmails");
     var emailsList =
         _.chain(pgList)
             .map(function (pg) {
@@ -22,7 +21,6 @@ foafUtils.getEmails = function(pgList) {
 };
 
 foafUtils.getPhones = function(pgList) {
-    console.log("foafUtils.getPhones");
     var phonesList =
         _.chain(pgList)
             .map(function (pg) {
@@ -36,7 +34,6 @@ foafUtils.getPhones = function(pgList) {
 };
 
 foafUtils.getHomepages = function(pgList) {
-    console.log("foafUtils.getHomepages");
     var homepagesList =
         _.chain(pgList)
             .map(function (pg) {
@@ -50,7 +47,6 @@ foafUtils.getHomepages = function(pgList) {
 };
 
 foafUtils.getworkplaceHomepages = function(pgList) {
-    console.log("foafUtils.getworkplaceHomepages");
     var workplaceHomepagesList =
         _.chain(pgList)
             .map(function (pg) {
@@ -64,7 +60,6 @@ foafUtils.getworkplaceHomepages = function(pgList) {
 };
 
 foafUtils.getContactHome = function(pgList) {
-    console.log("foafUtils.getContactHome");
     var latList = foafUtils.getGeoLatitude(pgList);
     var longList = foafUtils.getGeoLongitude(pgList);
     var addressList = foafUtils.getContactAddress(pgList);
@@ -105,7 +100,6 @@ foafUtils.getGeoLongitude = function(pgList) {
 };
 
 foafUtils.getContactAddress = function(pgList) {
-    console.log("foafUtils.getContactAddress")
 
     var relLiteral = function (pg, relSym) {
         return _.chain(pg.rels(relSym))
@@ -137,7 +131,6 @@ foafUtils.getContactAddress = function(pgList) {
 };
 
 foafUtils.getName = function(pgList) {
-    console.log("foafUtils.getName");
     var nameList =
         _.chain(pgList)
             .map(function (pg) {
@@ -151,15 +144,12 @@ foafUtils.getName = function(pgList) {
 };
 
 foafUtils.getNames = function(pgList) {
-    console.log("foafUtils.getNames");
     var relLiteral = function (relSym) {
         return _.chain(pgList)
             .map(function (pg){
-                    return _.chain(pg.rels(relSym))
-                        .map(function (litPG) {
-                            return (litPG.pointer.termType === "literal") ? [ litPG.pointer.value ] : []
-                        })
-                        .flatten().value();
+                    return _.compact(_.map(pg.rels(relSym),function (litPG) {
+                            return (litPG.pointer.termType === "literal") ? litPG.pointer.value  : undefined
+                        }))
                 }
             )
             .flatten().value();
@@ -167,9 +157,9 @@ foafUtils.getNames = function(pgList) {
 
     var nameObject = {
         name: relLiteral(FOAF("name")),
-        givenname: relLiteral(FOAF("givenname")),
-        family_name: relLiteral(FOAF("family_name")),
-        firstname: relLiteral(FOAF("firstname"))
+        givenname: relLiteral(FOAF("givenName"),FOAF("givenname")),
+        family_name: relLiteral(FOAF("familyName"),FOAF("family_name")),
+        firstname: relLiteral(FOAF("firstName"))
     };
 
     return nameObject;
@@ -177,7 +167,6 @@ foafUtils.getNames = function(pgList) {
 
 foafUtils.getImg = function (pgList) {
     var imgUrlList = [];
-    console.log("foafUtils.getImg");
     var imgUrlList =
         _.chain(pgList)
             .map(function (pg) {
@@ -194,7 +183,6 @@ foafUtils.getImg = function (pgList) {
 
 foafUtils.getThumbnail = function (pgList) {
     var imgUrlList = [];
-    console.log("foafUtils.getThumbnail");
     var pixSyms =
         _.chain(pgList)
             .map(function (imgPG) {
@@ -207,8 +195,6 @@ foafUtils.getThumbnail = function (pgList) {
             return (thumbs.length == 0) ? [imgPG.pointer] : thumbs
         }
     ).flatten().value();
-    console.log("pixSyms:");
-    console.log(pixSyms);
 
     return imgUrlList;
 };

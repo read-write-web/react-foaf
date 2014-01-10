@@ -10,35 +10,33 @@ var PersonContactOnProfile = React.createClass({
 
     componentWillMount: function () {
         var component = this;
-        console.log("in componentWillMount for MiniPerson( " + component.props.personPG.pointer + ")");
-        component.props.personPG.jumpAsync(false).then(
+        this.props.personPG.jumpAsync(false).then(
             function (jumpedPG) {
-                console.log("MiniPerson.  PG(_," + component.props.personPG.pointer + ","
-                    + component.props.personPG.webGraph + ",_).jumpAsync=PG(_," + jumpedPG.pointer + "," + jumpedPG.webGraph + ",_)");
                 component.replaceState({
                     jumpedPointedGraph: jumpedPG
                 })
             },
             function (err) {
-                console.log("MiniPerson. error in PG(_," + component.props.personPG.pointer + "," +
-                    component.props.personPG.webGraph + ",_).jumpAsync=" + err);
                 component.replaceState({error: err})
             }
         )
     },
 
     handlerClick: function() {
-        return this.props.handlerClick(this.state.jumpedPointedGraph);
-    },
+		 if (this.state.jumpedPointedGraph) {
+			 console.log("clicked on Person box info->")
+			 console.log(this.state.jumpedPointedGraph.print())
+		 } else console.log("graph not downloaded yet")
+		 return this.props.handlerClick(this.state.jumpedPointedGraph);
+	 },
 
     setElementClasses: function() {
         var loadingStr = "";
         var info = undefined;
         if (this.props.personPG.isLocalPointer()) {
-            console.log("this.props.personPG.isLocalPointer() TRUEEEEEE")
-            if (this.props.personPG.pointer.termType == "bnode") {
+            if (this.props.personPG.pointer.termType === "bnode") {
                 info = (<p>not a webid</p>)
-            } else if (this.props.personPG.pointer.termType == "literal") {
+            } else if (this.props.personPG.pointer.termType === "literal") {
                 info = (<p>a literal!!!</p>)
             } else {
                 info = (<p>locally defined</p>)
@@ -52,20 +50,17 @@ var PersonContactOnProfile = React.createClass({
                     info = (<p>definitional info, page was loaded</p>)
                 }
             } else {
-                console.log("LOADINGGGGGGG")
                 info = (<p>no remote info yet</p>)
                 loadingStr = "loading"
             }
         }
-        console.log("built up info about mini agent:");
-        console.log(info);
 
         // Set appropriate class of li items.
         return "contact clearfix float-left "+ loadingStr + ((this.state.error)?" error":"");
     },
 
     render: function() {
-        console.log('render profile $$$$$$$$$$$$$$$$$$$$$$$$$$')
+
 
         // Check user and filter.
         var show = {
@@ -73,11 +68,9 @@ var PersonContactOnProfile = React.createClass({
         };
 
         var originalAndJumpedPG =  _.compact([this.props.personPG, this.state.jumpedPointedGraph ])
-        console.log(originalAndJumpedPG);
 
         // Define appropriate class for the view.
         var clazz = this.setElementClasses();
-        console.log(clazz);
 
         return (
             <li className={clazz} style={show} onClick={this.handlerClick}>
@@ -102,8 +95,6 @@ var PersonContactOnProfile = React.createClass({
     },
 
     getUserImg: function() {
-        console.log("Get user img !!!!!!!!!");
-        console.log(this.props.personPG);
         var originalAndJumpedPG =  _.compact([this.props.personPG, this.state.jumpedPointedGraph ])
         var imgUrlList = foafUtils.getImg(originalAndJumpedPG);
         return (imgUrlList && imgUrlList.length>0)? imgUrlList[0]:"img/avatar.png";

@@ -6,7 +6,6 @@ var SearchBox = React.createClass({
     },
 
     handleSubmit: function(e) {
-        console.log("user submit !!!" + this.state.text);
         this.props.onUserInput(this.state.text);
         return false; //don't send result to web server
     },

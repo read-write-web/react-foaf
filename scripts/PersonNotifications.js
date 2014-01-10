@@ -3,7 +3,7 @@
 var PersonNotifications = React.createClass({
 
     render: function() {
-        console.log("Render notification");
+
         var notifications = this.props.getNotifications();
         return (
             <div className="notifications">

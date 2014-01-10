@@ -4,7 +4,7 @@ var PersonMoreInfo = React.createClass({
     render: function() {
         var self = this;
         var personPg = this.props.personPG;
-        console.log('Render More info');
+
         var moreInfo = this.props.getMoreInfo();
         return (
             <div id="details">

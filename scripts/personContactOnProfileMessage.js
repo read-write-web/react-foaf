@@ -2,7 +2,6 @@
 
 var PersonContactOnProfileMessage = React.createClass({
     render: function() {
-        console.log('Render messages');
         var message = this.props.getMessage();
         return (
             <div className="moreInfo">

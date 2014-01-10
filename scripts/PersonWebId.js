@@ -3,7 +3,7 @@
 var PersonWebId = React.createClass({
 
     render: function() {
-        console.log('Render webId');
+
         var webId = this.props.getWebId();
         console.log(webId)
         return (

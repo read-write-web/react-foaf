@@ -4,7 +4,7 @@ var PersonBasicInfo = React.createClass({
 
     // Render.
     render: function() {
-        console.log("Render the person Info");
+
 
         // Get info.
         var names = this.props.getBasicInfo();

@@ -16,9 +16,7 @@ var FoafBxV2 = React.createClass({
 
     // Executed immediately before render.
     componentWillMount: function() {
-        console.log("in FoafBx.componentWillMount");
         url = this.state.url;
-        console.log("this.props.url="+url);
         this.fetchURL(url);
     },
 
@@ -32,8 +30,6 @@ var FoafBxV2 = React.createClass({
     },
 
     fetchURL: function(url) {
-        console.log("in FoafBxV2.fetchURL");
-        console.log("FoafBx.handleUserIntput("+url+")");
         if (!url) return
         var component = this;
         var fetcher = $rdf.fetcher(store, 10000, true);
@@ -41,7 +37,6 @@ var FoafBxV2 = React.createClass({
         component.setState({url: url})
         future.then(
             function (pg) {
-                console.log("received graph for url=" + url);
                 var pt = pg.rel(FOAF("primaryTopic"))
                 component.replaceState({
                     primaryTopicsPointedGraphs: pt,
@@ -66,8 +61,6 @@ var FoafBxV2 = React.createClass({
     },
 
     render: function () {
-        console.log("rendering FoafBx with primarytopics");
-        console.log(this.state.primaryTopicsPointedGraphs);
         var firstCurrentPg = this.state.primaryTopicsPointedGraphs[0];
         var UserName = foafUtils.getName(this.props.personPG);
         return (

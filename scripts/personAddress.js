@@ -3,7 +3,6 @@
 var PersonAddress = React.createClass({
 
     render: function() {
-        console.log("Render person Address");
         var address = this.props.getAddress();
         return (
             <div className="address">
