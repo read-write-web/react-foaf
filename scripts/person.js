@@ -3,12 +3,13 @@
 var Person = React.createClass({
 
     render: function () {
-        console.log("in Person render with pgs=");
+        console.log("in Person render with pgs===========================================================");
         console.log(this.props.personPG);
 
         var UserName = foafUtils.getName(this.props.personPG);
-        var currentPg = this.props.personPG;
+        console.log(UserName);
 
+        var currentPg = this.props.personPG;
         if (currentPg && currentPg.length > 0) {
             console.log("about to display content of pg for person");
             var firstPg = currentPg[0];
@@ -17,10 +18,10 @@ var Person = React.createClass({
                     <PersonPix personPG={firstPg} getUserImg={this.getUserImg}/>
                     <PersonBasicInfo personPG={firstPg} getBasicInfo={this.getBasicInfo}/>
                     <PersonNotifications personPG={firstPg} getNotifications={this.getNotifications}/>
-                    <PersonMessage personPG={firstPg} userName={UserName} getMessage={this.getMessage}/>
+                    <PersonMessage personPG={firstPg} userName={UserName[0]} getMessage={this.getMessage}/>
                     <PersonMoreInfo personPG={firstPg} getMoreInfo={this.getMoreInfo} getAddress={this.getAddress}/>
                     <PersonWebId personPG={firstPg} getWebId={this.getWebId}/>
-                    <PersonContacts personPG={firstPg} userName={UserName} changeUser={this.changeUser}/>
+                    <PersonContacts personPG={firstPg} userName={UserName[0]} changeUser={this.changeUser}/>
                 </div>
                 );
         }
@@ -47,7 +48,8 @@ var Person = React.createClass({
         var names = foafUtils.getNames(this.props.personPG);
         var companyList = foafUtils.getworkplaceHomepages(this.props.personPG);
         var noValue = "...";
-
+        console.log('getBasicInfo !!!')
+        console.log(names)
         return names = {
             name:(names && names.name && names.name.length>0)? names.name[0]:noValue,
             givenname:(names && names.givenname && names.givenname.length>0)? names.givenname[0]:noValue,

@@ -9,7 +9,7 @@ var PersonContacts = React.createClass({
 
     handleUserInput: function(text) {
         console.log("handleUserInput");
-        this.setState({
+        this.replaceState({
             filterText: text
         });
     },

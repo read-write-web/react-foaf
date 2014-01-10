@@ -15,14 +15,14 @@ var PersonContactOnProfile = React.createClass({
             function (jumpedPG) {
                 console.log("MiniPerson.  PG(_," + component.props.personPG.pointer + ","
                     + component.props.personPG.webGraph + ",_).jumpAsync=PG(_," + jumpedPG.pointer + "," + jumpedPG.webGraph + ",_)");
-                component.setState({
+                component.replaceState({
                     jumpedPointedGraph: jumpedPG
                 })
             },
             function (err) {
                 console.log("MiniPerson. error in PG(_," + component.props.personPG.pointer + "," +
                     component.props.personPG.webGraph + ",_).jumpAsync=" + err);
-                component.setState({error: err})
+                component.replaceState({error: err})
             }
         )
     },
@@ -114,19 +114,6 @@ var PersonContactOnProfile = React.createClass({
         var names = foafUtils.getNames(originalAndJumpedPG);
         var companyList = foafUtils.getworkplaceHomepages(originalAndJumpedPG);
         var noValue = "...";
-
-        /*
-        var personPgList = this.props.personPGs;
-        console.log(personPgList);
-        var names = foafUtils.getNames(personPgList);
-        var companyList = foafUtils.getworkplaceHomepages(personPgList);
-        var noValue = "...";
-        console.log(names);
-        console.log(companyList);
-        var name = (names && names.name && names.name.length>0)? names.name[0]:noValue;
-        var surname = (names && names.givenname && names.givenname.length>0)? names.givenname[0]:noValue;
-        var company = (companyList && companyList.length>0)? companyList[0]:noValue;
-        */
 
         return names = {
             name:(names && names.name && names.name.length>0)? names.name[0]:noValue,
