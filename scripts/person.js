@@ -20,7 +20,7 @@ var Person = React.createClass({
                     <PersonMessage personPG={firstPg} userName={UserName} getMessage={this.getMessage}/>
                     <PersonMoreInfo personPG={firstPg} getMoreInfo={this.getMoreInfo} getAddress={this.getAddress}/>
                     <PersonWebId personPG={firstPg} getWebId={this.getWebId}/>
-                    <PersonContacts personPG={firstPg} userName={UserName} showContact={this.showContact}/>
+                    <PersonContacts personPG={firstPg} userName={UserName} changeUser={this.changeUser}/>
                 </div>
                 );
         }
@@ -33,7 +33,7 @@ var Person = React.createClass({
         }
     },
 
-    showContact: function(pg){
+    changeUser: function(pg){
         console.log('Load other user &&&&&&&&&&');
         return this.props.changeUser(pg);
     },

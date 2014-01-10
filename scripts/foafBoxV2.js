@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 
-var FoafBx = React.createClass({
+var FoafBxV2 = React.createClass({
 
     getInitialState: function() {
         return {
@@ -11,18 +11,28 @@ var FoafBx = React.createClass({
             //url:"http://presbrey.mit.edu/foaf",
             primaryTopicsPointedGraphs: [],
             filterText: ''
-
         };
     },
 
     // Executed immediately before render.
     componentWillMount: function() {
+        console.log("in FoafBx.componentWillMount");
         url = this.state.url;
+        console.log("this.props.url="+url);
         this.fetchURL(url);
     },
 
+    handleUserInput: function(filterText) {
+        console.log("handle user input !!!")
+        /*
+         this.setState({
+         filterText: filterText
+         });
+         */
+    },
+
     fetchURL: function(url) {
-        console.log("in FoafBx.fetchURL");
+        console.log("in FoafBxV2.fetchURL");
         console.log("FoafBx.handleUserIntput("+url+")");
         if (!url) return
         var component = this;
@@ -47,28 +57,24 @@ var FoafBx = React.createClass({
     },
 
     changeUser: function(pg){
+        var firstCurrentPg = this.state.primaryTopicsPointedGraphs[0];
         this.replaceState({
-            url:pg.pointer.value,
-            primaryTopicsPointedGraphs:[pg]
+            url:firstCurrentPg.pointer.value,
+            primaryTopicsPointedGraphs:[firstCurrentPg]
         });
         //this.fetchURL(pg.pointer.value);
-    },
-
-    handleUserInputInSearchBox: function(text) {
-        console.log('On user Input ' + text);
-        //this.setState({filterText:text});
     },
 
     render: function () {
         console.log("rendering FoafBx with primarytopics");
         console.log(this.state.primaryTopicsPointedGraphs);
-        console.log(this.state.filterText)
-
+        var firstCurrentPg = this.state.primaryTopicsPointedGraphs[0];
+        var UserName = foafUtils.getName(this.props.personPG);
         return (
             <div className="PersonalProfileDocument">
-                <MainSearchBox filterText={this.state.filterText} personPG={this.state.primaryTopicsPointedGraphs} onUserInput={this.handleUserInputInSearchBox}/>
+                <SearchBox filterText={this.state.filterText} onUserInput={this.handleUserInput}/>
                 <div id="actionNeeded">Action needed</div>
-                <Person personPG={this.state.primaryTopicsPointedGraphs} changeUser={this.changeUser}/>
+                <PersonContacts personPG={firstCurrentPg} userName={UserName} changeUser={this.changeUser}/>
             </div>
             );
     }

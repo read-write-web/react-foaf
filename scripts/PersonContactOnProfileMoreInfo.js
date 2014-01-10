@@ -1,16 +1,13 @@
 /** @jsx React.DOM */
 
 var PersonContactOnProfileMoreInfo = React.createClass({
-    getInitialState: function() {
-        return {
-            lastMessage:"..."
-        }
-    },
-
     render: function() {
+        console.log('Render More info');
+        var moreInfo = this.props.getMoreInfo();
+
         return (
             <div className="moreInfo">
-                <div className="lastInteraction"><span>{this.state.lastMessage}</span></div>
+                <div className="lastInteraction"><span>{notifications.nbNewMessages}</span></div>
                 <div className="nextStep"><a href="#">Start the conversation</a></div>
             </div>
             );

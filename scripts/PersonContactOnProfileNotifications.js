@@ -1,21 +1,15 @@
 /** @jsx React.DOM */
 
 var PersonContactOnProfileNotifications = React.createClass({
-    getInitialState: function() {
-        return {
-            nbNewMessages:"0",
-            nbRecentNotifications:"0",
-            nbUpdates:"0"
-        }
-    },
 
     render: function() {
+        var notifications = this.props.getNotifications();
         return (
-            <div className="notifications">
-                <div className="newMessages float-left">{this.state.nbNewMessages}</div>
-                <div className="recentInteractions float-left">{this.state.nbRecentNotifications}</div>
-                <div className="updates float-left">{this.state.nbUpdates}</div>
-            </div>
-            );
+        <div className="notifications">
+            <div className="newMessages float-left">{notifications.nbNewMessages}</div>
+            <div className="recentInteractions float-left">{notifications.nbRecentInteraction}</div>
+            <div className="updates float-left">{notifications.nbUpdates}</div>
+        </div>
+        );
     }
 });

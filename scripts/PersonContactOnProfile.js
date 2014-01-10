@@ -66,6 +66,12 @@ var PersonContactOnProfile = React.createClass({
 
     render: function() {
         console.log('render profile $$$$$$$$$$$$$$$$$$$$$$$$$$')
+
+        // Check user and filter.
+        var show = {
+            display: (this.displayUser()) ? 'block' : 'none'
+        };
+
         var originalAndJumpedPG =  _.compact([this.props.personPG, this.state.jumpedPointedGraph ])
         console.log(originalAndJumpedPG);
 
@@ -74,14 +80,76 @@ var PersonContactOnProfile = React.createClass({
         console.log(clazz);
 
         return (
-            <li className={clazz} onClick={this.handlerClick}>
+            <li className={clazz} style={show} onClick={this.handlerClick}>
                 <div className="loader"></div>
-                <div className="picture float-right"><img src="img/avatar.png" alt="Picture"/></div>
-                <PersonContactOnProfileBasicInfo personPGs={originalAndJumpedPG}/>
-                <PersonContactOnProfileNotifications personPGs={originalAndJumpedPG}/>
-                <PersonContactOnProfileMoreInfo personPGs={originalAndJumpedPG}/>
+                <PersonContactOnProfilePix personPGs={originalAndJumpedPG}  getUserImg={this.getUserImg}/>
+                <PersonContactOnProfileBasicInfo personPGs={originalAndJumpedPG}  getBasicInfo={this.getBasicInfo}/>
+                <PersonContactOnProfileNotifications personPGs={originalAndJumpedPG} getNotifications={this.getNotifications}/>
+                <PersonContactOnProfileMessage personPG={originalAndJumpedPG} getMessage={this.getMessage}/>
             </li>
-
             );
+    },
+
+    displayUser: function() {
+        var originalAndJumpedPG =  _.compact([this.props.personPG, this.state.jumpedPointedGraph ])
+        var userName = foafUtils.getName(originalAndJumpedPG).toString().toLowerCase();
+        var filterText = this.props.filterText;
+        if (!filterText) return true
+        else {
+            filterText = filterText.toString().toLowerCase();
+            return (userName.indexOf(filterText) != -1) && (userName.indexOf(filterText) == 0);
+        }
+    },
+
+    getUserImg: function() {
+        console.log("Get user img !!!!!!!!!");
+        console.log(this.props.personPG);
+        var originalAndJumpedPG =  _.compact([this.props.personPG, this.state.jumpedPointedGraph ])
+        var imgUrlList = foafUtils.getImg(originalAndJumpedPG);
+        return (imgUrlList && imgUrlList.length>0)? imgUrlList[0]:"img/avatar.png";
+    },
+
+    getBasicInfo: function() {
+        var originalAndJumpedPG =  _.compact([this.props.personPG, this.state.jumpedPointedGraph ])
+        var names = foafUtils.getNames(originalAndJumpedPG);
+        var companyList = foafUtils.getworkplaceHomepages(originalAndJumpedPG);
+        var noValue = "...";
+
+        /*
+        var personPgList = this.props.personPGs;
+        console.log(personPgList);
+        var names = foafUtils.getNames(personPgList);
+        var companyList = foafUtils.getworkplaceHomepages(personPgList);
+        var noValue = "...";
+        console.log(names);
+        console.log(companyList);
+        var name = (names && names.name && names.name.length>0)? names.name[0]:noValue;
+        var surname = (names && names.givenname && names.givenname.length>0)? names.givenname[0]:noValue;
+        var company = (companyList && companyList.length>0)? companyList[0]:noValue;
+        */
+
+        return names = {
+            name:(names && names.name && names.name.length>0)? names.name[0]:noValue,
+            givenname:(names && names.givenname && names.givenname.length>0)? names.givenname[0]:noValue,
+            lastname:(names && names.family_name && names.family_name.length>0)? names.family_name[0]:noValue,
+            firstname:(names && names.lastname && names.firstname.length>0)? names.lastname[0]:noValue,
+            company:(companyList && companyList.length>0)? companyList[0]:noValue
+        }
+    },
+
+    getNotifications: function() {
+        return notifications = {
+            nbNewMessages:0,
+            nbRecentInteraction:0,
+            nbUpdates:0
+        }
+    },
+
+    getMessage: function() {
+        return message = {
+            lastMessageDate:"",
+            lastMessage:"No message"
+        }
     }
+
 });
