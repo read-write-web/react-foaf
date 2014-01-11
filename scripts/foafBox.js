@@ -25,7 +25,7 @@ var FoafBx = React.createClass({
         if (!url) return
         var component = this;
         var fetcher = $rdf.fetcher(store, 10000, true);
-        var future = fetcher.fetch(url, url);
+        var future = fetcher.fetch(url, window.location);
         component.setState({url: url})
         future.then(
             function (pg) {

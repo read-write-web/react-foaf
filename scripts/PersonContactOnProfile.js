@@ -11,9 +11,9 @@ var PersonContactOnProfile = React.createClass({
     componentWillMount: function () {
         var component = this;
         this.props.personPG.jumpAsync(false).then(
-            function (jumpedPG) {
+            function (jumpedPersonPG) {
                 component.replaceState({
-                    jumpedPointedGraph: jumpedPG
+                    jumpedPointedGraph: jumpedPersonPG
                 })
             },
             function (err) {
