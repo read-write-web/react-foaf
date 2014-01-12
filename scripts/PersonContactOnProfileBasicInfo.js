@@ -6,7 +6,7 @@ var PersonContactOnProfileBasicInfo = React.createClass({
 
 
         // Get info.
-        var names = this.props.getBasicInfo();
+        var names = this.getBasicInfo();
 
         return (
             <div className="basic">
@@ -15,6 +15,8 @@ var PersonContactOnProfileBasicInfo = React.createClass({
                 <div className="company">{names.company}</div>
             </div>
             );
+
+
 
         /*
         return (
@@ -26,5 +28,20 @@ var PersonContactOnProfileBasicInfo = React.createClass({
 
             );
             */
-    }
+    },
+
+	getBasicInfo: function () {
+		var names = foafUtils.getNames(this.props.personPGs);
+		var companyList = foafUtils.getworkplaceHomepages(this.props.personPGs);
+		var noValue = "...";
+
+		return names = {
+			name: (names && names.name && names.name.length > 0) ? names.name[0] : noValue,
+			givenname: (names && names.givenname && names.givenname.length > 0) ? names.givenname[0] : noValue,
+			lastname: (names && names.family_name && names.family_name.length > 0) ? names.family_name[0] : noValue,
+			firstname: (names && names.lastname && names.firstname.length > 0) ? names.lastname[0] : noValue,
+			company: (companyList && companyList.length > 0) ? companyList[0] : noValue
+		};
+	}
+
 });

@@ -3,15 +3,15 @@
 var PersonContactOnProfile = React.createClass({
     getInitialState: function() {
         return {
-            jumpedPointedGraph:undefined,
-            error: undefined
+            jumpedPointedGraph: this.props.personPG
         }
     },
 
-    componentWillMount: function () {
+    componentDidMount: function () {
         var component = this;
         this.props.personPG.jumpAsync(false).then(
             function (jumpedPersonPG) {
+			    console.log("in componentDidMount. Change:",component.state.jumpedPointedGraph.pointer,"->",jumpedPersonPG)
                 component.replaceState({
                     jumpedPointedGraph: jumpedPersonPG
                 })
@@ -22,12 +22,29 @@ var PersonContactOnProfile = React.createClass({
         )
     },
 
-    handlerClick: function() {
+    handlerClick: function(e) {
+		 var component = this;
 		 if (this.state.jumpedPointedGraph) {
-			 console.log("clicked on Person box info->")
-			 console.log(this.state.jumpedPointedGraph.print())
-		 } else console.log("graph not downloaded yet")
-		 return this.props.handlerClick(this.state.jumpedPointedGraph);
+			 console.log("clicked on Person box info->");
+			 console.log(this.state.jumpedPointedGraph);
+		 } else console.log("graph not downloaded yet");
+
+//		 this.props.personPG.jumpAsync(false).then(
+//			 function (jumpedPersonPG) {
+//				 console.log("REPLACING STATE WITH:"+jumpedPersonPG);
+//				 console.log(jumpedPersonPG);
+//				 component.replaceState({
+//					 jumpedPointedGraph: jumpedPersonPG
+//				 })
+//			 },
+//			 function (err) {
+//				 console.log("RECEIVED ERR:" +err)
+//				 component.replaceState({error: err})
+//			 }
+//		 )
+//    	 if (e.altKey) { this.props.handlerClick(this.state.jumpedPointedGraph); }
+
+		this.props.handlerClick(this.state.jumpedPointedGraph);
 	 },
 
     setElementClasses: function() {
@@ -44,11 +61,11 @@ var PersonContactOnProfile = React.createClass({
         } else {
             jumpedState = this.state.jumpedPointedGraph;
             if (jumpedState) {
-                if (!jumpedState.isLocalPointer()) {
-                    info = (<p>there was not definitional info in the remote graph</p>)
-                } else {
-                    info = (<p>definitional info, page was loaded</p>)
-                }
+					if (jumpedState.isLocalPointer()) {
+						info = (<p>definitional info, page was loaded</p>)
+					} else {
+						info = (<p>there was not definitional info in the remote graph</p>)
+					}
             } else {
                 info = (<p>no remote info yet</p>)
                 loadingStr = "loading"
@@ -76,7 +93,7 @@ var PersonContactOnProfile = React.createClass({
             <li className={clazz} style={show} onClick={this.handlerClick}>
                 <div className="loader"></div>
                 <PersonContactOnProfilePix personPGs={originalAndJumpedPG}  getUserImg={this.getUserImg}/>
-                <PersonContactOnProfileBasicInfo personPGs={originalAndJumpedPG}  getBasicInfo={this.getBasicInfo}/>
+                <PersonContactOnProfileBasicInfo personPGs={originalAndJumpedPG} />
                 <PersonContactOnProfileNotifications personPGs={originalAndJumpedPG} getNotifications={this.getNotifications}/>
                 <PersonContactOnProfileMessage personPG={originalAndJumpedPG} getMessage={this.getMessage}/>
             </li>
@@ -100,20 +117,7 @@ var PersonContactOnProfile = React.createClass({
         return (imgUrlList && imgUrlList.length>0)? imgUrlList[0]:"img/avatar.png";
     },
 
-    getBasicInfo: function() {
-        var originalAndJumpedPG =  _.compact([this.props.personPG, this.state.jumpedPointedGraph ])
-        var names = foafUtils.getNames(originalAndJumpedPG);
-        var companyList = foafUtils.getworkplaceHomepages(originalAndJumpedPG);
-        var noValue = "...";
 
-        return names = {
-            name:(names && names.name && names.name.length>0)? names.name[0]:noValue,
-            givenname:(names && names.givenname && names.givenname.length>0)? names.givenname[0]:noValue,
-            lastname:(names && names.family_name && names.family_name.length>0)? names.family_name[0]:noValue,
-            firstname:(names && names.lastname && names.firstname.length>0)? names.lastname[0]:noValue,
-            company:(companyList && companyList.length>0)? companyList[0]:noValue
-        }
-    },
 
     getNotifications: function() {
         return notifications = {
