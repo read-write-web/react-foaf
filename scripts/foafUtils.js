@@ -166,7 +166,6 @@ foafUtils.getNames = function(pgList) {
 };
 
 foafUtils.getImg = function (pgList) {
-    var imgUrlList = [];
     var imgUrlList =
         _.chain(pgList)
             .map(function (pg) {

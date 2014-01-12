@@ -3,7 +3,7 @@
 var PersonContactOnProfile = React.createClass({
     getInitialState: function() {
         return {
-            jumpedPointedGraph: this.props.personPG
+            jumpedPointedGraph: this.props.personPG.jump()
         }
     },
 
@@ -17,6 +17,7 @@ var PersonContactOnProfile = React.createClass({
                 })
             },
             function (err) {
+					console.log("in componentDidMount. error:",component.state.jumpedPointedGraph.pointer,"->",err)
                 component.replaceState({error: err})
             }
         )
@@ -45,7 +46,7 @@ var PersonContactOnProfile = React.createClass({
 //    	 if (e.altKey) { this.props.handlerClick(this.state.jumpedPointedGraph); }
 		if ( ! ( this.state.jumpedPointedGraph.pointer.isBlank || this.state.jumpedPointedGraph.pointer.isVar))
 			this.props.changeUser(this.state.jumpedPointedGraph);
-		return false;
+		return true;
 	 },
 
     setElementClasses: function() {
@@ -93,10 +94,10 @@ var PersonContactOnProfile = React.createClass({
         return (
             <li className={clazz} style={show} onClick={this.handlerClick}>
                 <div className="loader"></div>
-                <PersonContactOnProfilePix personPGs={originalAndJumpedPG}  getUserImg={this.getUserImg}/>
+                <PersonContactOnProfilePix personPGs={originalAndJumpedPG} />
                 <PersonContactOnProfileBasicInfo personPGs={originalAndJumpedPG} />
                 <PersonContactOnProfileNotifications personPGs={originalAndJumpedPG} getNotifications={this.getNotifications}/>
-                <PersonContactOnProfileMessage personPG={originalAndJumpedPG} getMessage={this.getMessage}/>
+                <PersonContactOnProfileMessage personPG={originalAndJumpedPG}/>
             </li>
             );
     },
@@ -109,29 +110,6 @@ var PersonContactOnProfile = React.createClass({
         else {
             filterText = filterText.toString().toLowerCase();
             return (userName.indexOf(filterText) != -1) && (userName.indexOf(filterText) == 0);
-        }
-    },
-
-    getUserImg: function() {
-        var originalAndJumpedPG =  _.compact([this.props.personPG, this.state.jumpedPointedGraph ])
-        var imgUrlList = foafUtils.getImg(originalAndJumpedPG);
-        return (imgUrlList && imgUrlList.length>0)? imgUrlList[0]:"img/avatar.png";
-    },
-
-
-
-    getNotifications: function() {
-        return notifications = {
-            nbNewMessages:0,
-            nbRecentInteraction:0,
-            nbUpdates:0
-        }
-    },
-
-    getMessage: function() {
-        return message = {
-            lastMessageDate:"",
-            lastMessage:"No message"
         }
     }
 

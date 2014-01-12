@@ -2,7 +2,7 @@
 
 var PersonContactOnProfileMessage = React.createClass({
     render: function() {
-        var message = this.props.getMessage();
+        var message = this.getMessage();
         return (
             <div className="moreInfo">
                 <div className="lastInteraction">Last message from {this.props.userName}: <span>{message.lastMessageDate}</span></div>
@@ -10,5 +10,12 @@ var PersonContactOnProfileMessage = React.createClass({
                 <div className="nextStep"><a href="#">Write back</a></div>
             </div>
             );
-    }
+    },
+
+	getMessage: function() {
+		return message = {
+			lastMessageDate:"",
+			lastMessage:"No message"
+		}
+	}
 });
