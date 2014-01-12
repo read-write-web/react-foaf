@@ -11,10 +11,14 @@ var store = new $rdf.IndexedFormula();
 function FOAF(name) { return $rdf.sym("http://xmlns.com/foaf/0.1/"+name) }
 function RDFS(name) { return $rdf.sym("http://www.w3.org/2000/01/rdf-schema#"+name) }
 
-// Application boots here.
-var foafBx = <FoafBx />;
+
+var foafDocURL = "http://bblfish.net/people/henry/card";
+	//url : "https://my-profile.eu/people/tim/card",
+	//url:"https://my-profile.eu/people/deiu/card",
+	//url:"https://my-profile.eu/people/mtita/card",// Not working
+	//url:"http://presbrey.mit.edu/foaf",
 React.renderComponent(
-    foafBx,
+	 <FoafBx url={foafDocURL}/>,
     document.getElementById('container')
 );
 

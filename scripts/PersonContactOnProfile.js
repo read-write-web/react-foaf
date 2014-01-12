@@ -43,8 +43,9 @@ var PersonContactOnProfile = React.createClass({
 //			 }
 //		 )
 //    	 if (e.altKey) { this.props.handlerClick(this.state.jumpedPointedGraph); }
-
-		this.props.handlerClick(this.state.jumpedPointedGraph);
+		if ( ! ( this.state.jumpedPointedGraph.pointer.isBlank || this.state.jumpedPointedGraph.pointer.isVar))
+			this.props.changeUser(this.state.jumpedPointedGraph);
+		return false;
 	 },
 
     setElementClasses: function() {

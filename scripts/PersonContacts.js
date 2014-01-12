@@ -15,8 +15,8 @@ var PersonContacts = React.createClass({
 
     render: function () {
         var self = this;
-        var foafs = _.chain(this.props.personPG.jumpRel(FOAF("knows"))).map(function (foafPg) {
-                return (<PersonContactOnProfile personPG={foafPg} handlerClick={self.props.changeUser} filterText={self.state.filterText}/>)
+        var foafs = _.chain(this.props.personPG.rel(FOAF("knows"))).map(function (foafPg) {
+                return (<PersonContactOnProfile personPG={foafPg} changeUser={self.props.changeUser} filterText={self.state.filterText}/>)
             }).value();
         return (
             <div id="contacts">
