@@ -1,6 +1,6 @@
 
 // A object holding the module foaf.
-var foafUtils = {}
+var foafUtils = {};
 
 function FOAF(name) { return $rdf.sym("http://xmlns.com/foaf/0.1/"+name) }
 function CONTACT(name) { return $rdf.sym("http://www.w3.org/2000/10/swap/pim/contact#"+name) }
@@ -119,11 +119,11 @@ foafUtils.getContactAddress = function(pgList) {
             }).flatten()
             .map(function(pg) {
                 var address = {
-                    city: relLiteral(pg, CONTACT("city")),
-                    country: relLiteral(pg, CONTACT("country")),
-                    postalCode: relLiteral(pg, CONTACT("postalCode")),
-                    street: relLiteral(pg, CONTACT("street"))
-                }
+						 city: relLiteral(pg, CONTACT("city")),
+						 country: relLiteral(pg, CONTACT("country")),
+						 postalCode: relLiteral(pg, CONTACT("postalCode")),
+						 street: relLiteral(pg, CONTACT("street"))
+					 };
                 return address;
             }).flatten()
             .value();
@@ -186,11 +186,11 @@ foafUtils.getThumbnail = function (pgList) {
         _.chain(pgList)
             .map(function (imgPG) {
                 var thumbs = _.chain(imgPG.rel(FOAF("thumbnail"))).map(function (thumbPG) {
-                return (thumbPG.pointer.termType == "symbol") ? [thumbPG.pointer] :
-                    (imgPG.pointer.termType == "symbol") ? [imgPG.pointer] : []
+						 return (thumbPG.pointer.termType == "symbol") ? [thumbPG.pointer] :
+							 (imgPG.pointer.termType == "symbol") ? [imgPG.pointer] : []
 
-            })
-            .flatten().value()
+					 })
+						 .flatten().value();
             return (thumbs.length == 0) ? [imgPG.pointer] : thumbs
         }
     ).flatten().value();

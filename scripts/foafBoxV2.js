@@ -21,7 +21,7 @@ var FoafBxV2 = React.createClass({
     },
 
     handleUserInput: function(filterText) {
-        console.log("handle user input !!!")
+        console.log("handle user input !!!");
         /*
          this.setState({
          filterText: filterText
@@ -30,23 +30,23 @@ var FoafBxV2 = React.createClass({
     },
 
     fetchURL: function(url) {
-        if (!url) return
+        if (!url) return;
         var component = this;
         var fetcher = $rdf.fetcher(store, 10000, true);
         var future = fetcher.fetch(url, url);
-        component.setState({url: url})
+        component.setState({url: url});
         future.then(
             function (pg) {
-                var pt = pg.rel(FOAF("primaryTopic"))
+                var pt = pg.rel(FOAF("primaryTopic"));
                 component.replaceState({
-                    primaryTopicsPointedGraphs: pt,
-                    url: url
-                })
+						 primaryTopicsPointedGraphs: pt,
+						 url: url
+					 });
                 //need loading function to display advances in download
             },
             function (err) {
                 console.log("returned from componentDidMount of " + url + " with error " + err);
-                console.log(err)  //need error handling
+                console.log(err);  //need error handling
             })
 
     },

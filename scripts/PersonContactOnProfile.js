@@ -11,14 +11,19 @@ var PersonContactOnProfile = React.createClass({
         var component = this;
         this.props.personPG.jumpAsync(false).then(
             function (jumpedPersonPG) {
-			    console.log("in componentDidMount. Change:",component.state.jumpedPointedGraph.pointer,"->",jumpedPersonPG)
+				 console.log("In componentDidMount");
+			    console.log("Change:", component.state.jumpedPointedGraph.pointer.toNT(), "->", jumpedPersonPG);
                 component.replaceState({
                     jumpedPointedGraph: jumpedPersonPG
                 })
             },
             function (err) {
-					console.log("in componentDidMount. error:",component.state.jumpedPointedGraph.pointer,"->",err)
-                component.replaceState({error: err})
+					console.log("in componentDidMount");
+					console.log("error:", component.state.jumpedPointedGraph.pointer.toNT(), "->", err);
+                component.replaceState({
+						 jumpedPointedGraph: this.props.personPG,
+						 error: err
+					 })
             }
         )
     },
@@ -69,7 +74,7 @@ var PersonContactOnProfile = React.createClass({
 						info = (<p>there was not definitional info in the remote graph</p>)
 					}
             } else {
-                info = (<p>no remote info yet</p>)
+                info = (<p>no remote info yet</p>);
                 loadingStr = "loading"
             }
         }
@@ -86,7 +91,7 @@ var PersonContactOnProfile = React.createClass({
             display: (this.displayUser()) ? 'block' : 'none'
         };
 
-        var originalAndJumpedPG =  _.compact([this.props.personPG, this.state.jumpedPointedGraph ])
+        var originalAndJumpedPG = _.compact([this.props.personPG, this.state.jumpedPointedGraph ]);
 
         // Define appropriate class for the view.
         var clazz = this.setElementClasses();
@@ -103,10 +108,10 @@ var PersonContactOnProfile = React.createClass({
     },
 
     displayUser: function() {
-        var originalAndJumpedPG =  _.compact([this.props.personPG, this.state.jumpedPointedGraph ])
+        var originalAndJumpedPG = _.compact([this.props.personPG, this.state.jumpedPointedGraph ]);
         var userName = foafUtils.getName(originalAndJumpedPG).toString().toLowerCase();
         var filterText = this.props.filterText;
-        if (!filterText) return true
+        if (!filterText) return true;
         else {
             filterText = filterText.toString().toLowerCase();
             return (userName.indexOf(filterText) != -1) && (userName.indexOf(filterText) == 0);
