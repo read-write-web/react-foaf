@@ -3,23 +3,24 @@
 var PersonContactOnProfile = React.createClass({
     getInitialState: function() {
         return {
-            jumpedPointedGraph: this.props.personPG.jump()
+            jumpedPointedGraph: undefined
         }
     },
 
     componentDidMount: function () {
+        console.log('In componentDidMount of PersonContactOnProfile !!!!!!!!!! ********** ************');
         var component = this;
         this.props.personPG.jumpAsync(false).then(
             function (jumpedPersonPG) {
-				 console.log("In componentDidMount");
-			    console.log("Change:", component.state.jumpedPointedGraph.pointer.toNT(), "->", jumpedPersonPG);
+				console.log("In componentDidMount");
+			    //console.log("Change:", component.state.jumpedPointedGraph.pointer.toNT(), "->", jumpedPersonPG);
                 component.replaceState({
                     jumpedPointedGraph: jumpedPersonPG
                 })
             },
             function (err) {
 					console.log("in componentDidMount");
-					console.log("error:", component.state.jumpedPointedGraph.pointer.toNT(), "->", err);
+					//console.log("error:", component.state.jumpedPointedGraph.pointer.toNT(), "->", err);
                 component.replaceState({
 						 jumpedPointedGraph: this.props.personPG,
 						 error: err
@@ -41,14 +42,15 @@ var PersonContactOnProfile = React.createClass({
 //				 console.log(jumpedPersonPG);
 //				 component.replaceState({
 //					 jumpedPointedGraph: jumpedPersonPG
-//				 })
+//				 });
+//                 this.props.changeUser(this.state.jumpedPointedGraph);
 //			 },
 //			 function (err) {
 //				 console.log("RECEIVED ERR:" +err)
 //				 component.replaceState({error: err})
 //			 }
 //		 )
-//    	 if (e.altKey) { this.props.handlerClick(this.state.jumpedPointedGraph); }
+    	 //if (e.altKey) { this.props.handlerClick(this.state.jumpedPointedGraph); }
 		if ( ! ( this.state.jumpedPointedGraph.pointer.isBlank || this.state.jumpedPointedGraph.pointer.isVar))
 			this.props.changeUser(this.state.jumpedPointedGraph);
 		return true;
@@ -83,14 +85,44 @@ var PersonContactOnProfile = React.createClass({
         return "contact clearfix float-left "+ loadingStr + ((this.state.error)?" error":"");
     },
 
-    render: function() {
+    componentWillReceiveProps: function(newProps) {
+        console.log('componentWillReceiveProps !!!!!!! *************** ****************')
+        this.setState({
+            jumpedPointedGraph:newProps.personPG
+        });
 
+        /*
+        var component = this;
+        this.props.personPG.jumpAsync(false).then(
+            function (jumpedPersonPG) {
+                console.log("In componentWillReceiveProps");
+                //console.log("Change:", component.state.jumpedPointedGraph.pointer.toNT(), "->", jumpedPersonPG);
+                component.replaceState({
+                    jumpedPointedGraph: jumpedPersonPG
+                })
+            },
+            function (err) {
+                console.log("in componentDidMount");
+                //console.log("error:", component.state.jumpedPointedGraph.pointer.toNT(), "->", err);
+                component.replaceState({
+                    jumpedPointedGraph: this.props.personPG,
+                    error: err
+                })
+            }
+        )
+        */
+    },
+
+    render: function() {
+        console.log('In Render of PersonContactOnProfile !!!!!!!!!! ********** ************');
+        console.log(this.state.jumpedPointedGraph);
 
         // Check user and filter.
         var show = {
             display: (this.displayUser()) ? 'block' : 'none'
         };
 
+        // Set appropriate Pgs.
         var originalAndJumpedPG = _.compact([this.props.personPG, this.state.jumpedPointedGraph ]);
 
         // Define appropriate class for the view.

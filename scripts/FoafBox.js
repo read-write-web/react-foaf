@@ -33,6 +33,8 @@ var FoafBx = React.createClass({
     },
 
     changeUser: function(pg){
+        console.log("In foaf box ------->>>>> Change User")
+        console.log(pg)
         this.replaceState({
             primaryTopicsPointedGraphs:[pg]
         });
