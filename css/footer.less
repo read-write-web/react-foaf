@@ -1,41 +1,43 @@
+@import "base";
+
 .footer {
   position:fixed;
   width: 100%;
   bottom: 0;
   left: 0;
-  .transition(all 0.8s);
-  .transform(translate(0,45px));
+  height: auto;
+  color:  @white;
+  .transition(all 0.4s);
+  .transform(translate(0,48px));
 
   &:hover {
     .transform(translate(0,0));
   }
 
-  .footer-bar {
-    width: auto;
-    background: @darkGrey;
-    color: @white;
-    padding: 5px 15px;
-    box-sizing: border-box;
+  .footer-handle {
+    background: @blue;
+    margin: 0 20px;
+    width: 130px;
+    padding: 5px 10px;
+    color: white;
+  }
+
+  .footer-content {
     height: 50px;
+    width: 100%;
+    background: @darkGrey;
 
-    .footer-title {
-      color: @white;
-    }
+    ul {
+      margin: 0;
+      padding: 0;
 
-    .footer-items {
-      margin:0;
-
-      li {
-        font-size: 15px;
+      .footer-item {
         display: inline-block;
-        margin: 0 0 -100px;
-        padding:0 5px;
-
-        &:hover {
-          color: @green;
-        }
+        margin: 10px 0 10px 10px;
+        width: 30px;
+        height: 30px;
+        background: @blue;
       }
     }
-
   }
 }
