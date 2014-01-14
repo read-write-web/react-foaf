@@ -1,0 +1,41 @@
+.footer {
+  position:fixed;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  .transition(all 0.8s);
+  .transform(translate(0,45px));
+
+  &:hover {
+    .transform(translate(0,0));
+  }
+
+  .footer-bar {
+    width: auto;
+    background: @darkGrey;
+    color: @white;
+    padding: 5px 15px;
+    box-sizing: border-box;
+    height: 50px;
+
+    .footer-title {
+      color: @white;
+    }
+
+    .footer-items {
+      margin:0;
+
+      li {
+        font-size: 15px;
+        display: inline-block;
+        margin: 0 0 -100px;
+        padding:0 5px;
+
+        &:hover {
+          color: @green;
+        }
+      }
+    }
+
+  }
+}

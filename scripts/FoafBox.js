@@ -50,7 +50,8 @@ var FoafBx = React.createClass({
             <div className="PersonalProfileDocument">
                 <MainSearchBox filterText={this.state.filterText} personPG={this.state.primaryTopicsPointedGraphs} onUserInput={this.handleUserInputInSearchBox}/>
                 <div id="actionNeeded">Action needed</div>
-                <Person personPG={this.state.primaryTopicsPointedGraphs} changeUser={this.changeUser}/>
+                <Space personPG={this.state.primaryTopicsPointedGraphs} changeUser={this.changeUser}/>
+                <Footer/>
             </div>
             );
     }
@@ -58,5 +59,6 @@ var FoafBx = React.createClass({
     // Executed immediately after render.
     //componentDidMount: function() {}
 });
+
 
 //<Person personPG={this.state.primaryTopicsPointedGraphs} changeUser={this.changeUser}/>

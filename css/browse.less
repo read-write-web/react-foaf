@@ -1,0 +1,33 @@
+
+#actionNeeded {
+  width: @mainWidth;
+  background: @red;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 10px;
+  box-sizing: border-box;
+  margin: 0 auto 20px;
+}
+
+.contacts {
+
+  width: @mainWidth;
+  margin: 0 auto;
+
+  a, a:visited {
+    color: @lightGrey;
+  }
+
+  ul {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .contact :extend(.contact-base all) {
+
+  }
+
+}

@@ -3,7 +3,7 @@
 var PersonContactOnProfile = React.createClass({
     getInitialState: function() {
         return {
-            jumpedPointedGraph: undefined
+            jumpedPointedGraph: this.props.personPG.jump()
         }
     },
 

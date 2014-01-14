@@ -1,0 +1,183 @@
+
+
+#profile :extend(.content-base all) {
+
+  & > .picture {
+    width:300px;
+    height: 300px;
+    border-radius: 50%;
+    overflow: hidden;
+    
+    img {
+      width: 110%;
+      height: auto;
+    }
+  }
+
+  & > .basic {
+
+    & .name {
+      font-size: 50px;
+      margin-top: -15px;
+    }
+
+    & .surname {
+      line-height: 30px;
+      font-size: 30px;
+
+    }
+
+    & .company {
+      line-height: 40px;
+      font-size: 16px;
+      color: @mediumGrey;
+    }
+  }
+
+  & > .notifications {
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+
+
+    div {
+      text-align: center;
+      width: 42px;
+      height: 42px;
+      line-height: 42px;
+      margin: 8px 10px 10px 0;
+    }
+
+    .newMessages {
+      background: @red;
+    }
+
+    .recentInteractions {
+      background: @green;
+    }
+
+    .updates {
+      background: @blue;
+    }
+
+  }
+
+  & > .moreInfo {
+
+    & .lastInteraction {
+      clear: both;
+      text-align: center;
+      padding: 40px 0 20px;
+
+      span {
+        font-weight: bold;
+      }
+    }
+
+    & .message {
+      font-style: italic;
+      padding: 14px 20px;
+      margin: 5px 0;
+      background: @lightYellow;
+      color: @mediumGrey;
+      line-height: 1.8em;
+    }
+
+    & .nextStep {
+      position: relative;
+      width: 120px;
+      margin: 30px auto;
+      text-align: center;
+      padding: 10px 14px;
+      background: @green;
+      .transition(all 0.2s);
+
+      &:hover {
+        .scale(1.1);
+        background: @red;
+      }
+
+      a {
+        color: white;
+      }
+    }
+  }
+
+  & > #details {
+    color: @mediumGrey;
+
+    .title {
+      background: @blue;
+      padding: 7px 10px;
+      margin: 30px 0;
+      color: @white;
+    }
+
+    .title-case {
+      margin: 0 0 5px;
+    }
+
+    .content {
+      margin: 0 0 20px;
+
+    }
+
+    ul {
+      padding: 0;
+
+    }
+
+    li {
+      height: 150px;
+      padding: 10px;
+      background: @lightestGrey;
+    }
+  }
+
+  & > #webid {
+    background: @lightestGrey;
+    margin: 20px 0;
+    padding: 10px;
+
+    img {
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    #webid-address {
+      color: @mediumGrey;
+      height: 40px;
+      line-height: 40px;
+      vertical-align: middle;
+    }
+  }
+
+  & > #contacts {
+
+    .title {
+      background: @blue;
+      padding: 7px 10px;
+      margin: 30px 0;
+      color: @white;
+    }
+
+    li {
+
+      img {
+        width: 100%;
+        height: auto;
+      }
+
+    }
+
+    .contact :extend(.contact-base all) {
+      background: @lightestGrey;
+      box-shadow: none;
+    }
+
+  }
+
+}
+
+

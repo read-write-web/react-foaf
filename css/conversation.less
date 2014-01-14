@@ -1,0 +1,110 @@
+
+
+#conversation {
+  width: @mainWidth;
+  padding: 0;
+
+  #title {
+    width: @mainWidth;
+    background: @blue;
+    padding: 10px;
+    color: white;
+    box-sizing: border-box;
+    margin-bottom: 30px;
+  }
+
+  .message {
+    position: relative;
+    list-style-type: none;
+    margin-bottom: 30px;
+    width: @mainWidth;
+    height: auto;
+    background: white;
+    box-shadow: @shadow;
+    box-sizing: border-box;
+
+    &.right {
+      text-align: right;
+    }
+
+    .author {
+      position: absolute;
+      top: 10px;
+      width: 100px;
+      height: 100px;
+      border-radius: 50px;
+      overflow: hidden;
+
+      &.left {
+        left: 0;
+        margin-left: -130px;
+      }
+
+      &.right {
+        right: 0;
+        margin-right: -130px;
+      }
+
+      img {
+        width: 100%;
+        height: auto;
+      }
+
+    }
+
+    .title {
+      padding: 30px;
+      font-size: 30px;
+    }
+
+    .summary {
+      width: 100%;
+      margin-top: 10px;
+      background: @lightYellow;
+      padding: 20px 30px;
+      box-sizing: border-box;
+    }
+
+    .content {
+      width: 100%;
+      padding: 20px 30px;
+      box-sizing: border-box;
+    }
+
+    #summary {
+      width: 100%;
+      margin-top: 10px;
+      background: @lightYellow;
+      padding: 20px 30px;
+      box-sizing: border-box;
+    }
+
+    #content {
+      width: 100%;
+      padding: 20px 30px;
+      box-sizing: border-box;
+    }
+
+    button[type="submit"] {
+      font-family: 'Noto Sans', sans-serif;
+      font-size: 16px;
+      text-transform: uppercase;
+      font-weight: bold;
+      color: white;
+      background: @green;
+      border: none;
+      box-shadow: none;
+      border-radius: 0;
+      outline: none;
+      padding: 10px;
+      margin: 30px;
+      cursor: pointer;
+
+      &:hover {
+
+      }
+
+    }
+  }
+}
+

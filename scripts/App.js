@@ -13,10 +13,13 @@ function RDFS(name) { return $rdf.sym("http://www.w3.org/2000/01/rdf-schema#"+na
 
 
 //var foafDocURL = "http://bblfish.net/people/henry/card";
-	//url : "https://my-profile.eu/people/tim/card",
-var foafDocURL ="https://my-profile.eu/people/deiu/card";
-	//url:"https://my-profile.eu/people/mtita/card",// Not working
-	//url:"http://presbrey.mit.edu/foaf",
+//var foafDocURL = "https://my-profile.eu/people/tim/card";
+//var foafDocURL = "https://my-profile.eu/people/deiu/card";
+var foafDocURL = "https://my-profile.eu/people/deiu/card";
+//var foafDocURL = "https://my-profile.eu/people/mtita/card";// Not working
+//var foafDocURL = "http://presbrey.mit.edu/foaf";
+//var foafDocURL = 'https://localhost:8443/2013/backbone';
+
 React.renderComponent(
 	 <FoafBx url={foafDocURL}/>,
     document.getElementById('container')

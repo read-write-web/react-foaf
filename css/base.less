@@ -1,0 +1,419 @@
+/* ------------------------------- */
+/* COLORS */
+
+
+@darkGrey: #24221f;
+@mediumGrey: #938b7f;
+@lightGrey: #e2e2e2;
+@lighterGrey: #ededed;
+@lightestGrey: #f8f8f8;
+@lightYellow: #fffdcb;
+@lightRed: #ffe6e6;
+@red: #b80b5b;
+@blue: #3fabd3;
+@green: #0bb988;
+@orange: #ff793a;
+@brown: #938b7f;
+@white: white;
+@black: black;
+
+
+
+
+/* ------------------------------- */
+/* IMPORTS */
+
+@import "mixins";
+@import "browse";
+@import "conversation";
+@import "profile";
+@import "space";
+@import "footer";
+
+/* ------------------------------- */
+/* FONTS */
+
+@font: 'Noto Sans', sans-serif;
+
+
+/* ------------------------------- */
+/* VARIABLES */
+
+@mainWidth: 800px;
+@shadow: 6px 6px rgba(0, 0, 0, 0.2);
+@border: 10px solid #e3e3e3;
+
+
+
+/* ------------------------------- */
+/* BASIC */
+
+
+html {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  background: #EDEDED;
+  width: 100%;
+  height: auto;
+  font-family: @font;
+}
+
+div {
+  box-sizing: border-box;
+}
+
+.clearfix:before, .clearfix:after { content: ""; display: table; }
+.clearfix:after { clear: both; }
+.clearfix { zoom: 1; }
+
+a, a:visited {
+  text-decoration: none;
+  color: @blue;
+}
+
+.center {
+  margin: 0 auto;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.hide {
+  display: none;
+}
+
+.loading {
+  opacity: 0.4;
+}
+
+.error {
+  background: @lightRed !important;
+}
+
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}
+
+.title-case {
+  font-weight: bold;
+  text-transform: uppercase;
+  color: @black;
+}
+
+input[type="text"] {
+  font-family: 'Noto Sans', sans-serif;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  outline: none;
+  box-sizing: border-box;
+}
+
+input[type="text"]:focus {
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  outline: none;
+}
+
+textarea {
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 16px;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  outline: none;
+  resize: none;
+  box-sizing: border-box;
+
+}
+
+textarea:focus {
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  outline: none;
+}
+
+
+/* ------------------------------- */
+/* SEARCH */
+
+#search {
+  width: @mainWidth;
+  height: 60px;
+  background: white;
+  box-shadow: @shadow;
+  margin: 40px auto;
+  border: @border;
+  box-sizing: content-box;
+}
+
+#add {
+  font-weight: bold;
+  height: 60px;
+  width: 60px;
+  text-align: center;
+  line-height: 60px;
+  background: #333333;
+  color: white;
+  font-size: 50px;
+  float: left;
+  cursor: pointer;
+  .transition(all 0.2s);
+}
+
+#add:hover {
+  background: @blue;
+  .twist(-5deg, 1.1);
+
+}
+
+#search input[type="text"] {
+  height: 60px;
+  width: 680px;
+  border: 0;
+  box-shadow: none;
+  padding: 20px;
+  box-sizing: border-box;
+  outline: none;
+  font-family: "Noto Sans", sans-serif;
+  font-size: 20px;
+  float: left;
+}
+
+#search input[type="text"]:focus {
+  box-shadow: none;
+  outline: none;
+
+}
+
+#search button[type="submit"] {
+  height: 60px;
+  width: 60px;
+  text-align: center;
+  line-height: 60px;
+  background: #333333;
+  color: white;
+  font-size: 30px;
+  float: right;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  -moz-transition: all 0.2s;
+  -webkit-transition: all 0.2s;
+}
+
+#search button[type="submit"]:hover {
+  box-shadow: none;
+  outline: none;
+  background: @green;
+  .twist(-5deg, 1.1);
+
+}
+
+
+
+
+/* ------------------------------- */
+/* LOADER */
+
+.loader {
+  display: none;
+  position: absolute;
+  z-index: 1000000000;
+  top: 50%;
+  left: 50%;
+  margin-top: -19px;
+  margin-left: -19px;
+  border: 17px solid;
+  border-color: @blue @darkGrey @darkGrey;
+  border-radius: 50%;
+  -webkit-animation: spin 1s linear infinite;
+  -moz-animation: spin 1s linear infinite;
+  -o-animation: spin 1s linear infinite;
+  animation: spin 1s linear infinite;
+}
+
+.loading .loader {
+  display: block;
+}
+
+@-webkit-keyframes spin {
+  100% { -webkit-transform: rotate(359deg); }
+}
+
+@-moz-keyframes spin {
+  100% { -moz-transform: rotate(359deg); }
+}
+
+@-o-keyframes spin {
+  100% { -moz-transform: rotate(359deg); }
+}
+
+@keyframes spin {
+  100% {  transform: rotate(359deg); }
+}
+
+
+
+
+ul {
+  padding: 0;
+}
+
+.span3 li {
+  list-style-type: none;
+  width: 32%;
+  margin: 0 2% 2% 0;
+  box-sizing: border-box;
+
+  &:nth-child(3n + 3) {
+    margin: 0 0 2% 0;
+  }
+}
+
+
+.container-base {
+  position: relative;
+  width: @mainWidth;
+  height: auto;
+  background: white;
+  box-shadow: @shadow;
+  box-sizing: border-box;
+  margin-bottom: 50px;
+}
+
+.content-base {
+  position: relative;
+  width: @mainWidth;
+  height: auto;
+  background: white;
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+.contact-base {
+  position: relative;
+  font-size: 10px;
+  width: 32%;
+  height: 220px;
+  background: white;
+  margin: 0 2% 2% 0;
+  box-sizing: border-box;
+  box-shadow: @shadow;
+  list-style-type: none;
+  cursor: default;
+
+  &:nth-child(3n + 3) {
+    margin: 0 0 2% 0;
+  }
+
+  .picture {
+    margin: 10px;
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    overflow:hidden;
+
+    img {
+      width: 110%;
+      height: auto;
+    }
+  }
+
+  .name {
+    font-size: 18px;
+    margin: 10px 10px 0;
+  }
+
+  .surname {
+    font-size: 14px;
+    margin: 0 10px 0;
+  }
+
+  .company {
+    margin: 2px 10px 0;
+    font-size: 12px;
+    color: @mediumGrey;
+  }
+
+  .moreInfo {
+    clear: both;
+    margin: 45px 10px 0;
+    color: @lightGrey;
+  }
+
+  &:hover {
+
+    a, a:visited {
+      color: @blue;
+    }
+
+    .moreInfo {
+      color: black;
+    }
+
+    .message {
+      background: @lightYellow;
+    }
+
+  }
+
+  .recentInteractions,
+  .newMessages,
+  .updates {
+    font-size: 10px;
+    text-align: center;
+    width: 21px;
+    height: 21px;
+    line-height: 20px;
+    color: white;
+    margin: 8px 0 10px 10px;
+  }
+
+  .lastInteraction {
+    text-align: center;
+    margin-bottom: 10px;
+
+    span {
+      font-weight: bold;
+    }
+
+  }
+
+  .message {
+    font-style: italic;
+    padding: 7px 10px;
+    margin: 5px 0;
+    background: #f8f8f8;
+  }
+
+  .nextStep {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    text-align: right;
+  }
+
+  .newMessages {
+    background: @red;
+  }
+
+  .recentInteractions {
+    background: @green;
+  }
+
+  .updates {
+    background: @blue;
+  }
+
+}

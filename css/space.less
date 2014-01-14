@@ -1,0 +1,31 @@
+
+.space :extend(.container-base all) {
+
+  .space-bar {
+    width: 100%;
+    background: @darkGrey;
+    padding: 5px 15px;
+    box-sizing: border-box;
+    height: auto;
+    color: @white;
+
+    .space-title {
+      color: @white;
+    }
+
+    .space-tools {
+      margin:0;
+
+      li {
+        font-size: 18px;
+        display: inline-block;
+        margin: 0;
+        padding:0 5px;
+
+        &:hover {
+          color: @green;
+        }
+      }
+    }
+  }
+}
