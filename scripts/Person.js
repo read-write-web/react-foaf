@@ -17,7 +17,7 @@ var Person = React.createClass({
                     <PersonMessage personPG={firstPg} userName={UserName[0]} getMessage={this.getMessage}/>
                     <PersonMoreInfo personPG={firstPg} getMoreInfo={this.getMoreInfo} getAddress={this.getAddress}/>
                     <PersonWebId personPG={firstPg} getWebId={this.getWebId}/>
-                    <PersonContacts personPG={firstPg} userName={UserName[0]} changeUser={this.props.changeUser}/>
+
                 </div>
                 );
         }
@@ -30,7 +30,7 @@ var Person = React.createClass({
         }
     },
 
-
+//<PersonContacts personPG={firstPg} userName={UserName[0]} changeUser={this.props.changeUser}/>
     getUserImg: function() {
         var imgUrlList = foafUtils.getImg(this.props.personPG);
         return (imgUrlList && imgUrlList.length>0)? imgUrlList[0]:"img/avatar.png";

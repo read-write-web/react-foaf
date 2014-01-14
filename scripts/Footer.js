@@ -5,6 +5,22 @@ var Footer = React.createClass({
 
     },
 
+    handleClick: function() {
+        this.props.maximizeTab(this.props.properties);
+    },
+
+    render:function(){
+        // Check user and filter.
+        var show = {
+            display: (this.props.properties.isCurrentTab) ? 'none' : 'block'
+        };
+
+        return (
+            <li className="footer-item" style={show} onClick={this.handleClick}></li>
+            );
+    }
+
+    /*
     render:function(){
         return (
             <div className="footer">
@@ -18,5 +34,6 @@ var Footer = React.createClass({
 			   </div>
             </div>
             );
-    }
+    }*/
+
 });
