@@ -24,15 +24,12 @@ var Space = React.createClass({
         console.log(this.props.properties)
         console.log(this.props.personPG)
 
-        // Check user and filter.
-        var show = {
-            display: (this.props.properties.isCurrentTab) ? 'block' : 'none'
-        };
+        // Set css display properties.
+        var show = {display: (this.props.properties.isCurrentTab) ? 'block' : 'none'};
+        var styleTools = this._setCssForTools(self.props.properties);
 
-        // Check user and filter.
+        // Set component classes.
         var clazz = "space center " + this.props.properties.className;
-
-        console.log(self._tabMap[this.props.properties.type])
 
         // Define the Html.
         var spaceTree =
@@ -40,16 +37,16 @@ var Space = React.createClass({
                 <div className="space-bar clearfix">
                     <div className="space-title float-left title-case">"Test Title"</div>
                     <ul className="space-tools float-right">
-                        <li className="space-options">
+                        <li className="space-options" style={styleTools}>
                             <i class="fa fa-cog"></i>
                         </li>
-                        <li className="space-maximize" onClick={this.handleClickMaximize}>
+                        <li className="space-maximize" style={styleTools}>
                             <i class="fa fa-plus-circle"></i>
                         </li>
-                        <li className="space-minimize" onClick={this.handleClickMinimize}>
+                        <li className="space-minimize" style={styleTools} onClick={this.handleClickMinimize}>
                             <i class="fa fa-minus-circle"></i>
                         </li>
-                        <li className="space-close" onClick={this.handleClickClose}>
+                        <li className="space-close" style={styleTools} onClick={this.handleClickClose}>
                             <i className="fa fa-times-circle"></i>
                         </li>
                     </ul>
@@ -63,8 +60,26 @@ var Space = React.createClass({
         return spaceTree;
     },
 
+    _setCssForTools: function(properties) {
+        return this._cssForToolsMap[properties.type](properties);
+    },
+
     _createSubComponent: function(properties) {
         return this._tabMap[properties.type](properties, this);
+    },
+
+    // Choose css style based on
+    _cssForToolsMap: {
+        contacts: function(prop) {
+            return {
+                display: 'none'
+            };
+        },
+        person: function(prop, ref) {
+            return {
+                display: 'inline-block'
+            };
+        }
     },
 
     // Choose html based on tab type.

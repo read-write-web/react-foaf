@@ -17,7 +17,7 @@ var FoafBx = React.createClass({
        };
     },
 
-	 componentDidMount: function() {
+	componentDidMount: function() {
 		 this.fetchURL(this.props.url);
 	 },
 
@@ -121,11 +121,9 @@ var FoafBx = React.createClass({
         this.state.tabsList[tabProperties.className] = tabProperties;
 
         // Change state to render.
-//        this.setState({tabsList: this.state.tabsList});
-        // Set state to render.
         this.setState({
-            tabsList: this.state.tabsList
-            //primaryTopicsPointedGraphs:[pg]
+            tabsList: this.state.tabsList,
+            primaryTopicsPointedGraphs:tabProperties.pointedGraphs
         });
 
     },
@@ -165,6 +163,7 @@ var FoafBx = React.createClass({
         return foafBoxTree;
     },
 
+    // Methods not ReactJs should begin with _xxx (need to change it on all the app files).
     _createTab:function(tab) {
         return <Space
             personPG={this.state.primaryTopicsPointedGraphs}

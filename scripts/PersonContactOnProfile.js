@@ -9,16 +9,19 @@ var PersonContactOnProfile = React.createClass({
 
     componentDidMount: function () {
         console.log('In componentDidMount of PersonContactOnProfile !!!!!!!!!! ********** ************');
+        console.log(this.props.personPG)
         var component = this;
         this.props.personPG.jumpAsync(false).then(
             function (jumpedPersonPG) {
 				console.log("Success");
 			    //console.log("Change:", component.state.jumpedPointedGraph.pointer.toNT(), "->", jumpedPersonPG);
+                console.log(jumpedPersonPG);
                 component.replaceState({
                     jumpedPointedGraph: jumpedPersonPG
                 })
             },
             function (err) {
+                console.log("error")
 					//console.log("error:", component.state.jumpedPointedGraph.pointer.toNT(), "->", err);
                 component.replaceState({
 						 jumpedPointedGraph: this.props.personPG,
@@ -72,23 +75,28 @@ var PersonContactOnProfile = React.createClass({
 
     componentWillReceiveProps: function(newProps) {
         console.log('componentWillReceiveProps !!!!!!! *************** ****************')
-        console.log(newProps.personPG)
+        console.log(this.state.jumpedPointedGraph)
+        console.log(newProps)
+
+        /*
         this.setState({
             jumpedPointedGraph:newProps.personPG
         });
+        */
 
         /*
         var component = this;
-        this.props.personPG.jumpAsync(false).then(
+        newProps.personPG.jumpAsync(false).then(
             function (jumpedPersonPG) {
-                console.log("In componentWillReceiveProps");
                 //console.log("Change:", component.state.jumpedPointedGraph.pointer.toNT(), "->", jumpedPersonPG);
+                console.log("success")
+                console.log(jumpedPersonPG)
                 component.replaceState({
                     jumpedPointedGraph: jumpedPersonPG
                 })
             },
             function (err) {
-                console.log("in componentDidMount");
+                console.log("error")
                 //console.log("error:", component.state.jumpedPointedGraph.pointer.toNT(), "->", err);
                 component.replaceState({
                     jumpedPointedGraph: this.props.personPG,
@@ -97,9 +105,11 @@ var PersonContactOnProfile = React.createClass({
             }
         )
         */
+
     },
 
     render: function() {
+        console.log("Render PersonContactOnProfile")
         // Check if user should be displayed.
         var show = {
             display: (this.displayUser()) ? 'block' : 'none'
@@ -107,6 +117,7 @@ var PersonContactOnProfile = React.createClass({
 
         // Set appropriate Pgs.
         var originalAndJumpedPG = _.compact([this.props.personPG, this.state.jumpedPointedGraph ]);
+        console.log(originalAndJumpedPG)
 
         // Define appropriate class for the view.
         var clazz = this.setElementClasses();
