@@ -87,6 +87,9 @@ var FoafBx = React.createClass({
         // Update its properties.
         delete this.state.tabsList[tabProperties.className]
 
+        // Set initial tab as current tab.
+        this.state.tabsList["0"].isCurrentTab = true;
+
         // Change state to render.
         this.setState({tabsList: this.state.tabsList});
     },
@@ -100,6 +103,9 @@ var FoafBx = React.createClass({
 
         // Update its properties.
         this.state.tabsList[tabProperties.className] = tabProperties;
+
+        // Set initial tab as current tab.
+        this.state.tabsList["0"].isCurrentTab = true;
 
         // Change state to render.
         this.setState({tabsList: this.state.tabsList});
