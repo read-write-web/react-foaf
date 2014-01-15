@@ -12,14 +12,13 @@ var PersonContactOnProfile = React.createClass({
         var component = this;
         this.props.personPG.jumpAsync(false).then(
             function (jumpedPersonPG) {
-				console.log("In componentDidMount");
+				console.log("Success");
 			    //console.log("Change:", component.state.jumpedPointedGraph.pointer.toNT(), "->", jumpedPersonPG);
                 component.replaceState({
                     jumpedPointedGraph: jumpedPersonPG
                 })
             },
             function (err) {
-					console.log("in componentDidMount");
 					//console.log("error:", component.state.jumpedPointedGraph.pointer.toNT(), "->", err);
                 component.replaceState({
 						 jumpedPointedGraph: this.props.personPG,
@@ -73,6 +72,7 @@ var PersonContactOnProfile = React.createClass({
 
     componentWillReceiveProps: function(newProps) {
         console.log('componentWillReceiveProps !!!!!!! *************** ****************')
+        console.log(newProps.personPG)
         this.setState({
             jumpedPointedGraph:newProps.personPG
         });
