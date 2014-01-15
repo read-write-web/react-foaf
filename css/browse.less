@@ -11,8 +11,7 @@
   margin: 0 auto 20px;
 }
 
-.contacts {
-
+#contacts {
   width: @mainWidth;
   margin: 0 auto;
 
@@ -26,8 +25,21 @@
     padding: 0;
   }
 
-  .contact :extend(.contact-base all) {
-
+  li {
+    img {
+      width: 100%;
+      height: auto;
+    }
   }
 
+  .contact :extend(.contact-base all) {
+  }
+
+  /*
+  .contact :extend(.contact-base all) {
+    background: @lightestGrey;
+    box-shadow: none;
+  }*/
 }
+
+

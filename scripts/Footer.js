@@ -6,17 +6,21 @@ var Footer = React.createClass({
     },
 
     handleClick: function() {
+        console.log('handle click')
+        console.log(this.props.personPG)
         this.props.maximizeTab(this.props.properties);
     },
 
     render:function(){
-        // Check user and filter.
+        console.log('handle click')
+        console.log(this.props.personPG);
+
         var show = {
             display: (this.props.properties.isCurrentTab) ? 'none' : 'block'
         };
 
         return (
-            <li className="footer-item" style={show} onClick={this.handleClick}></li>
+            <li className="footer-item float-left" style={show} onClick={this.handleClick}></li>
             );
     }
 

@@ -4,6 +4,7 @@ var Space = React.createClass({
     getInitialState: function(){
 
     },
+
     handleClickMaximize: function(e) {
         console.log('Click to Maximized ' + e);
         this.props.maximizeTab(this.props.properties);
@@ -18,8 +19,11 @@ var Space = React.createClass({
     },
 
     render:function(){
+        var self = this;
         console.log('Render space')
         console.log(this.props.properties)
+        console.log(this.props.personPG)
+
         // Check user and filter.
         var show = {
             display: (this.props.properties.isCurrentTab) ? 'block' : 'none'
@@ -28,7 +32,10 @@ var Space = React.createClass({
         // Check user and filter.
         var clazz = "space center " + this.props.properties.className;
 
-        return (
+        console.log(self._tabMap[this.props.properties.type])
+
+        // Define the Html.
+        var spaceTree =
             <div className={clazz} style={show}>
                 <div className="space-bar clearfix">
                     <div className="space-title float-left title-case">"Test Title"</div>
@@ -48,8 +55,27 @@ var Space = React.createClass({
                     </ul>
                 </div>
                 <div className="space-content clearfix"></div>
-                <Person personPG={this.props.personPG} changeUser={this.props.changeUser}/>
+                {
+                    self._createSubComponent(self.props.properties)
+                }
             </div>
-            );
+
+        return spaceTree;
+    },
+
+    _createSubComponent: function(properties) {
+        return this._tabMap[properties.type](properties, this);
+    },
+
+    // Choose html based on tab type.
+    _tabMap: {
+        contacts: function(prop, ref) {
+            return <PersonContacts properties={prop} personPG={ref.props.personPG[0]} userName="Test" loadUserProfile={ref.props.loadUserProfile}/>
+        },
+        person: function(prop, ref) {
+            return <Person properties={prop} personPG={ref.props.personPG} loadUserProfile={ref.props.loadUserProfile}/>
+        }
     }
 });
+
+//<Person personPG={this.props.personPG} changeUser={this.props.changeUser}/>

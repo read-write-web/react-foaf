@@ -29,30 +29,16 @@ var PersonContactOnProfile = React.createClass({
         )
     },
 
-    handlerClick: function(e) {
+    handleClick: function(e) {
 		 var component = this;
 		 if (this.state.jumpedPointedGraph) {
 			 console.log("clicked on Person box info->");
 			 console.log(this.state.jumpedPointedGraph);
 		 } else console.log("graph not downloaded yet");
 
-//		 this.props.personPG.jumpAsync(false).then(
-//			 function (jumpedPersonPG) {
-//				 console.log("REPLACING STATE WITH:"+jumpedPersonPG);
-//				 console.log(jumpedPersonPG);
-//				 component.replaceState({
-//					 jumpedPointedGraph: jumpedPersonPG
-//				 });
-//                 this.props.changeUser(this.state.jumpedPointedGraph);
-//			 },
-//			 function (err) {
-//				 console.log("RECEIVED ERR:" +err)
-//				 component.replaceState({error: err})
-//			 }
-//		 )
-    	 //if (e.altKey) { this.props.handlerClick(this.state.jumpedPointedGraph); }
+        // ?
 		if ( ! ( this.state.jumpedPointedGraph.pointer.isBlank || this.state.jumpedPointedGraph.pointer.isVar))
-			this.props.changeUser(this.state.jumpedPointedGraph);
+			this.props.loadUserProfile(this.state.jumpedPointedGraph);
 		return true;
 	 },
 
@@ -114,10 +100,7 @@ var PersonContactOnProfile = React.createClass({
     },
 
     render: function() {
-        console.log('In Render of PersonContactOnProfile !!!!!!!!!! ********** ************');
-        console.log(this.state.jumpedPointedGraph);
-
-        // Check user and filter.
+        // Check if user should be displayed.
         var show = {
             display: (this.displayUser()) ? 'block' : 'none'
         };
@@ -128,8 +111,9 @@ var PersonContactOnProfile = React.createClass({
         // Define appropriate class for the view.
         var clazz = this.setElementClasses();
 
+        // Return.
         return (
-            <li className={clazz} style={show} onClick={this.handlerClick}>
+            <li className={clazz} style={show} onClick={this.handleClick}>
                 <div className="loader"></div>
                 <PersonContactOnProfilePix personPGs={originalAndJumpedPG} />
                 <PersonContactOnProfileBasicInfo personPGs={originalAndJumpedPG} />

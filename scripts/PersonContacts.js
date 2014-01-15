@@ -15,15 +15,28 @@ var PersonContacts = React.createClass({
 
     render: function () {
         var self = this;
-        var foafs = _.chain(this.props.personPG.rel(FOAF("knows"))).map(function (foafPg) {
-            console.log("Foaf knows !!!!!!!!")
-            console.log(foafPg)
-                return (<PersonContactOnProfile personPG={foafPg} changeUser={self.props.changeUser} filterText={self.state.filterText}/>)
+        console.log('Render contacts !!!!')
+        console.log(this.props.properties.pointedGraphs);
+
+        if (!this.props.personPG) return (
+            <div id="contacts" className="clearfix">
+                <ul className="clearfix span3">
+                </ul>
+            </div>
+            );
+
+        //var foafs = _.chain(this.props.personPG.rel(FOAF("knows"))).map(function (foafPg) {
+        var foafs =
+            _.chain(this.props.properties.pointedGraphs[0].rel(FOAF("knows")))
+            .map(function (foafPg) {
+                return (<PersonContactOnProfile
+                            personPG={foafPg}
+                            loadUserProfile={self.props.loadUserProfile}
+                            filterText={self.state.filterText}/>)
             }).value();
+
         return (
-            <div id="contacts">
-                <div className="title center-text title-case">{this.props.userName}'s contacts</div>
-                <SearchBox filterText={this.state.filterText} onUserInput={this.handleUserInput}/>
+            <div id="contacts" className="clearfix">
                 <ul className="clearfix span3">
                     { foafs }
                 </ul>
@@ -32,5 +45,8 @@ var PersonContacts = React.createClass({
     }
 });
 
+//<SearchBox filterText={this.state.filterText} onUserInput={this.handleUserInput}/>
+//<SearchBox filterText={this.state.filterText} onUserInput={this.handleUserInput}/>
+//<div className="title center-text title-case">{this.props.userName}'s contacts</div>
 
 //<PersonContacts personPG={firstCurrentPg} userName={UserName} changeUser={this.changeUser}/>

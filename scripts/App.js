@@ -5,6 +5,9 @@
 $rdf.Fetcher.crossSiteProxyTemplate = "http://data.fm/proxy?uri=";
 $rdf.Fetcher.onlyUseProxy = true;
 
+// Level of logs in external libs.
+$rdf.PointedGraph.setLogLevel("nologs");
+
 var foafSpec = "http://xmlns.com/foaf/spec/";
 var store = new $rdf.IndexedFormula();
 
