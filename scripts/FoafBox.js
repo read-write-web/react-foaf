@@ -12,6 +12,7 @@ var FoafBx = React.createClass({
 
        return {
             primaryTopicsPointedGraphs: [],
+            testPg:[],
             filterText: '',
             tabsList: {0:initialTab}
        };
@@ -20,6 +21,43 @@ var FoafBx = React.createClass({
 	componentDidMount: function() {
 		 this.fetchURL(this.props.url);
 	 },
+
+    render: function () {
+        var self = this;
+        console.log("render foafBof");
+        console.log(this.state.tabsList);
+
+        var foafBoxTree =
+            <div className="PersonalProfileDocument">
+                <MainSearchBox filterText={this.state.filterText} personPG={this.state.primaryTopicsPointedGraphs} onUserInput={this.inputInSearchBox}/>
+                <div id="actionNeeded">Action needed
+                    <a onClick={this._loadCurrentUser}>Current_Profile</a>
+                </div>
+                {
+                    _.map(this.state.tabsList, function (tab) {
+                        return self._createTab(tab);
+                    })
+                }
+                <div className="footer">
+                    <div className="footer-handle center-text title-case">Navigation</div>
+                    <div className="footer-content">
+                        <ul>
+                        {
+                            _.map(this.state.tabsList, function (tab) {
+                                return self._createFooter(tab);
+                            })
+                        }
+                        </ul>
+                    </div>
+                </div>
+            </div>;
+
+        console.log(foafBoxTree);
+
+        /*var nofoafBoxTree = <div class="shape-canvas no-shapes">No Shapes Found</div>;*/
+
+        return foafBoxTree;
+    },
 
     fetchURL: function(url) {
         if (!url) return;
@@ -32,9 +70,10 @@ var FoafBx = React.createClass({
                 // Update the list of tabs.
                 self.state.tabsList[0].pointedGraphs = pt;
                 self.setState({
-				    primaryTopicsPointedGraphs: pt,
+                    primaryTopicsPointedGraphs: pt,
+                    testPg:pt,
                     tabsList:self.state.tabsList
-			    });
+                });
                 //need loading function to display advances in download
             },
             function (err) {
@@ -43,7 +82,7 @@ var FoafBx = React.createClass({
 
     },
 
-    loadUserProfile: function(pg){
+    _loadUserProfile: function(pg){
         console.log("In foaf box ------->>>>> Change User")
         console.log(pg)
 
@@ -76,22 +115,30 @@ var FoafBx = React.createClass({
             primaryTopicsPointedGraphs:[pg]
         });
 
-		return false;
+        return false;
     },
 
-    handleUserInputInSearchBox: function(text) {
+    _loadCurrentUser: function() {
+        this._loadUserProfile(this.state.testPg[0]);
+    },
+
+    inputInSearchBox: function(text) {
         //this.setState({filterText:text});
     },
 
     closeTab: function(tabProperties) {
         // Update its properties.
-        delete this.state.tabsList[tabProperties.className]
+        delete this.state.tabsList[tabProperties.className];
 
         // Set initial tab as current tab.
-        this.state.tabsList["0"].isCurrentTab = true;
+        currentIndex = 0;
+        this.state.tabsList[currentIndex].isCurrentTab = true;
 
         // Change state to render.
-        this.setState({tabsList: this.state.tabsList});
+        this.setState({
+            tabsList: this.state.tabsList,
+            primaryTopicsPointedGraphs:this.state.tabsList[currentIndex].pointedGraphs
+        });
     },
 
     minimizeTab: function(tabProperties) {
@@ -105,10 +152,15 @@ var FoafBx = React.createClass({
         this.state.tabsList[tabProperties.className] = tabProperties;
 
         // Set initial tab as current tab.
-        this.state.tabsList["0"].isCurrentTab = true;
+        //var currentIndex = parseInt(tabProperties.className)-1;
+        currentIndex = 0;
+        this.state.tabsList[currentIndex].isCurrentTab = true;
 
         // Change state to render.
-        this.setState({tabsList: this.state.tabsList});
+        this.setState({
+            tabsList: this.state.tabsList,
+            primaryTopicsPointedGraphs:this.state.tabsList[currentIndex].pointedGraphs
+        });
     },
 
     maximizeTab: function(tabProperties) {
@@ -120,53 +172,18 @@ var FoafBx = React.createClass({
             tab.isCurrentTab = false
         });
 
-        // Tab become the current tab.
+        // Tab becomes the current tab.
         tabProperties.isCurrentTab = true;
 
         // Update its properties.
-        this.state.tabsList[tabProperties.className] = tabProperties;
+        var currentIndex = parseInt(tabProperties.className);
+        this.state.tabsList[currentIndex] = tabProperties;
 
         // Change state to render.
         this.setState({
             tabsList: this.state.tabsList,
             primaryTopicsPointedGraphs:tabProperties.pointedGraphs
         });
-
-    },
-
-    render: function () {
-        var self = this;
-        console.log("render foafBof");
-        console.log(this.state.tabsList);
-
-        var foafBoxTree =
-            <div className="PersonalProfileDocument">
-                <MainSearchBox filterText={this.state.filterText} personPG={this.state.primaryTopicsPointedGraphs} onUserInput={this.handleUserInputInSearchBox}/>
-                <div id="actionNeeded">Action needed</div>
-                {
-                    _.map(this.state.tabsList, function (tab) {
-                        return self._createTab(tab);
-                    })
-                }
-                <div className="footer">
-                    <div className="footer-handle center-text title-case">Navigation</div>
-                    <div className="footer-content">
-                        <ul>
-                        {
-                            _.map(this.state.tabsList, function (tab) {
-                                return self._createFooter(tab);
-                            })
-                        }
-                        </ul>
-                    </div>
-                </div>
-            </div>;
-
-        console.log(foafBoxTree);
-
-        /*var nofoafBoxTree = <div class="shape-canvas no-shapes">No Shapes Found</div>;*/
-
-        return foafBoxTree;
     },
 
     // Methods not ReactJs should begin with _xxx (need to change it on all the app files).
@@ -174,7 +191,7 @@ var FoafBx = React.createClass({
         return <Space
             personPG={this.state.primaryTopicsPointedGraphs}
             properties={tab}
-            loadUserProfile={this.loadUserProfile}
+            loadUserProfile={this._loadUserProfile}
             closeTab={this.closeTab}
             minimizeTab={this.minimizeTab}
             />;

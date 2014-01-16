@@ -1,46 +1,41 @@
 /** @jsx React.DOM */
 
 var Footer = React.createClass({
-    getInitialState: function(){
 
+    // Render.
+    render:function(){
+        var self = this;
+        console.log('Render Footer')
+        console.log(this.props)
+
+        var show = {display: (this.props.properties.isCurrentTab) ? 'none' : 'block'};
+
+        return (
+            <li className="footer-item float-left" style={show} onClick={this._handleClick}>
+                <PersonPix getUserImg={this._getUserImg}/>
+            </li>
+        );
     },
 
-    handleClick: function() {
-        console.log('handle click  footer')
-        console.log(this.props.personPG)
-        console.log(this.props.properties)
+    // Handler.
+    _handleClick: function() {
         this.props.maximizeTab(this.props.properties);
     },
 
-    render:function(){
-        console.log('render footer')
-        console.log(this.props.personPG);
+    // Get image.
+    _getUserImg: function() {
+        return this._imageMap[this.props.properties.type](this.props.properties);
+    },
 
-        var show = {
-            display: (this.props.properties.isCurrentTab) ? 'none' : 'block'
-        };
-
-        var toPrint = this.props.properties.pointedGraphs[0]? this.props.properties.pointedGraphs[0].pointer.value : "noValue";
-
-        return (
-            <li className="footer-item float-left" style={show} onClick={this.handleClick}>{toPrint}</li>
-            );
+    // Image depend on space type.
+    _imageMap: {
+        contacts: function(prop) {
+            return "img/friends_icon_blue.png";
+        },
+        person: function(prop) {
+            var imgUrlList = foafUtils.getImg(prop.pointedGraphs);
+            return (imgUrlList && imgUrlList.length>0)? imgUrlList[0]:"img/avatar.png";
+        }
     }
-
-    /*
-    render:function(){
-        return (
-            <div className="footer">
-               <div className="footer-handle center-text title-case">Navigation</div>
-               <div className="footer-content">
-				   <ul>
-					   <li className="footer-item"></li>
-					   <li className="footer-item"></li>
-					   <li className="footer-item"></li>
-				   </ul>
-			   </div>
-            </div>
-            );
-    }*/
 
 });

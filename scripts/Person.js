@@ -3,8 +3,11 @@
 var Person = React.createClass({
 
     render: function () {
+        console.log('Render Person')
+        console.log(this.props)
+
+        // Set user name.
         var UserName = foafUtils.getName(this.props.personPG);
-        console.log(UserName);
 
         var currentPg = this.props.personPG;
         if (currentPg && currentPg.length > 0) {
@@ -17,7 +20,6 @@ var Person = React.createClass({
                     <PersonMessage personPG={firstPg} userName={UserName[0]} getMessage={this.getMessage}/>
                     <PersonMoreInfo personPG={firstPg} getMoreInfo={this.getMoreInfo} getAddress={this.getAddress}/>
                     <PersonWebId personPG={firstPg} getWebId={this.getWebId}/>
-
                 </div>
                 );
         }
@@ -30,7 +32,6 @@ var Person = React.createClass({
         }
     },
 
-//<PersonContacts personPG={firstPg} userName={UserName[0]} changeUser={this.props.changeUser}/>
     getUserImg: function() {
         var imgUrlList = foafUtils.getImg(this.props.personPG);
         return (imgUrlList && imgUrlList.length>0)? imgUrlList[0]:"img/avatar.png";
@@ -40,8 +41,6 @@ var Person = React.createClass({
         var names = foafUtils.getNames(this.props.personPG);
         var companyList = foafUtils.getworkplaceHomepages(this.props.personPG);
         var noValue = "...";
-        console.log('getBasicInfo !!!');
-        console.log(names);
         return names = {
             name:(names && names.name && names.name.length>0)? names.name[0]:noValue,
             givenname:(names && names.givenname && names.givenname.length>0)? names.givenname[0]:noValue,
@@ -54,12 +53,12 @@ var Person = React.createClass({
     getAddress: function(){
         var addressList = foafUtils.getContactHome(this.props.personPG);
         var address = ( addressList &&  addressList.address && addressList.address.length>0)? addressList.address[0]:null;
-
+        var noValue = "";
         return addressRes = {
-            street: (address)? address.street:"",
-            postalCode: (address)? address.postalCode:"",
-            city: (address)? address.city:"",
-            country: (address)? address.country:""
+            street: (address)? address.street:noValue,
+            postalCode: (address)? address.postalCode:noValue,
+            city: (address)? address.city:noValue,
+            country: (address)? address.country:noValue
         }
     },
 
@@ -72,8 +71,9 @@ var Person = React.createClass({
     },
 
     getMessage: function() {
+        var noValue = "";
         return message = {
-            lastMessageDate:"",
+            lastMessageDate:noValue,
             lastMessage:"No message"
         }
     },

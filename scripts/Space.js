@@ -1,32 +1,29 @@
 /** @jsx React.DOM */
 
 var Space = React.createClass({
-    getInitialState: function(){
-
-    },
 
     handleClickMaximize: function(e) {
-        console.log('Click to Maximized ' + e);
         this.props.maximizeTab(this.props.properties);
     },
     handleClickMinimize: function(e) {
-        console.log('Click to Minimized ' + e);
         this.props.minimizeTab(this.props.properties);
     },
     handleClickClose: function(e) {
-        console.log('Click to close ' + e);
         this.props.closeTab(this.props.properties);
+    },
+
+    handleClickEdit:  function(e) {
+        //this.props.closeTab(this.props.properties);
     },
 
     render:function(){
         var self = this;
         console.log('Render space')
-        console.log(this.props.properties)
-        console.log(this.props.personPG)
+        console.log(this.props)
 
         // Set css display properties.
         var show = {display: (this.props.properties.isCurrentTab) ? 'block' : 'none'};
-        var styleTools = this._setCssForTools(self.props.properties);
+        var styleTools = this._setCssForToolBar(self.props.properties);
 
         // Set component classes.
         var clazz = "space center " + this.props.properties.className;
@@ -37,6 +34,7 @@ var Space = React.createClass({
                 <div className="space-bar clearfix">
                     <div className="space-title float-left title-case">"Test Title"</div>
                     <ul className="space-tools float-right">
+                        <li className="space-options" style={styleTools} onClick={this.handleClickEdit}>Edit</li>
                         <li className="space-options" style={styleTools}>
                             <i class="fa fa-cog"></i>
                         </li>
@@ -60,8 +58,8 @@ var Space = React.createClass({
         return spaceTree;
     },
 
-    _setCssForTools: function(properties) {
-        return this._cssForToolsMap[properties.type](properties);
+    _setCssForToolBar: function(properties) {
+        return this._cssForToolBarMap[properties.type](properties);
     },
 
     _createSubComponent: function(properties) {
@@ -69,7 +67,7 @@ var Space = React.createClass({
     },
 
     // Choose css style based on
-    _cssForToolsMap: {
+    _cssForToolBarMap: {
         contacts: function(prop) {
             return {
                 display: 'none'
