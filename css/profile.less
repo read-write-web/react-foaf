@@ -2,12 +2,24 @@
 
 #profile :extend(.content-base all) {
 
+  .edit-profile {
+    width:40px;
+    height:40px;
+    background:red;
+    color:white;
+    float:right;
+    text-transform: uppercase;
+    text-align:center;
+    line-height: 40px;
+  }
+
   & > .picture {
     width:300px;
     height: 300px;
     border-radius: 50%;
     overflow: hidden;
-    
+    float: right;
+
     img {
       width: 110%;
       height: auto;
@@ -16,14 +28,45 @@
 
   & > .basic {
 
+    form {
+      width: 400px;
+      background: white;
+      box-sizing: content-box;
+
+      input {
+        height: 25px;
+        width: 350px;
+        border: 1px solid #e3e3e3;
+        box-shadow: none;
+        box-sizing: border-box;
+        outline: none;
+        font-family: "Noto Sans", sans-serif;
+        font-size: 20px;
+        float: left;
+        margin: 0 0 10px 0;
+      }
+    }
+
     & .name {
       font-size: 50px;
       margin-top: -15px;
+
+      input {
+        height: 100px;
+        font-size: 50px;
+        line-height: 50px;
+      }
     }
 
     & .surname {
       line-height: 30px;
       font-size: 30px;
+
+      input {
+        height: 60px;
+        font-size: 30px;
+        line-height: 30px;
+      }
 
     }
 
@@ -31,6 +74,12 @@
       line-height: 40px;
       font-size: 16px;
       color: @mediumGrey;
+
+      input {
+        height: 50px;
+        font-size: 16px;
+        line-height: 40px;
+      }
     }
   }
 
@@ -138,6 +187,7 @@
     background: @lightestGrey;
     margin: 20px 0;
     padding: 10px;
+
 
     img {
       width: 40px;

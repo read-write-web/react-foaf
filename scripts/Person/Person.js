@@ -1,10 +1,14 @@
 /** @jsx React.DOM */
 
 var Person = React.createClass({
+    getInitialState: function() {
+        return {modeEdit:false}
+    },
 
     render: function () {
         console.log('Render Person')
         console.log(this.props)
+        console.log(this.state.modeEdit)
 
         // Set user name.
         var UserName = foafUtils.getName(this.props.personPG);
@@ -14,8 +18,9 @@ var Person = React.createClass({
             var firstPg = currentPg[0];
             return (
                 <div id="profile" className="clearfix center">
-                    <PersonPix personPG={firstPg} getUserImg={this.getUserImg}/>
-                    <PersonBasicInfo personPG={firstPg} getBasicInfo={this.getBasicInfo}/>
+                    <div className="edit-profile" onClick={this._handleClickEdit}>Edit</div>
+                    <Pix src={this.getUserImg()}/>
+                    <PersonBasicInfo modeEdit={this.state.modeEdit} personPG={firstPg} getBasicInfo={this.getBasicInfo}/>
                     <PersonNotifications personPG={firstPg} getNotifications={this.getNotifications}/>
                     <PersonMessage personPG={firstPg} userName={UserName[0]} getMessage={this.getMessage}/>
                     <PersonMoreInfo personPG={firstPg} getMoreInfo={this.getMoreInfo} getAddress={this.getAddress}/>
@@ -30,6 +35,13 @@ var Person = React.createClass({
                 </div>
                 );
         }
+    },
+
+    _handleClickEdit: function(e) {
+        console.log('Edit !!! ');
+        this.setState({
+            modeEdit:true
+        });
     },
 
     getUserImg: function() {

@@ -12,7 +12,7 @@ var Footer = React.createClass({
 
         return (
             <li className="footer-item float-left" style={show} onClick={this._handleClick}>
-                <PersonPix getUserImg={this._getUserImg}/>
+                <Pix src={this._getUserImg()}/>
             </li>
         );
     },

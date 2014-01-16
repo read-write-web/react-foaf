@@ -15,19 +15,6 @@ var PersonContactOnProfileBasicInfo = React.createClass({
                 <div className="company">{names.company}</div>
             </div>
             );
-
-
-
-        /*
-        return (
-            <div className="basic">
-                <div className="name title-case">{name}</div>
-                <div className="surname title-case">{surname}</div>
-                <div className="company">{company}</div>
-            </div>
-
-            );
-            */
     },
 
 	getBasicInfo: function () {

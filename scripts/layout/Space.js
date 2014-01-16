@@ -2,20 +2,6 @@
 
 var Space = React.createClass({
 
-    handleClickMaximize: function(e) {
-        this.props.maximizeTab(this.props.properties);
-    },
-    handleClickMinimize: function(e) {
-        this.props.minimizeTab(this.props.properties);
-    },
-    handleClickClose: function(e) {
-        this.props.closeTab(this.props.properties);
-    },
-
-    handleClickEdit:  function(e) {
-        //this.props.closeTab(this.props.properties);
-    },
-
     render:function(){
         var self = this;
         console.log('Render space')
@@ -34,17 +20,16 @@ var Space = React.createClass({
                 <div className="space-bar clearfix">
                     <div className="space-title float-left title-case">"Test Title"</div>
                     <ul className="space-tools float-right">
-                        <li className="space-options" style={styleTools} onClick={this.handleClickEdit}>Edit</li>
                         <li className="space-options" style={styleTools}>
                             <i class="fa fa-cog"></i>
                         </li>
                         <li className="space-maximize" style={styleTools}>
                             <i class="fa fa-plus-circle"></i>
                         </li>
-                        <li className="space-minimize" style={styleTools} onClick={this.handleClickMinimize}>
+                        <li className="space-minimize" style={styleTools} onClick={this._handleClickMinimize}>
                             <i class="fa fa-minus-circle"></i>
                         </li>
-                        <li className="space-close" style={styleTools} onClick={this.handleClickClose}>
+                        <li className="space-close" style={styleTools} onClick={this._handleClickClose}>
                             <i className="fa fa-times-circle"></i>
                         </li>
                     </ul>
@@ -56,6 +41,17 @@ var Space = React.createClass({
             </div>
 
         return spaceTree;
+    },
+
+    // Handlers.
+    _handleClickMaximize: function(e) {
+        this.props.maximizeTab(this.props.properties);
+    },
+    _handleClickMinimize: function(e) {
+        this.props.minimizeTab(this.props.properties);
+    },
+    _handleClickClose: function(e) {
+        this.props.closeTab(this.props.properties);
     },
 
     _setCssForToolBar: function(properties) {

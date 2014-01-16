@@ -19,7 +19,7 @@ var FoafBx = React.createClass({
     },
 
 	componentDidMount: function() {
-		 this.fetchURL(this.props.url);
+		 this._fetchURL(this.props.url);
 	 },
 
     render: function () {
@@ -29,7 +29,7 @@ var FoafBx = React.createClass({
 
         var foafBoxTree =
             <div className="PersonalProfileDocument">
-                <MainSearchBox filterText={this.state.filterText} personPG={this.state.primaryTopicsPointedGraphs} onUserInput={this.inputInSearchBox}/>
+                <MainSearchBox filterText={this.state.filterText} personPG={this.state.primaryTopicsPointedGraphs} onUserInput={this._inputInSearchBox}/>
                 <div id="actionNeeded">Action needed
                     <a onClick={this._loadCurrentUser}>Current_Profile</a>
                 </div>
@@ -59,7 +59,7 @@ var FoafBx = React.createClass({
         return foafBoxTree;
     },
 
-    fetchURL: function(url) {
+    _fetchURL: function(url) {
         if (!url) return;
         var self = this;
         var fetcher = $rdf.fetcher(store, 10000, true);
@@ -122,11 +122,11 @@ var FoafBx = React.createClass({
         this._loadUserProfile(this.state.testPg[0]);
     },
 
-    inputInSearchBox: function(text) {
+    _inputInSearchBox: function(text) {
         //this.setState({filterText:text});
     },
 
-    closeTab: function(tabProperties) {
+    _closeTab: function(tabProperties) {
         // Update its properties.
         delete this.state.tabsList[tabProperties.className];
 
@@ -141,7 +141,7 @@ var FoafBx = React.createClass({
         });
     },
 
-    minimizeTab: function(tabProperties) {
+    _minimizeTab: function(tabProperties) {
         console.log('minimize');
         console.log(tabProperties);
 
@@ -163,7 +163,7 @@ var FoafBx = React.createClass({
         });
     },
 
-    maximizeTab: function(tabProperties) {
+    _maximizeTab: function(tabProperties) {
         console.log('maximized');
         console.log(tabProperties)
 
@@ -192,8 +192,8 @@ var FoafBx = React.createClass({
             personPG={this.state.primaryTopicsPointedGraphs}
             properties={tab}
             loadUserProfile={this._loadUserProfile}
-            closeTab={this.closeTab}
-            minimizeTab={this.minimizeTab}
+            closeTab={this._closeTab}
+            minimizeTab={this._minimizeTab}
             />;
     },
 
@@ -201,7 +201,7 @@ var FoafBx = React.createClass({
         return <Footer
         personPG={this.state.primaryTopicsPointedGraphs}
         properties={tab}
-        maximizeTab={this.maximizeTab}
+        maximizeTab={this._maximizeTab}
         />;
     }
 
