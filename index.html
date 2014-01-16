@@ -3,28 +3,25 @@
 <head>
     <meta http-equiv='Content-type' content='text/html; charset=utf-8'>
     <title>Basic Example with external JSX</title>
-    <!--link rel="stylesheet" href="css/base.css"/-->
-    <!--link rel="stylesheet" href="styles.css"/-->
     <link rel="stylesheet/less" href="css/base.less">
     <script src="lib/less.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <!--script src="scripts/showdown.js"></script-->
     <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
-    <!--script src="https://raw.github.com/kriskowal/q/v0.9/q.js"></script-->
     <script src="lib/q.js"></script>
     <script src="http://underscorejs.org/underscore.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/rxjs/2.2.10/rx.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/rxjs/2.2.10/rx.async.js"></script>
-    <!--script src="http://fb.me/react-0.8.0.min.js"></script-->
     <script src="http://fb.me/react-0.8.0.min.js"></script>
     <script src="lib/JSXTransformer.js"></script>
-    <!--script src="http://fb.me/JSXTransformer-0.8.0.js"></script-->
 
     <script src="lib/rdflib.js"></script>
     <!--script src="lib/react.js"></script-->
     <script src="lib/pointedGraph.js"></script>
     <script src="lib/fetcherWithPromise.js"></script>
+    <script src="lib/director.js"></script>
+
     <script src="scripts/foafUtils.js"></script>
 </head>
 <body>
@@ -33,7 +30,29 @@
     <!-- Application Renders Here-->
 </span>
 
-<!-- Application Scripts -->
+
+<!--
+Main application scripts
+-->
+<script type="text/javascript" src="scripts/AppConfig.js"></script>
+<script type="text/javascript" src="scripts/routing.js"></script>
+<script type="text/jsx" src="scripts/windows/FoafWindow.js"></script>
+
+<!--
+Layout component scripts
+-->
+<script type="text/jsx" src="scripts/layout/MainSearchBox.js"></script>
+<script type="text/jsx" src="scripts/layout/Space.js"></script>
+<script type="text/jsx" src="scripts/layout/Footer.js"></script>
+
+<!--
+Reusable component scripts
+-->
+<script type="text/jsx" src="scripts/common/Pix.js"></script>
+
+<!--
+View component scripts
+-->
 <script type="text/jsx" src="scripts/contacts/PersonContactOnProfileBasicInfo.js"></script>
 <script type="text/jsx" src="scripts/contacts/PersonContactOnProfileMoreInfo.js"></script>
 <script type="text/jsx" src="scripts/contacts/PersonContactOnProfileNotifications.js"></script>
@@ -41,8 +60,8 @@
 <script type="text/jsx" src="scripts/contacts/PersonContactOnProfilePix.js"></script>
 <script type="text/jsx" src="scripts/contacts/PersonContactOnProfile.js"></script>
 <script type="text/jsx" src="scripts/contacts/PersonContacts.js"></script>
-
-<script type="text/jsx" src="scripts/common/Pix.js"></script>
+<script type="text/jsx" src="scripts/contacts/SearchBox.js"></script>
+<!------------------------->
 <script type="text/jsx" src="scripts/person/PersonBasicInfo.js"></script>
 <script type="text/jsx" src="scripts/person/PersonNotifications.js"></script>
 <script type="text/jsx" src="scripts/person/PersonMessage.js"></script>
@@ -52,12 +71,17 @@
 <script type="text/jsx" src="scripts/person/PersonEditProfile.js"></script>
 <script type="text/jsx" src="scripts/person/Person.js"></script>
 
-<script type="text/jsx" src="scripts/layout/MainSearchBox.js"></script>
-<script type="text/jsx" src="scripts/contacts/SearchBox.js"></script>
-<script type="text/jsx" src="scripts/layout/Space.js"></script>
-<script type="text/jsx" src="scripts/layout/Footer.js"></script>
-<script type="text/jsx" src="scripts/FoafBox.js"></script>
-<script type="text/jsx" src="scripts/App.js"></script>
+
+
+<script type="text/jsx">
+   /**
+     * @jsx React.DOM
+     */
+    window.onload = function startApplication() {
+        React.renderComponent( <FoafWindow url={foafDocURL}/>, document.getElementById('container') );
+    };
+</script>
+
 
 </body>
 </html>

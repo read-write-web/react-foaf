@@ -1,8 +1,7 @@
-/** @jsx React.DOM */
 
 // proxy
-//$rdf.Fetcher.crossSiteProxyTemplate = "http://localhost:9000/srv/cors?url=";
-$rdf.Fetcher.crossSiteProxyTemplate = "http://data.fm/proxy?uri=";
+$rdf.Fetcher.crossSiteProxyTemplate = "http://localhost:9000/srv/cors?url=";
+//$rdf.Fetcher.crossSiteProxyTemplate = "http://data.fm/proxy?uri=";
 $rdf.Fetcher.onlyUseProxy = true;
 
 // Level of logs in external libs.
@@ -23,15 +22,3 @@ var foafDocURL = "https://my-profile.eu/people/deiu/card";
 //var foafDocURL = "http://presbrey.mit.edu/foaf";
 //var foafDocURL = 'https://localhost:8443/2013/backbone';
 
-React.renderComponent(
-	 <FoafBx url={foafDocURL}/>,
-    document.getElementById('container')
-);
-
-/*
-var foafBx = <FoafBx />;
-React.renderComponent(
-    foafBx,
-    document.getElementById('container')
-);
-*/
