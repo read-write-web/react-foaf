@@ -1,7 +1,7 @@
 
 // proxy
-$rdf.Fetcher.crossSiteProxyTemplate = "http://localhost:9000/srv/cors?url=";
-//$rdf.Fetcher.crossSiteProxyTemplate = "http://data.fm/proxy?uri=";
+//$rdf.Fetcher.crossSiteProxyTemplate = "http://localhost:9000/srv/cors?url=";
+$rdf.Fetcher.crossSiteProxyTemplate = "http://data.fm/proxy?uri=";
 $rdf.Fetcher.onlyUseProxy = true;
 
 // Level of logs in external libs.

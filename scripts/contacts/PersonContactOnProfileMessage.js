@@ -3,9 +3,14 @@
 var PersonContactOnProfileMessage = React.createClass({
     render: function() {
         var message = this.getMessage();
+/*        var message = this.props.lastMessage;
+        var propName = this.props.userName;
+        var noValue = "...";
+        var name = (propName.name["1"] && propName.name["1"].length>0)? propName.name["1"][0]:noValue;
+*/
         return (
             <div className="moreInfo">
-                <div className="lastInteraction">Last message from {this.props.userName}: <span>{message.lastMessageDate}</span></div>
+                <div className="lastInteraction">Last message from {name}: <span>{message.lastMessageDate}</span></div>
                 <div className="message">{message.lastMessage}</div>
                 <div className="nextStep"><a href="#">Write back</a></div>
             </div>

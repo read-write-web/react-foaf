@@ -4,7 +4,8 @@ var PersonNotifications = React.createClass({
 
     render: function() {
 
-        var notifications = this.props.getNotifications();
+        var notifications = this.props.notifications();
+
         return (
             <div className="notifications">
                 <div className="newMessages float-left">{notifications.nbNewMessages}</div>

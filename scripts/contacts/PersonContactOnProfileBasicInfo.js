@@ -3,10 +3,8 @@
 var PersonContactOnProfileBasicInfo = React.createClass({
 
     render: function() {
-
-
         // Get info.
-        var names = this.getBasicInfo();
+        var names = this._getBasicInfo();
 
         return (
             <div className="basic">
@@ -17,18 +15,29 @@ var PersonContactOnProfileBasicInfo = React.createClass({
             );
     },
 
-	getBasicInfo: function () {
-		var names = foafUtils.getNames(this.props.personPGs);
-		var companyList = foafUtils.getworkplaceHomepages(this.props.personPGs);
-		var noValue = "...";
+    _getBasicInfo: function() {
+        //var names = foafUtils.getNames(this.props.personPGs);
+        //var companies = foafUtils.getworkplaceHomepages(this.props.personPGs);
+        var noValue = "...";
+        var nameList=foafUtils.getName(this.props.personPGs);
+        var givenNameList=foafUtils.getGivenName(this.props.personPGs);
+        var familyNameList=foafUtils.getFamilyName(this.props.personPGs);
+        var firstNameList=foafUtils.getFirstName(this.props.personPGs);
+        var workPlaceList = foafUtils.getworkplaceHomepages(this.props.personPGs);
 
-		return names = {
-			name: (names && names.name && names.name.length > 0) ? names.name[0] : noValue,
-			givenname: (names && names.givenname && names.givenname.length > 0) ? names.givenname[0] : noValue,
-			lastname: (names && names.family_name && names.family_name.length > 0) ? names.family_name[0] : noValue,
-			firstname: (names && names.lastname && names.firstname.length > 0) ? names.lastname[0] : noValue,
-			company: (companyList && companyList.length > 0) ? companyList[0] : noValue
-		};
-	}
+        var name = (nameList["1"] && nameList["1"].length>0)? nameList["1"][0]:noValue;
+        var givenName = (givenNameList["1"] && givenNameList["1"].length>0)? givenNameList["1"][0]:noValue;
+        var familyName = (familyNameList["1"] && familyNameList["1"].length>0)? familyNameList["1"][0]:noValue;
+        var firstName = (firstNameList["1"] && firstNameList["1"].length>0)? firstNameList["1"][0]:noValue;
+        var workPlace = (workPlaceList["1"] && workPlaceList["1"].length>0)? workPlaceList["1"][0]:noValue;
+
+        return names = {
+            name: name,
+            givenname: givenName,
+            lastname:familyName,
+            firstname:firstName,
+            company:workPlace
+        }
+    }
 
 });

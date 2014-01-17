@@ -2,7 +2,9 @@
 
 var Person = React.createClass({
     getInitialState: function() {
-        return {modeEdit:false}
+        return {
+            modeEdit:false,
+            editText:"Edit"}
     },
 
     render: function () {
@@ -11,20 +13,27 @@ var Person = React.createClass({
         console.log(this.state.modeEdit)
 
         // Set user name.
-        var UserName = foafUtils.getName(this.props.personPG);
+        var userName = foafUtils.getName(this.props.personPG);
 
         var currentPg = this.props.personPG;
         if (currentPg && currentPg.length > 0) {
             var firstPg = currentPg[0];
             return (
                 <div id="profile" className="clearfix center">
-                    <div className="edit-profile" onClick={this._handleClickEdit}>Edit</div>
-                    <Pix src={this.getUserImg()}/>
-                    <PersonBasicInfo modeEdit={this.state.modeEdit} personPG={firstPg} getBasicInfo={this.getBasicInfo}/>
-                    <PersonNotifications personPG={firstPg} getNotifications={this.getNotifications}/>
-                    <PersonMessage personPG={firstPg} userName={UserName[0]} getMessage={this.getMessage}/>
-                    <PersonMoreInfo personPG={firstPg} getMoreInfo={this.getMoreInfo} getAddress={this.getAddress}/>
-                    <PersonWebId personPG={firstPg} getWebId={this.getWebId}/>
+                    <div className="edit-profile" onClick={this._handleClickEdit}>{this.state.editText}</div>
+                    <Pix src={this._getUserImg()}/>
+                    <PersonBasicInfo
+                        modeEdit={this.state.modeEdit}
+                        submitEdition={this._submitEdition}
+                        basicInfo={this._getBasicInfo()}/>
+                    <PersonNotifications notifications={this._getNotifications}/>
+                    <PersonMessage userName={userName} lastMessage={this._getMessage()}/>
+                    <PersonMoreInfo
+                        modeEdit={this.state.modeEdit}
+                        moreInfo={this._getMoreInfo()}
+                        submitEdition={this._submitEdition}
+                        address={this._getAddress()}/>
+                    <PersonWebId getWebId={this.getWebId}/>
                 </div>
                 );
         }
@@ -40,73 +49,96 @@ var Person = React.createClass({
     _handleClickEdit: function(e) {
         console.log('Edit !!! ');
         this.setState({
-            modeEdit:true
+            modeEdit:true,
+            editText:"save"
         });
     },
 
-    getUserImg: function() {
+    _submitEdition: function(data) {
+        console.log("_submitEdition ");
+        console.log(data);
+
+        // Update relative PG.
+        this.props.submitEdition(data);
+
+        // Cancel Edit mode.
+        this.setState({
+            modeEdit:false,
+            editText:"edit"
+        });
+    },
+
+    _getUserImg: function() {
         var imgUrlList = foafUtils.getImg(this.props.personPG);
         return (imgUrlList && imgUrlList.length>0)? imgUrlList[0]:"img/avatar.png";
     },
 
-    getBasicInfo: function() {
-        var names = foafUtils.getNames(this.props.personPG);
-        var companyList = foafUtils.getworkplaceHomepages(this.props.personPG);
+    _getBasicInfo: function() {
         var noValue = "...";
-        return names = {
-            name:(names && names.name && names.name.length>0)? names.name[0]:noValue,
-            givenname:(names && names.givenname && names.givenname.length>0)? names.givenname[0]:noValue,
-            lastname:(names && names.family_name && names.family_name.length>0)? names.family_name[0]:noValue,
-            firstname:(names && names.lastname && names.firstname.length>0)? names.lastname[0]:noValue,
-            company:(companyList && companyList.length>0)? companyList[0]:noValue
+        var nameList=foafUtils.getName(this.props.personPG);
+        var givenNameList=foafUtils.getGivenName(this.props.personPG);
+        var familyNameList=foafUtils.getFamilyName(this.props.personPG);
+        var firstNameList=foafUtils.getFirstName(this.props.personPG);
+        var workPlaceHomepageList = foafUtils.getworkplaceHomepages(this.props.personPG);
+
+        return {
+            name: nameList,
+            givenname: givenNameList,
+            lastname: familyNameList,
+            firstname: firstNameList,
+            workPlaceHomepage: workPlaceHomepageList
         }
     },
 
-    getAddress: function(){
-        var addressList = foafUtils.getContactHome(this.props.personPG);
-        var address = ( addressList &&  addressList.address && addressList.address.length>0)? addressList.address[0]:null;
-        var noValue = "";
-        return addressRes = {
-            street: (address)? address.street:noValue,
-            postalCode: (address)? address.postalCode:noValue,
-            city: (address)? address.city:noValue,
-            country: (address)? address.country:noValue
+    _getAddress: function(){
+        //var addressList = foafUtils.getContactHome(this.props.personPG);
+        var streetList = foafUtils.getContactStreet(this.props.personPG);
+        var postalCodeList = foafUtils.getContactPostalCode(this.props.personPG);
+        var cityList = foafUtils.getContactCity(this.props.personPG);
+        var countryList = foafUtils.getContactCountry(this.props.personPG);
+
+        //var address = ( addressList &&  addressList.address && addressList.address.length>0)? addressList.address[0]:null;
+        console.log(streetList)
+        return {
+            street: streetList,
+            postalCode: postalCodeList,
+            city: cityList,
+            country: countryList
         }
     },
 
-    getNotifications: function() {
-        return notifications = {
+    _getNotifications: function() {
+        return {
             nbNewMessages:0,
             nbRecentInteraction:0,
             nbUpdates:0
         }
     },
 
-    getMessage: function() {
+    _getMessage: function() {
         var noValue = "";
-        return message = {
+        return {
             lastMessageDate:noValue,
             lastMessage:"No message"
         }
     },
 
-    getMoreInfo: function() {
+    _getMoreInfo: function() {
         var emailList = foafUtils.getEmails(this.props.personPG);
         var phoneList = foafUtils.getPhones(this.props.personPG);
         var homepageList = foafUtils.getHomepages(this.props.personPG);
-        var noValue = "...";
 
-        // Set various states.
-        return moreInfo = {
-            email:(emailList && emailList.length>0)? emailList[0]:noValue,
-            phone:(phoneList && phoneList.length>0)? phoneList[0]:noValue,
-            homepage:(homepageList && homepageList.length>0)? homepageList[0]:noValue
+        // Return.
+        return {
+            email:emailList,
+            phone:phoneList,
+            homepage:homepageList
         };
     },
 
     getWebId: function() {
         var value = this.props.personPG[0].pointer.value;
-        return webId = {
+        return {
             webId:value
         };
     }

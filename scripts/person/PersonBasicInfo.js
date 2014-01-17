@@ -3,22 +3,22 @@
 var PersonBasicInfo = React.createClass({
     getInitialState: function() {
         return {
-            name: "",
-            givenname: "",
-            company: ""
+            name: this.props.basicInfo.name,
+            givenname: this.props.basicInfo.givenname,
+            company: this.props.basicInfo.workPlaceHomepage
         }
     },
 
-    // Render.
     render: function() {
         // Get info.
-        var names = this.props.getBasicInfo();
+        var info = this._getPersonInfo();
 
+        // Define Html.
         var viewTree =
             <div className="basic">
-                <div className="name title-case">{names.name}</div>
-                <div className="surname title-case">{names.givenname}</div>
-                <div className="company">{names.company}</div>
+                <div className="name title-case">{info.name}</div>
+                <div className="surname title-case">{info.givenname}</div>
+                <div className="company">{info.company}</div>
             </div>
 
         var viewTreeEdit =
@@ -27,6 +27,8 @@ var PersonBasicInfo = React.createClass({
                     <form onSubmit={this._handleSubmit}>
                         <input id="name"
                         type="text"
+                        defaultValue={info.name}
+                        onChange={this._onChange}
                         />
                     </form>
                 </div>
@@ -34,7 +36,8 @@ var PersonBasicInfo = React.createClass({
                     <form onSubmit={this._handleSubmit}>
                         <input id="givenname"
                         type="text"
-                        defaultValue={names.givenname}
+                        defaultValue={info.givenname}
+                        onChange={this._onChange}
                         />
                     </form>
                 </div>
@@ -42,49 +45,51 @@ var PersonBasicInfo = React.createClass({
                     <form onSubmit={this._handleSubmit}>
                         <input id="company"
                         type="text"
-                        defaultValue={names.company}
+                        defaultValue={info.company}
+                        onChange={this._onChange}
                         />
                     </form>
                 </div>
             </div>
 
+        // Return depending on the mode.
         return (this.props.modeEdit)? viewTreeEdit: viewTree;
     },
 
-    //onChange={this._onChange}
+    /*
+    *  Start our own functions here.
+    * */
+
+    _handleSubmit: function() {
+        this.props.submitEdition(this.state);
+        return false;
+    },
 
     _onChange: function(e) {
-        console.log(e.target.id)
         this._infoMap[e.target.id](e.target.value, this);
+    },
 
-        //this.setState({text: e.target.value});
-        //this.props.onUserInput(e.target.value);s
+    _getPersonInfo: function() {
+        var noValue = "...";
+        return {
+            name: (this.state.name["1"] && this.state.name["1"].length>0)? this.state.name["1"][0]:noValue,
+            givenname: (this.state.givenname["1"] && this.state.givenname["1"].length>0)? this.state.givenname["1"][0]:noValue,
+            company: (this.state.company["1"] && this.state.company["1"].length>0)? this.state.company["1"][0]:noValue
+        }
     },
 
     _infoMap: {
         name: function(value, ref) {
-            return ref.setState({name: value});
+            ref.state.name["1"][0] = value;
+            return ref.setState({name: ref.state.name});
         },
         givenname: function(value, ref) {
-            return ref.setState({test: value});
+            ref.state.givenname["1"][0] = value;
+            return ref.setState({givenname: ref.state.givenname});
         },
         company: function(value, ref) {
-            return ref.setState({test: value});
+            ref.state.company["1"][0] = value;
+            return ref.setState({company: ref.state.company});
         }
-    },
-/*
-    _onChange: function(e) {
-        console.log("user input !!! : " + e.target.value);
-        this.setState({text: e.target.value});
-        this.props.onUserInput(e.target.value);
-    },
-
-    _onChange: function(e) {
-        console.log("user input !!! : " + e.target.value);
-        this.setState({text: e.target.value});
-        this.props.onUserInput(e.target.value);
     }
-
-*/
-
 });
