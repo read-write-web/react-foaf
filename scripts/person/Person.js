@@ -7,17 +7,26 @@ var Person = React.createClass({
             editText:"Edit"}
     },
 
+    // TODO fixme HACK !!!
+    // TODO fixme HACK !!!
+    // TODO fixme HACK !!!
+    // TODO fixme HACK !!!
+    toPgArrayHack: function(pg) {
+        return [pg];
+    },
+
     render: function () {
         console.log('Render Person')
         console.log(this.props)
         console.log(this.state.modeEdit)
 
-        // Set user name.
-        var userName = foafUtils.getName(this.props.personPG);
 
-        var currentPg = this.props.personPG;
-        if (currentPg && currentPg.length > 0) {
-            var firstPg = currentPg[0];
+
+        if ( this.props.personPG ) {
+            var personPG = this.toPgArrayHack(this.props.personPG); // TODO remove when possible
+            // Set user name.
+            var userName = foafUtils.getName(personPG);
+
             return (
                 <div id="profile" className="clearfix center">
                     <div className="edit-profile" onClick={this._handleClickEdit}>{this.state.editText}</div>
@@ -69,17 +78,18 @@ var Person = React.createClass({
     },
 
     _getUserImg: function() {
-        var imgUrlList = foafUtils.getImg(this.props.personPG);
+        var personPG = this.toPgArrayHack(this.props.personPG); // TODO remove when possible
+        var imgUrlList = foafUtils.getImg(personPG);
         return (imgUrlList && imgUrlList.length>0)? imgUrlList[0]:"img/avatar.png";
     },
 
     _getBasicInfo: function() {
-        var noValue = "...";
-        var nameList=foafUtils.getName(this.props.personPG);
-        var givenNameList=foafUtils.getGivenName(this.props.personPG);
-        var familyNameList=foafUtils.getFamilyName(this.props.personPG);
-        var firstNameList=foafUtils.getFirstName(this.props.personPG);
-        var workPlaceHomepageList = foafUtils.getworkplaceHomepages(this.props.personPG);
+        var personPG = this.toPgArrayHack(this.props.personPG); // TODO remove when possible
+        var nameList=foafUtils.getName(personPG);
+        var givenNameList=foafUtils.getGivenName(personPG);
+        var familyNameList=foafUtils.getFamilyName(personPG);
+        var firstNameList=foafUtils.getFirstName(personPG);
+        var workPlaceHomepageList = foafUtils.getworkplaceHomepages(personPG);
 
         return {
             name: nameList,
@@ -91,11 +101,12 @@ var Person = React.createClass({
     },
 
     _getAddress: function(){
-        //var addressList = foafUtils.getContactHome(this.props.personPG);
-        var streetList = foafUtils.getContactStreet(this.props.personPG);
-        var postalCodeList = foafUtils.getContactPostalCode(this.props.personPG);
-        var cityList = foafUtils.getContactCity(this.props.personPG);
-        var countryList = foafUtils.getContactCountry(this.props.personPG);
+        var personPG = this.toPgArrayHack(this.props.personPG); // TODO remove when possible
+        //var addressList = foafUtils.getContactHome(personPG);
+        var streetList = foafUtils.getContactStreet(personPG);
+        var postalCodeList = foafUtils.getContactPostalCode(personPG);
+        var cityList = foafUtils.getContactCity(personPG);
+        var countryList = foafUtils.getContactCountry(personPG);
 
         //var address = ( addressList &&  addressList.address && addressList.address.length>0)? addressList.address[0]:null;
         console.log(streetList)
@@ -124,9 +135,10 @@ var Person = React.createClass({
     },
 
     _getMoreInfo: function() {
-        var emailList = foafUtils.getEmails(this.props.personPG);
-        var phoneList = foafUtils.getPhones(this.props.personPG);
-        var homepageList = foafUtils.getHomepages(this.props.personPG);
+        var personPG = this.toPgArrayHack(this.props.personPG); // TODO remove when possible
+        var emailList = foafUtils.getEmails(personPG);
+        var phoneList = foafUtils.getPhones(personPG);
+        var homepageList = foafUtils.getHomepages(personPG);
 
         // Return.
         return {
@@ -137,7 +149,7 @@ var Person = React.createClass({
     },
 
     getWebId: function() {
-        var value = this.props.personPG[0].pointer.value;
+        var value = this.props.personPG.pointer.value;
         return {
             webId:value
         };

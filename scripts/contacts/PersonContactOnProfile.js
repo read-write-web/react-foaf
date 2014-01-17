@@ -21,7 +21,7 @@ var PersonContactOnProfile = React.createClass({
                 })
             },
             function (err) {
-                //console.log("error")
+                console.error(err);
 					//console.log("error:", component.state.jumpedPointedGraph.pointer.toNT(), "->", err);
                 component.replaceState({
 						 jumpedPointedGraph: this.props.personPG,
@@ -39,8 +39,11 @@ var PersonContactOnProfile = React.createClass({
 		 } else console.log("graph not downloaded yet");
 
         // ?
-		if ( ! ( this.state.jumpedPointedGraph.pointer.isBlank || this.state.jumpedPointedGraph.pointer.isVar))
-			this.props.loadUserProfile(this.state.jumpedPointedGraph);
+		if ( ! ( this.state.jumpedPointedGraph.pointer.isBlank || this.state.jumpedPointedGraph.pointer.isVar)) {
+            var personContactUrl = this.props.personPG.pointer.value;
+            routeHelper.visitProfile(personContactUrl);
+            // this.props.loadUserProfile(this.state.jumpedPointedGraph);
+        }
 		return true;
 	 },
 

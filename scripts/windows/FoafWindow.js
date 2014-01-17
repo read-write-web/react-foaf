@@ -3,67 +3,77 @@
 var FoafWindow = React.createClass({
 
     getInitialState: function() {
+        // TODO this should not be seen as a tab, it's more like the uncloseable "background" that is shawn when there is no active tab
         var initialTab = {
-            pointedGraphs:[],
             type:"contacts",
             className:"0",
             isCurrentTab:true,
             isDefaultTab:true
         };
 
-       return {
-            primaryTopicsPointedGraphs: [],
-            testPg:[],
+        return {
+            personPG: undefined,
             filterText: '',
             tabsList: {0:initialTab}
-       };
+        };
     },
 
-	componentDidMount: function() {
-		 this._fetchURL(this.props.url);
-	},
-
-    componentWillReceiveProps: function(props) {
-        console.log("App initialized with props: " + props)
+    componentDidMount: function() {
+        this._fetchURL(this.props.url);
+        // it is important to create the router after the fetching to open the tab
+        // TODO there may be concurrency issues and maybe the 2 calls must be chained sequentially
+        this._initRouter();
     },
+
+
+
+    _initRouter : function() {
+        var self = this;
+        var onRouteChangeHandler = {
+            onGoToHome: function() {
+                self._fetchURL(self.props.url);
+            },
+            onVisitProfile : function(profileURL) {
+                self._loadOrMaximizeUserProfileFromUrl(profileURL);
+            }
+        }
+        return createRouter(onRouteChangeHandler)
+    },
+
 
     render: function () {
         var self = this;
-        console.log("render foafBof");
+        console.log("render FoafWindow");
         console.log(this.state.tabsList);
+
+        var tabs;
+        var footerItems;
+        if ( this.state.personPG ) {
+            var personPG = this.state.personPG;
+            tabs = _.map(this.state.tabsList, function (tab) {
+                return self._createTab(tab);
+            })
+            footerItems = _.map(this.state.tabsList, function (tab) {
+                return self._createFooter(tab);
+            })
+        } else {
+            tabs = "LOADING"; // TODO fix this with a loading icon or something ?
+            footerItems = "LOADING"; // TODO fix this with a loading icon or something ?
+        }
 
         var foafBoxTree =
             <div className="PersonalProfileDocument">
-                <MainSearchBox
-                    filterText={this.state.filterText}
-                    personPGs={this.state.primaryTopicsPointedGraphs}
-                    onUserInput={this._inputInSearchBox}
-                    loadCurrentUser={this._loadCurrentUser}
-                    />
+                <MainSearchBox filterText={this.state.filterText} onUserInput={this._inputInSearchBox}/>
                 <div id="actionNeeded">Action needed</div>
-                {
-                    _.map(this.state.tabsList, function (tab) {
-                        return self._createTab(tab);
-                    })
-                }
+                <div className="tabs">{tabs}</div>
                 <div className="footer">
                     <div className="footer-handle center-text title-case">Navigation</div>
                     <div className="footer-content">
-                        <ul>
-                        {
-                            _.map(this.state.tabsList, function (tab) {
-                                return self._createFooter(tab);
-                            })
-                        }
-                        </ul>
+                        <ul>{footerItems}</ul>
                     </div>
                 </div>
             </div>;
-
         console.log(foafBoxTree);
-
-        /*var nofoafBoxTree = <div class="shape-canvas no-shapes">No Shapes Found</div>;*/
-
         return foafBoxTree;
     },
 
@@ -71,18 +81,17 @@ var FoafWindow = React.createClass({
         if (!url) return;
         var self = this;
         var fetcher = $rdf.fetcher(store, 10000, true);
-        var future = fetcher.fetch(url, window.location);
+        var referer = window.location; // TODO rework the referer with the url of a foaf profile previously visited
+        var future = fetcher.fetch(url, referer);
         future.then(
             function (pg) {
-                var pt = pg.rel(FOAF("primaryTopic"));
-                // Update the list of tabs.
-                self.state.tabsList[0].pointedGraphs = pt;
+                console.log("Setting pg for " + url);
+                console.log(pg);
                 self.setState({
-                    primaryTopicsPointedGraphs: pt,
-                    testPg:pt,
-                    tabsList:self.state.tabsList
+                    personPG: pg,
+                    tabsList: self.state.tabsList
                 });
-                //need loading function to display advances in download
+                //self.forceUpdate(); // TODO temporary
             },
             function (err) {
                 console.log("returned from componentDidMount of " + url + " with error " + err);
@@ -90,23 +99,39 @@ var FoafWindow = React.createClass({
 
     },
 
+
     _submitEdition: function(data){
         var self = this;
 
         console.log('update profile');
-        console.log(this.state.primaryTopicsPointedGraphs)
         console.log(data);
 
         _.chain(data)
             .map(function (d) {
                 console.log(d);
                 // Test: Take the first graph to update.
-                self.state.primaryTopicsPointedGraphs[0].update(FOAF("name"), d.fVal, d.nVal);
+                self.state.personPG.update(FOAF("name"), d.fVal, d.nVal);
             })
             .value()
 
         // Return.
         return false;
+    },
+
+    _loadOrMaximizeUserProfileFromUrl: function(url) {
+        console.error("TODO _loadOrMaximizeUserProfileFromUrl");
+        this._loadUserProfileFromUrl(url); // TODO bad, should maximize if it already exists in the tabs!
+    },
+
+    _loadUserProfileFromUrl: function(url) {
+        var self = this;
+        console.debug("_loadUserProfileFromUrl = " + url);
+        var fetcher = $rdf.fetcher(store, 10000, true);
+        var referer = window.location; // TODO rework the referer with the url of a foaf profile previously visited
+        var future = fetcher.fetch(url, referer);
+        future.then(function(pg) {
+            self._loadUserProfile(pg);
+        });
     },
 
     _loadUserProfile: function(pg){
@@ -127,7 +152,7 @@ var FoafWindow = React.createClass({
 
         // Create a new tab.
         var newTab = {
-            pointedGraphs:[pg],
+            personPG: pg,
             type:"person",
             className:(maxKey+1).toString(),
             isCurrentTab:true,
@@ -139,15 +164,11 @@ var FoafWindow = React.createClass({
 
         // Set state to render.
         this.setState({
-            tabsList: this.state.tabsList,
-            primaryTopicsPointedGraphs:[pg]
+            personPG: this.state.personPG,
+            tabsList: this.state.tabsList
         });
 
         return false;
-    },
-
-    _loadCurrentUser: function() {
-        this._loadUserProfile(this.state.testPg[0]);
     },
 
     _inputInSearchBox: function(text) {
@@ -156,16 +177,16 @@ var FoafWindow = React.createClass({
 
     _closeTab: function(tabProperties) {
         // Update its properties.
-        delete this.state.tabsList[tabProperties.className];
+        delete this.state.tabsList[tabProperties.className]; // TODO should not use classname as tab index but id instead
 
         // Set initial tab as current tab.
-        currentIndex = 0;
+        currentIndex = 0; // TODO should stack tabs instead of returned to 0 tab
         this.state.tabsList[currentIndex].isCurrentTab = true;
 
         // Change state to render.
         this.setState({
             tabsList: this.state.tabsList,
-            primaryTopicsPointedGraphs:this.state.tabsList[currentIndex].pointedGraphs
+            personPG: this.state.personPG
         });
     },
 
@@ -187,7 +208,7 @@ var FoafWindow = React.createClass({
         // Change state to render.
         this.setState({
             tabsList: this.state.tabsList,
-            primaryTopicsPointedGraphs:this.state.tabsList[currentIndex].pointedGraphs
+            personPG: this.state.personPG
         });
     },
 
@@ -210,33 +231,27 @@ var FoafWindow = React.createClass({
         // Change state to render.
         this.setState({
             tabsList: this.state.tabsList,
-            primaryTopicsPointedGraphs:tabProperties.pointedGraphs
+            personPG: this.state.personPG
         });
     },
 
-    // Methods not ReactJs should begin with _xxx (need to change it on all the app files).
     _createTab:function(tab) {
         return <Space
-            personPG={this.state.primaryTopicsPointedGraphs}
-            properties={tab}
-            loadUserProfile={this._loadUserProfile}
-            submitEdition={this._submitEdition}
-            closeTab={this._closeTab}
-            minimizeTab={this._minimizeTab}
-            />;
+        properties={tab}
+        personPG={this.state.personPG}
+        loadUserProfile={this._loadUserProfile}
+        closeTab={this._closeTab}
+        minimizeTab={this._minimizeTab}
+        submitEdition={this._submitEdition}
+        />;
     },
 
     _createFooter:function(tab) {
         return <Footer
-        personPG={this.state.primaryTopicsPointedGraphs}
         properties={tab}
         maximizeTab={this._maximizeTab}
         />;
     }
 
 });
-
-//personPG={this.state.primaryTopicsPointedGraphs}
-//<Person personPG={this.state.primaryTopicsPointedGraphs} changeUser={this.changeUser}/>
-//<Space personPG={this.state.primaryTopicsPointedGraphs} changeUser={this.changeUser}/>
 

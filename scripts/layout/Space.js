@@ -4,8 +4,8 @@ var Space = React.createClass({
 
     render:function(){
         var self = this;
-        console.log('Render space')
-        //console.log(this.props)
+        console.log('Render space');
+        console.log(this.props)
 
         // Set css display properties.
         var show = {display: (this.props.properties.isCurrentTab) ? 'block' : 'none'};
@@ -79,13 +79,11 @@ var Space = React.createClass({
     // Choose html based on tab type.
     _tabMap: {
         contacts: function(prop, ref) {
-            return <PersonContacts properties={prop} personPG={ref.props.personPG[0]} userName="Test" loadUserProfile={ref.props.loadUserProfile}/>
+            return <PersonContacts properties={prop} personPG={ref.props.personPG} userName="Test" loadUserProfile={ref.props.loadUserProfile}/>
         },
         person: function(prop, ref) {
             return <Person
-                properties={prop}
-                personPG={ref.props.personPG}
-                loadUserProfile={ref.props.loadUserProfile}
+                personPG={ref.props.properties.personPG}
                 submitEdition={ref.props.submitEdition}
             />
         }
