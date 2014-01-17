@@ -33,15 +33,13 @@
       background: white;
       box-sizing: content-box;
 
+
       input {
-        height: 25px;
         width: 350px;
-        border: 1px solid #e3e3e3;
         box-shadow: none;
         box-sizing: border-box;
         outline: none;
         font-family: "Noto Sans", sans-serif;
-        font-size: 20px;
         float: left;
         margin: 0 0 10px 0;
       }
@@ -52,9 +50,11 @@
       margin-top: -15px;
 
       input {
-        height: 100px;
         font-size: 50px;
-        line-height: 50px;
+        margin-top: -15px;
+        height: 60px;
+        text-transform: uppercase;
+        font-weight: bold;
       }
     }
 
@@ -63,9 +63,11 @@
       font-size: 30px;
 
       input {
-        height: 60px;
         font-size: 30px;
         line-height: 30px;
+        height: 40px;
+        text-transform: uppercase;
+        font-weight: bold;
       }
 
     }
@@ -76,9 +78,9 @@
       color: @mediumGrey;
 
       input {
-        height: 50px;
         font-size: 16px;
         line-height: 40px;
+        height: 36px;
       }
     }
   }
@@ -155,6 +157,23 @@
   & > #details {
     color: @mediumGrey;
 
+    form {
+      width: 300px;
+      background: white;
+      box-sizing: content-box;
+
+      input {
+        width: 200px;
+        box-shadow: none;
+        box-sizing: border-box;
+        outline: none;
+        font-family: "Noto Sans", sans-serif;
+        float: left;
+        /*margin: 0 0 10px 0;*/
+      }
+    }
+
+
     .title {
       background: @blue;
       padding: 7px 10px;
@@ -174,12 +193,17 @@
     ul {
       padding: 0;
 
-    }
+      li {
+        height: 150px;
+        padding: 10px;
+        background: @lightestGrey;
 
-    li {
-      height: 150px;
-      padding: 10px;
-      background: @lightestGrey;
+        input {
+          font-size: 16px;
+          line-height: 40px;
+          height: 36px;
+        }
+      }
     }
   }
 

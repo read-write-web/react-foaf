@@ -5,7 +5,7 @@ var Space = React.createClass({
     render:function(){
         var self = this;
         console.log('Render space')
-        console.log(this.props)
+        //console.log(this.props)
 
         // Set css display properties.
         var show = {display: (this.props.properties.isCurrentTab) ? 'block' : 'none'};
@@ -82,7 +82,12 @@ var Space = React.createClass({
             return <PersonContacts properties={prop} personPG={ref.props.personPG[0]} userName="Test" loadUserProfile={ref.props.loadUserProfile}/>
         },
         person: function(prop, ref) {
-            return <Person properties={prop} personPG={ref.props.personPG} loadUserProfile={ref.props.loadUserProfile}/>
+            return <Person
+                properties={prop}
+                personPG={ref.props.personPG}
+                loadUserProfile={ref.props.loadUserProfile}
+                submitEdition={ref.props.submitEdition}
+            />
         }
     }
 });

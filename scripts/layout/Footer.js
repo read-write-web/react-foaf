@@ -1,14 +1,14 @@
 /** @jsx React.DOM */
 
 var Footer = React.createClass({
-
     // Render.
     render:function(){
         var self = this;
-        console.log('Render Footer')
-        console.log(this.props)
+        //console.log('Render Footer')
+        //console.log(this.props)
 
-        var show = {display: (this.props.properties.isCurrentTab) ? 'none' : 'block'};
+        var bool = ((this.props.properties.isCurrentTab) && (!this.props.properties.isDefaultTab));
+        var show = {display: bool ? 'none' : 'block'};
 
         return (
             <li className="footer-item float-left" style={show} onClick={this._handleClick}>
@@ -17,7 +17,11 @@ var Footer = React.createClass({
         );
     },
 
-    // Handler.
+    /*
+     *  Start our own functions here.
+     * */
+
+    // Handlers.
     _handleClick: function() {
         this.props.maximizeTab(this.props.properties);
     },
@@ -30,7 +34,7 @@ var Footer = React.createClass({
     // Image depend on space type.
     _imageMap: {
         contacts: function(prop) {
-            return "img/friends_icon_blue.png";
+            return "img/friends_icon_yellow.png";
         },
         person: function(prop) {
             var imgUrlList = foafUtils.getImg(prop.pointedGraphs);

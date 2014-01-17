@@ -7,7 +7,8 @@ var FoafBx = React.createClass({
             pointedGraphs:[],
             type:"contacts",
             className:"0",
-            isCurrentTab:true
+            isCurrentTab:true,
+            isDefaultTab:true
         };
 
        return {
@@ -29,10 +30,13 @@ var FoafBx = React.createClass({
 
         var foafBoxTree =
             <div className="PersonalProfileDocument">
-                <MainSearchBox filterText={this.state.filterText} personPG={this.state.primaryTopicsPointedGraphs} onUserInput={this._inputInSearchBox}/>
-                <div id="actionNeeded">Action needed
-                    <a onClick={this._loadCurrentUser}>Current_Profile</a>
-                </div>
+                <MainSearchBox
+                    filterText={this.state.filterText}
+                    personPGs={this.state.primaryTopicsPointedGraphs}
+                    onUserInput={this._inputInSearchBox}
+                    loadCurrentUser={this._loadCurrentUser}
+                    />
+                <div id="actionNeeded">Action needed</div>
                 {
                     _.map(this.state.tabsList, function (tab) {
                         return self._createTab(tab);
@@ -82,6 +86,25 @@ var FoafBx = React.createClass({
 
     },
 
+    _submitEdition: function(data){
+        var self = this;
+
+        console.log('update profile');
+        console.log(this.state.primaryTopicsPointedGraphs)
+        console.log(data);
+
+        _.chain(data)
+            .map(function (d) {
+                console.log(d);
+                // Test: Take the first graph to update.
+                self.state.primaryTopicsPointedGraphs[0].update(FOAF("name"), d.fVal, d.nVal);
+            })
+            .value()
+
+        // Return.
+        return false;
+    },
+
     _loadUserProfile: function(pg){
         console.log("In foaf box ------->>>>> Change User")
         console.log(pg)
@@ -103,7 +126,8 @@ var FoafBx = React.createClass({
             pointedGraphs:[pg],
             type:"person",
             className:(maxKey+1).toString(),
-            isCurrentTab:true
+            isCurrentTab:true,
+            isDefaultTab:false
         };
 
         // Update the list of tabs.
@@ -142,8 +166,8 @@ var FoafBx = React.createClass({
     },
 
     _minimizeTab: function(tabProperties) {
-        console.log('minimize');
-        console.log(tabProperties);
+        //console.log('minimize');
+        //console.log(tabProperties);
 
         // Tab is not current the tab anymore.
         tabProperties.isCurrentTab = false;
@@ -192,6 +216,7 @@ var FoafBx = React.createClass({
             personPG={this.state.primaryTopicsPointedGraphs}
             properties={tab}
             loadUserProfile={this._loadUserProfile}
+            submitEdition={this._submitEdition}
             closeTab={this._closeTab}
             minimizeTab={this._minimizeTab}
             />;

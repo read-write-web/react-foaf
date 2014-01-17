@@ -14,11 +14,19 @@ var store = new $rdf.IndexedFormula();
 function FOAF(name) { return $rdf.sym("http://xmlns.com/foaf/0.1/"+name) }
 function RDFS(name) { return $rdf.sym("http://www.w3.org/2000/01/rdf-schema#"+name) }
 
-
+/*
+FOAFKEY: {
+    "foaf:name": "foaf:name";
+    "foaf:name": "foaf:givenname";
+    "foaf:name": "foaf:family_name";
+    "foaf:name": "foaf:firstname";
+    "foaf:name": "foaf:workplaceHomepage";
+}
+*/
 //var foafDocURL = "http://bblfish.net/people/henry/card";
 //var foafDocURL = "https://my-profile.eu/people/tim/card";
-//var foafDocURL = "https://my-profile.eu/people/deiu/card";
 var foafDocURL = "https://my-profile.eu/people/deiu/card";
+//var foafDocURL = "https://my-profile.eu/people/deiu/card";
 //var foafDocURL = "https://my-profile.eu/people/mtita/card";// Not working
 //var foafDocURL = "http://presbrey.mit.edu/foaf";
 //var foafDocURL = 'https://localhost:8443/2013/backbone';

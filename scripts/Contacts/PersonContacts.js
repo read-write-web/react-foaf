@@ -16,7 +16,7 @@ var PersonContacts = React.createClass({
     render: function () {
         var self = this;
         console.log('Render PersonContacts')
-        console.log(this.props);
+        //console.log(this.props);
 
         if (!this.props.personPG) return (
             <div id="contacts" className="clearfix">
