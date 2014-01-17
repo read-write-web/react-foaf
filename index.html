@@ -36,6 +36,8 @@ Main application scripts
 -->
 <script type="text/javascript" src="scripts/AppConfig.js"></script>
 <script type="text/javascript" src="scripts/routing.js"></script>
+<script type="text/jsx" src="scripts/App.js"></script>
+<script type="text/jsx" src="scripts/windows/Window.js"></script>
 <script type="text/jsx" src="scripts/windows/FoafWindow.js"></script>
 
 <!--
@@ -78,7 +80,7 @@ View component scripts
      * @jsx React.DOM
      */
     window.onload = function startApplication() {
-        React.renderComponent( <FoafWindow url={foafDocURL}/>, document.getElementById('container') );
+        React.renderComponent( <App />, document.getElementById('container') );
     };
 </script>
 
