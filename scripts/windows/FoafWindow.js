@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 
-var FoafBx = React.createClass({
+var FoafWindow = React.createClass({
 
     getInitialState: function() {
         var initialTab = {
@@ -21,7 +21,11 @@ var FoafBx = React.createClass({
 
 	componentDidMount: function() {
 		 this._fetchURL(this.props.url);
-	 },
+	},
+
+    componentWillReceiveProps: function(props) {
+        console.log("App initialized with props: " + props)
+    },
 
     render: function () {
         var self = this;
