@@ -29,7 +29,7 @@ var FoafWindow = React.createClass({
             },
             onVisitProfile : function(profileURL) {
                 if ( !self._isInitialized() ) {
-                    self._fetchURL(this.props.url);
+                    self._fetchURL(self.props.url);
                     self._loadOrMaximizeUserProfileFromUrl(profileURL);
                 }
             }
@@ -89,7 +89,13 @@ var FoafWindow = React.createClass({
                     <MainSearchBox filterText={this.state.filterText} onUserInput={this._inputInSearchBox}/>
                     <div id="actionNeeded">Action needed</div>
                     <div className="tabs">{contentSpace}</div>
-                    <Footer activeTabs={this.state.activeTabs} tabs={this.state.tabs} onTabClicked={this._loadOrMaximizeUserProfileFromUrl} minimizeAllTabs={this._minimizeAllTabs}/>
+                    <Footer
+                    activeTabs={this.state.activeTabs}
+                    tabs={this.state.tabs}
+                    onTabClicked={this._toggleTab}
+                    minimizeAllTabs={this._minimizeAllTabs}
+                    closeAllTabs={this._closeAllTabs}
+                    />
                 </div>;
             return foafBoxTree;
         }
@@ -134,6 +140,7 @@ var FoafWindow = React.createClass({
         return false;
     },
 
+
     _loadOrMaximizeUserProfileFromUrl: function(url) {
         console.log("_loadOrMaximizeUserProfileFromUrl " + url);
         var maybeTab = this._getTabOpenForUrl(url);
@@ -144,8 +151,6 @@ var FoafWindow = React.createClass({
             this._createNewUserTabFromUrl(url);
         }
     },
-
-
 
     _createNewUserTabFromUrl: function(url) {
         var self = this;
@@ -173,6 +178,14 @@ var FoafWindow = React.createClass({
         //this.setState({filterText:text});
     },
 
+    _toggleTab: function(tab) {
+        if ( _.contains(this.state.activeTabs,tab) ) {
+            this._minimizeTab(tab);
+        }
+        else {
+            this._maximizeTab(tab);
+        }
+    },
 
     _closeTab: function(tab) {
         this.setState({
@@ -203,7 +216,6 @@ var FoafWindow = React.createClass({
     _maximizeTab: function(tab) {
         console.log("Maximizing tab:",tab);
         var tempActiveTabs = _.without(this.state.activeTabs,tab);
-        console.log("tempActiveTabs tab:",tempActiveTabs);
         var newActiveTabs = _.union([tab],tempActiveTabs);
         this.setState({
             activeTabs: newActiveTabs

@@ -39,6 +39,30 @@
         width: 30px;
         height: 30px;
         background: @blue;
+
+        &.active-tab {
+          opacity: 1;
+        }
+        &.minimized-tab {
+          opacity: 0.4;
+        }
+        &.current-tab {
+          -webkit-box-shadow:inset 0px 0px 0px 10px #f00;
+          -moz-box-shadow:inset 0px 0px 0px 10px #f00;
+          box-shadow:inset 0px 0px 0px 10px #f00;
+          border-top-color: rgb(152, 191, 110);
+          border-top-style: inset;
+          border-top-width: 3px;
+          border-right-color: rgb(152, 191, 33);
+          border-right-style: inset;
+          border-right-width: 3px;
+          border-bottom-color: rgb(152, 191, 110);
+          border-bottom-style: inset;
+          border-bottom-width: 3px;
+          border-left-color: rgb(152, 191, 33);
+          border-left-style: inset;
+          border-left-width: 3px;
+        }
       }
 
       li {

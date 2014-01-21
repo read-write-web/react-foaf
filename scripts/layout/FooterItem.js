@@ -4,20 +4,32 @@ var Footer = React.createClass({
     render: function() {
         var self = this;
 
-        var activeTabs = this.props.activeTabs;
         var allTabs = this.props.tabs;
-        var inactiveTabs = _.difference(allTabs,activeTabs);
+        var activeTabs = this.props.activeTabs;
+        var minimizedTabs = _.difference(allTabs,activeTabs);
+        var currentTab = _.first(activeTabs); // can be undefined if no active tab
 
+        var desktopItem = <FooterItem imgSrc={'img/friends_icon_yellow.png'} onFooterItemClick={this.props.minimizeAllTabs}/>;
 
-        var desktop = <FooterItem imgSrc={'img/friends_icon_yellow.png'} onFooterItemClick={this.props.minimizeAllTabs}/>;
         var tabsFooterItems = _.map(allTabs, function(tab) {
             var img = self._getUserImg(tab.personPG);
-            var onClick = self.props.onTabClicked.bind(this, tab.personURL);
-            return <FooterItem imgSrc={img} onFooterItemClick={onClick}/>;
-        })
+            var onClick = function() {
+                self.props.onTabClicked(tab);
+            };
+            var active = _.contains(activeTabs,tab);
+            var minimized = _.contains(minimizedTabs,tab);
+            var current = (currentTab === tab);
+            return <FooterItem imgSrc={img} onFooterItemClick={onClick} isActiveTab={active} isMinimizedTab={minimized} isCurrentTab={current} />;
+        });
 
-        var footerItems = _.union([desktop],tabsFooterItems);
+        var globalCloseItemArray = [];
+        if ( !_.isEmpty(this.props.tabs) ) {
+            var globalCloseItem = <FooterItem imgSrc={'img/close_icon.png'} onFooterItemClick={this.props.closeAllTabs}/>;
+            globalCloseItemArray.push(globalCloseItem);
+        }
 
+
+        var footerItems = _.union([desktopItem],tabsFooterItems,[globalCloseItemArray]);
 
         return (
             <div className="footer">
@@ -43,8 +55,15 @@ var Footer = React.createClass({
 var FooterItem = React.createClass({
 
     render: function() {
+        var liClasses = React.addons.classSet({
+            'footer-item': true,
+            'float-left': true,
+            'minimized-tab': this.props.isMinimizedTab,
+            'active-tab': this.props.isActiveTab,
+            'current-tab': this.props.isCurrentTab
+        });
         return (
-            <li className="footer-item float-left" onClick={this.props.onFooterItemClick}>
+            <li className={liClasses} onClick={this.props.onFooterItemClick}>
                 <Pix src={this.props.imgSrc}/>
             </li>
             );
