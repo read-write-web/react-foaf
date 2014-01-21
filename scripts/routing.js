@@ -21,6 +21,9 @@ function createRouter(onRouteChangeHandler) {
         on: function() { console.debug("Route is found, hash="+window.location.hash+" and arguments=" +JSON.stringify(arguments)) }
     });
     directorRouter.init();
+    if ( !window.location.hash ) {
+        window.location.hash = "/";
+    }
     return directorRouter;
 }
 

@@ -1,38 +1,53 @@
 /** @jsx React.DOM */
 
-// TODO, actually this is a FooterItem, and there is one per open tab
+var Footer = React.createClass({
+    render: function() {
+        var self = this;
 
-var FooterItem = React.createClass({
-    // Render.
-    render:function(){
-        console.log('Render Footer')
-        console.log(this.props)
-        var show = {display: 'block'};
+        var activeTabs = this.props.activeTabs;
+        var allTabs = this.props.tabs;
+        var inactiveTabs = _.difference(allTabs,activeTabs);
+
+
+        var desktop = <FooterItem imgSrc={'img/friends_icon_yellow.png'} onFooterItemClick={this.props.minimizeAllTabs}/>;
+        var tabsFooterItems = _.map(allTabs, function(tab) {
+            var img = self._getUserImg(tab.personPG);
+            var onClick = self.props.onTabClicked.bind(this, tab.personURL);
+            return <FooterItem imgSrc={img} onFooterItemClick={onClick}/>;
+        })
+
+        var footerItems = _.union([desktop],tabsFooterItems);
+
 
         return (
-            <li className="footer-item float-left" style={show} onClick={this._handleClick}>
-                <Pix src={this._getUserImg()}/>
-            </li>
-            );
-    },
-
-
-    // Handlers.
-    _handleClick: function() {
-        var personContactUrl = this.props.tab.personPG.pointer.value;
-        routeHelper.visitProfile(personContactUrl);
+            <div className="footer">
+                <div className="footer-handle center-text title-case">Navigation</div>
+                <div className="footer-content">
+                    <ul>{footerItems}</ul>
+                </div>
+            </div>);
     },
 
 
     // Get image.
-    _getUserImg: function() {
+    _getUserImg: function(pg) {
         console.log("In footer -> _getUserImg")
-        var personPGArray = [this.props.tab.personPG]; // TODO should not be an array: hack
+        var personPGArray = [pg]; // TODO should not be an array: hack
         var imgUrlList = foafUtils.getImg(personPGArray);
         return (imgUrlList && imgUrlList.length>0)? imgUrlList[0]:"img/avatar.png";
     }
 
+});
 
-    // return "img/friends_icon_yellow.png";
+
+var FooterItem = React.createClass({
+
+    render: function() {
+        return (
+            <li className="footer-item float-left" onClick={this.props.onFooterItemClick}>
+                <Pix src={this.props.imgSrc}/>
+            </li>
+            );
+    }
 
 });

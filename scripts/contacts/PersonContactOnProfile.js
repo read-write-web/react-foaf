@@ -33,6 +33,7 @@ var PersonContactOnProfile = React.createClass({
 
     handleClick: function(e) {
 		 var component = this;
+        // TODO maybe not appropriate?
 		 if (this.state.jumpedPointedGraph) {
 			 console.log("clicked on Person box info->");
 			 console.log(this.state.jumpedPointedGraph);
@@ -41,7 +42,7 @@ var PersonContactOnProfile = React.createClass({
         // ?
 		if ( ! ( this.state.jumpedPointedGraph.pointer.isBlank || this.state.jumpedPointedGraph.pointer.isVar)) {
             var personContactUrl = this.props.personPG.pointer.value;
-            routeHelper.visitProfile(personContactUrl);
+            this.props.onPersonContactClick();
         }
 		return true;
 	 },

@@ -27,9 +27,12 @@ var PersonContacts = React.createClass({
             );
 
         var foafs = _.chain(this.props.personPG.rel(FOAF("knows")))
-            .map(function (foafPg) {
+            .map(function (contactPG) {
+                var contactURL = contactPG.pointer.value;
+                var onContactClick = self.props.onContactSelected.bind(this,contactURL);
                 return (<PersonContactOnProfile
-                            personPG={foafPg}
+                            onPersonContactClick={onContactClick}
+                            personPG={contactPG}
                             filterText={self.state.filterText}/>)
             }).value();
 

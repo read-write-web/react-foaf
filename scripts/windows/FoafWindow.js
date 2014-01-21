@@ -12,25 +12,48 @@ var FoafWindow = React.createClass({
     },
 
     componentDidMount: function() {
-        this._fetchURL(this.props.url);
-        // it is important to create the router after the fetching to open the tab
-        // TODO there may be concurrency issues and maybe the 2 calls must be chained sequentially
         this._initRouter();
     },
 
+    _isInitialized: function() {
+        return this.state.personPG
+    },
 
-
-    _initRouter : function() {
+    _initRouter: function() {
         var self = this;
         var onRouteChangeHandler = {
             onGoToHome: function() {
-                self._fetchURL(self.props.url);
+                if ( !self._isInitialized() ) {
+                    self._fetchURL(self.props.url);
+                }
             },
             onVisitProfile : function(profileURL) {
-                self._loadOrMaximizeUserProfileFromUrl(profileURL);
+                if ( !self._isInitialized() ) {
+                    self._fetchURL(this.props.url);
+                    self._loadOrMaximizeUserProfileFromUrl(profileURL);
+                }
             }
         }
-        return createRouter(onRouteChangeHandler)
+        var router = createRouter(onRouteChangeHandler)
+    },
+
+    /**
+     * The current tab on which we focus: the first of the active tabs
+     * Can return undefined if we are on the "desktop"
+     * @returns {*}
+     * @private
+     */
+    _getCurrentTab: function() {
+        return _.first(this.state.activeTabs);
+    },
+
+    _updateRouteToCurrentState: function() {
+        var currentTab = this._getCurrentTab()
+        if ( currentTab ) {
+            routeHelper.visitProfile(currentTab.personURL);
+        } else {
+            routeHelper.goToHome();
+        }
     },
 
 
@@ -39,41 +62,34 @@ var FoafWindow = React.createClass({
         console.log("render FoafWindow with state");
         console.log(this.state);
 
-        if ( !this.state.personPG ) {
+        if ( !this._isInitialized() ) {
             return <div>{'LOADING'}</div>;
         }
         else {
             var contentSpace;
-            if ( _.isEmpty(this.state.activeTabs) ) {
+            var currentTab = this._getCurrentTab();
+            this._updateRouteToCurrentState();
+            if ( !currentTab ) {
                 console.debug("No active tab, will display PersonContacts");
-                var content = <PersonContacts personPG={this.state.personPG}/>;
+                var content = <PersonContacts personPG={this.state.personPG} onContactSelected={this._loadOrMaximizeUserProfileFromUrl}/>;
                 contentSpace = <ContentSpace clazz="space center">{content}</ContentSpace>;
             }
             else {
-                var firstActiveTab = _.first(this.state.activeTabs);
+                var currentTab = this._getCurrentTab()
                 console.debug("Active tabs have been found, will display tab:");
-                console.debug(firstActiveTab);
-                var minimizeFirstTab = this._minimizeTab.bind(this,firstActiveTab);
-                var closeFirstTab = this._closeTab.bind(this,firstActiveTab);
-                var content = <Person personPG={firstActiveTab.personPG} submitEdition={this._submitEdition} />
-                contentSpace = <ContentSpace onMinimize={minimizeFirstTab} onClose={closeFirstTab}>{content}</ContentSpace>;
+                console.debug(currentTab);
+                var minimizeCurrentTab = this._minimizeTab.bind(this,currentTab);
+                var closeCurrentTab = this._closeTab.bind(this,currentTab);
+                var content = <Person personPG={currentTab.personPG} submitEdition={this._submitEdition} />
+                contentSpace = <ContentSpace onMinimize={minimizeCurrentTab} onClose={closeCurrentTab}>{content}</ContentSpace>;
             }
-
-            var footerItems = _.map(this.state.tabs, function(tab) {
-                return <FooterItem tab={tab} />;
-            })
 
             var foafBoxTree =
                 <div className="PersonalProfileDocument">
                     <MainSearchBox filterText={this.state.filterText} onUserInput={this._inputInSearchBox}/>
                     <div id="actionNeeded">Action needed</div>
                     <div className="tabs">{contentSpace}</div>
-                    <div className="footer">
-                        <div className="footer-handle center-text title-case">Navigation</div>
-                        <div className="footer-content">
-                            <ul>{footerItems}</ul>
-                        </div>
-                    </div>
+                    <Footer activeTabs={this.state.activeTabs} tabs={this.state.tabs} onTabClicked={this._loadOrMaximizeUserProfileFromUrl} minimizeAllTabs={this._minimizeAllTabs}/>
                 </div>;
             return foafBoxTree;
         }
@@ -119,7 +135,7 @@ var FoafWindow = React.createClass({
     },
 
     _loadOrMaximizeUserProfileFromUrl: function(url) {
-        console.error("TODO _loadOrMaximizeUserProfileFromUrl");
+        console.log("_loadOrMaximizeUserProfileFromUrl " + url);
         var maybeTab = this._getTabOpenForUrl(url);
         if ( maybeTab ) {
             this._maximizeTab(maybeTab); // it is not a problem to maximise an already active tab
@@ -143,55 +159,52 @@ var FoafWindow = React.createClass({
     },
 
     _createNewUserTab: function(pg){
-        // Create a new tab.
         var newTab = {
+            personURL: pg.pointer.value,
             personPG: pg
         };
-
-        /*
-        this.setState({
-            tabs: this.state.tabs.push(newTab),
-            activeTabs: this.state.activeTabs.unshift(newTab)
-        });
-        */
         this.setState({
             tabs: _.union([newTab],this.state.tabs),
             activeTabs: _.union([newTab],this.state.activeTabs)
         })
-
-        // False does not trigger web browser default action on submit event.
-        return false;
     },
 
     _inputInSearchBox: function(text) {
         //this.setState({filterText:text});
     },
 
+
     _closeTab: function(tab) {
         this.setState({
             tabs: _.without(this.state.tabs,tab),
             activeTabs: _.without(this.state.activeTabs,tab)
         });
-        if (_.isEmpty(this.state.activeTabs) ) {
-            routeHelper.goToHome();
-        }
+    },
+
+    _closeAllTabs: function() {
+        this.setState({
+            tabs: [],
+            activeTabs: []
+        });
     },
 
     _minimizeTab: function(tab) {
-        console.log("_.without(this.state.activeTabs,tab) => ");
-        console.log(this.state.activeTabs);
-        console.log(tab);
-        console.log(_.without(this.state.activeTabs,tab));
         this.setState({
             activeTabs: _.without(this.state.activeTabs,tab)
         });
-        if (_.isEmpty(this.state.activeTabs) ) {
-            routeHelper.goToHome();
-        }
+    },
+
+    _minimizeAllTabs: function() {
+        this.setState({
+            activeTabs: []
+        });
     },
 
     _maximizeTab: function(tab) {
-        var newActiveTabs = _.unshift( _.without(this.state.activeTabs,tab),tab);
+        console.log("Maximizing tab:",tab);
+        var tempActiveTabs = _.without(this.state.activeTabs,tab);
+        console.log("tempActiveTabs tab:",tempActiveTabs);
+        var newActiveTabs = _.union([tab],tempActiveTabs);
         this.setState({
             activeTabs: newActiveTabs
         });
@@ -200,7 +213,7 @@ var FoafWindow = React.createClass({
     _getTabOpenForUrl: function(url) {
         console.debug("Tabs = "+this.state.tabs);
         return _.find(this.state.tabs, function(tab) {
-            return tab.personPG.pointer.value == url;
+            return tab.personURL == url;
         });
     }
 
