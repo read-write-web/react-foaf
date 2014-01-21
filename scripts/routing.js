@@ -31,9 +31,11 @@ function createRouter(onRouteChangeHandler) {
  */
 function RouteHelper() {
     this.goToHome = function() {
+        console.debug("goToHome");
         window.location.hash = '/';
     };
     this.visitProfile = function(profileURL) {
+        console.debug("visitProfile " + profileURL);
         window.location.hash = '/profile/'+routeHashCodec.encode(profileURL);
     };
 }

@@ -3,18 +3,11 @@
 var FoafWindow = React.createClass({
 
     getInitialState: function() {
-        // TODO this should not be seen as a tab, it's more like the uncloseable "background" that is shawn when there is no active tab
-        var initialTab = {
-            type:"contacts",
-            className:"0",
-            isCurrentTab:true,
-            isDefaultTab:true
-        };
-
         return {
             personPG: undefined,
             filterText: '',
-            tabsList: {0:initialTab}
+            tabs: [], // unordered
+            activeTabs: [] // first element is the displayed one: it's a stack
         };
     },
 
@@ -43,38 +36,47 @@ var FoafWindow = React.createClass({
 
     render: function () {
         var self = this;
-        console.log("render FoafWindow");
-        console.log(this.state.tabsList);
+        console.log("render FoafWindow with state");
+        console.log(this.state);
 
-        var tabs;
-        var footerItems;
-        if ( this.state.personPG ) {
-            var personPG = this.state.personPG;
-            tabs = _.map(this.state.tabsList, function (tab) {
-                return self._createTab(tab);
-            })
-            footerItems = _.map(this.state.tabsList, function (tab) {
-                return self._createFooter(tab);
-            })
-        } else {
-            tabs = "LOADING"; // TODO fix this with a loading icon or something ?
-            footerItems = "LOADING"; // TODO fix this with a loading icon or something ?
+        if ( !this.state.personPG ) {
+            return <div>{'LOADING'}</div>;
         }
+        else {
+            var contentSpace;
+            if ( _.isEmpty(this.state.activeTabs) ) {
+                console.debug("No active tab, will display PersonContacts");
+                var content = <PersonContacts personPG={this.state.personPG}/>;
+                contentSpace = <ContentSpace clazz="space center">{content}</ContentSpace>;
+            }
+            else {
+                var firstActiveTab = _.first(this.state.activeTabs);
+                console.debug("Active tabs have been found, will display tab:");
+                console.debug(firstActiveTab);
+                var minimizeFirstTab = this._minimizeTab.bind(this,firstActiveTab);
+                var closeFirstTab = this._closeTab.bind(this,firstActiveTab);
+                var content = <Person personPG={firstActiveTab.personPG} submitEdition={this._submitEdition} />
+                contentSpace = <ContentSpace onMinimize={minimizeFirstTab} onClose={closeFirstTab}>{content}</ContentSpace>;
+            }
 
-        var foafBoxTree =
-            <div className="PersonalProfileDocument">
-                <MainSearchBox filterText={this.state.filterText} onUserInput={this._inputInSearchBox}/>
-                <div id="actionNeeded">Action needed</div>
-                <div className="tabs">{tabs}</div>
-                <div className="footer">
-                    <div className="footer-handle center-text title-case">Navigation</div>
-                    <div className="footer-content">
-                        <ul>{footerItems}</ul>
+            var footerItems = _.map(this.state.tabs, function(tab) {
+                return <FooterItem tab={tab} />;
+            })
+
+            var foafBoxTree =
+                <div className="PersonalProfileDocument">
+                    <MainSearchBox filterText={this.state.filterText} onUserInput={this._inputInSearchBox}/>
+                    <div id="actionNeeded">Action needed</div>
+                    <div className="tabs">{contentSpace}</div>
+                    <div className="footer">
+                        <div className="footer-handle center-text title-case">Navigation</div>
+                        <div className="footer-content">
+                            <ul>{footerItems}</ul>
+                        </div>
                     </div>
-                </div>
-            </div>;
-        console.log(foafBoxTree);
-        return foafBoxTree;
+                </div>;
+            return foafBoxTree;
+        }
     },
 
     _fetchURL: function(url) {
@@ -88,10 +90,8 @@ var FoafWindow = React.createClass({
                 console.log("Setting pg for " + url);
                 console.log(pg);
                 self.setState({
-                    personPG: pg,
-                    tabsList: self.state.tabsList
+                    personPG: pg
                 });
-                //self.forceUpdate(); // TODO temporary
             },
             function (err) {
                 console.log("returned from componentDidMount of " + url + " with error " + err);
@@ -120,54 +120,46 @@ var FoafWindow = React.createClass({
 
     _loadOrMaximizeUserProfileFromUrl: function(url) {
         console.error("TODO _loadOrMaximizeUserProfileFromUrl");
-        this._loadUserProfileFromUrl(url); // TODO bad, should maximize if it already exists in the tabs!
+        var maybeTab = this._getTabOpenForUrl(url);
+        if ( maybeTab ) {
+            this._maximizeTab(maybeTab); // it is not a problem to maximise an already active tab
+        }
+        else {
+            this._createNewUserTabFromUrl(url);
+        }
     },
 
-    _loadUserProfileFromUrl: function(url) {
+
+
+    _createNewUserTabFromUrl: function(url) {
         var self = this;
-        console.debug("_loadUserProfileFromUrl = " + url);
+        console.debug("_createNewUserTabFromUrl = " + url);
         var fetcher = $rdf.fetcher(store, 10000, true);
         var referer = window.location; // TODO rework the referer with the url of a foaf profile previously visited
         var future = fetcher.fetch(url, referer);
         future.then(function(pg) {
-            self._loadUserProfile(pg);
+            self._createNewUserTab(pg);
         });
     },
 
-    _loadUserProfile: function(pg){
-        console.log("In foaf box ------->>>>> Change User")
-        console.log(pg)
-
-        // Initialize all tabs.
-        _.map(this.state.tabsList, function(tab) {
-            tab.isCurrentTab = false
-        });
-
-        // Select max index.
-        var maxKey = _.chain(this.state.tabsList)
-            .keys()
-            .map(function(k) {return parseInt(k)})
-            .max()
-            .value()
-
+    _createNewUserTab: function(pg){
         // Create a new tab.
         var newTab = {
-            personPG: pg,
-            type:"person",
-            className:(maxKey+1).toString(),
-            isCurrentTab:true,
-            isDefaultTab:false
+            personPG: pg
         };
 
-        // Update the list of tabs.
-        this.state.tabsList[maxKey+1] = newTab;
-
-        // Set state to render.
+        /*
         this.setState({
-            personPG: this.state.personPG,
-            tabsList: this.state.tabsList
+            tabs: this.state.tabs.push(newTab),
+            activeTabs: this.state.activeTabs.unshift(newTab)
         });
+        */
+        this.setState({
+            tabs: _.union([newTab],this.state.tabs),
+            activeTabs: _.union([newTab],this.state.activeTabs)
+        })
 
+        // False does not trigger web browser default action on submit event.
         return false;
     },
 
@@ -175,82 +167,41 @@ var FoafWindow = React.createClass({
         //this.setState({filterText:text});
     },
 
-    _closeTab: function(tabProperties) {
-        // Update its properties.
-        delete this.state.tabsList[tabProperties.className]; // TODO should not use classname as tab index but id instead
-
-        // Set initial tab as current tab.
-        currentIndex = 0; // TODO should stack tabs instead of returned to 0 tab
-        this.state.tabsList[currentIndex].isCurrentTab = true;
-
-        // Change state to render.
+    _closeTab: function(tab) {
         this.setState({
-            tabsList: this.state.tabsList,
-            personPG: this.state.personPG
+            tabs: _.without(this.state.tabs,tab),
+            activeTabs: _.without(this.state.activeTabs,tab)
         });
+        if (_.isEmpty(this.state.activeTabs) ) {
+            routeHelper.goToHome();
+        }
     },
 
-    _minimizeTab: function(tabProperties) {
-        //console.log('minimize');
-        //console.log(tabProperties);
-
-        // Tab is not current the tab anymore.
-        tabProperties.isCurrentTab = false;
-
-        // Update its properties.
-        this.state.tabsList[tabProperties.className] = tabProperties;
-
-        // Set initial tab as current tab.
-        //var currentIndex = parseInt(tabProperties.className)-1;
-        currentIndex = 0;
-        this.state.tabsList[currentIndex].isCurrentTab = true;
-
-        // Change state to render.
+    _minimizeTab: function(tab) {
+        console.log("_.without(this.state.activeTabs,tab) => ");
+        console.log(this.state.activeTabs);
+        console.log(tab);
+        console.log(_.without(this.state.activeTabs,tab));
         this.setState({
-            tabsList: this.state.tabsList,
-            personPG: this.state.personPG
+            activeTabs: _.without(this.state.activeTabs,tab)
         });
+        if (_.isEmpty(this.state.activeTabs) ) {
+            routeHelper.goToHome();
+        }
     },
 
-    _maximizeTab: function(tabProperties) {
-        console.log('maximized');
-        console.log(tabProperties)
-
-        // Initialize all tabs.
-        _.map(this.state.tabsList, function(tab) {
-            tab.isCurrentTab = false
-        });
-
-        // Tab becomes the current tab.
-        tabProperties.isCurrentTab = true;
-
-        // Update its properties.
-        var currentIndex = parseInt(tabProperties.className);
-        this.state.tabsList[currentIndex] = tabProperties;
-
-        // Change state to render.
+    _maximizeTab: function(tab) {
+        var newActiveTabs = _.unshift( _.without(this.state.activeTabs,tab),tab);
         this.setState({
-            tabsList: this.state.tabsList,
-            personPG: this.state.personPG
+            activeTabs: newActiveTabs
         });
     },
 
-    _createTab:function(tab) {
-        return <Space
-        properties={tab}
-        personPG={this.state.personPG}
-        loadUserProfile={this._loadUserProfile}
-        closeTab={this._closeTab}
-        minimizeTab={this._minimizeTab}
-        submitEdition={this._submitEdition}
-        />;
-    },
-
-    _createFooter:function(tab) {
-        return <Footer
-        properties={tab}
-        maximizeTab={this._maximizeTab}
-        />;
+    _getTabOpenForUrl: function(url) {
+        console.debug("Tabs = "+this.state.tabs);
+        return _.find(this.state.tabs, function(tab) {
+            return tab.personPG.pointer.value == url;
+        });
     }
 
 });

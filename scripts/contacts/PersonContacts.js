@@ -30,7 +30,6 @@ var PersonContacts = React.createClass({
             .map(function (foafPg) {
                 return (<PersonContactOnProfile
                             personPG={foafPg}
-                            loadUserProfile={self.props.loadUserProfile}
                             filterText={self.state.filterText}/>)
             }).value();
 

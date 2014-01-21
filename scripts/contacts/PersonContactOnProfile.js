@@ -42,7 +42,6 @@ var PersonContactOnProfile = React.createClass({
 		if ( ! ( this.state.jumpedPointedGraph.pointer.isBlank || this.state.jumpedPointedGraph.pointer.isVar)) {
             var personContactUrl = this.props.personPG.pointer.value;
             routeHelper.visitProfile(personContactUrl);
-            // this.props.loadUserProfile(this.state.jumpedPointedGraph);
         }
 		return true;
 	 },
