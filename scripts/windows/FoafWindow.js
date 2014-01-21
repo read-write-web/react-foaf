@@ -34,7 +34,7 @@ var FoafWindow = React.createClass({
                 }
             }
         }
-        var router = createRouter(onRouteChangeHandler)
+        createRouter(onRouteChangeHandler)
     },
 
     /**

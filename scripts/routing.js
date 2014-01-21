@@ -22,6 +22,7 @@ function createRouter(onRouteChangeHandler) {
     });
     directorRouter.init();
     if ( !window.location.hash ) {
+        console.debug("Redirecting to default hash route #/");
         window.location.hash = "/";
     }
     return directorRouter;
