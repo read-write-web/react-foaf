@@ -76,3 +76,34 @@ var WithLifecycleLogging = {
 
 };
 
+/**
+ * Same as WithLifecycleLogging but less verbose
+ */
+var WithLifecycleLoggingLite = {
+
+    componentWillMount: function() {
+        this.debug("componentWillMount. Initial state:",this.state);
+    },
+
+    componentDidMount: function(rootNode) {
+        this.debug("componentDidMount",rootNode);
+    },
+
+    componentWillReceiveProps: function(nextProps) {
+        this.debug("componentWillReceiveProps. Current props/state:",this.props,this.state," New props:",nextProps);
+    },
+
+    componentWillUpdate: function(nextProps, nextState) {
+        this.debug("componentWillUpdate. Current props/state:  ",this.props,this.state," New props/state:",nextProps,nextState)
+    },
+
+    componentDidUpdate: function(prevProps, prevState, rootNode) {
+        this.debug("componentDidUpdate. Current props/state: ",this.props,this.state," Previous props/state:",prevProps,prevState);
+    },
+
+    componentWillUnmount: function() {
+        this.debug("componentWillUnmount");
+    }
+
+};
+

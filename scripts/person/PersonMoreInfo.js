@@ -1,19 +1,28 @@
 /** @jsx React.DOM */
 
 var PersonMoreInfo = React.createClass({
+    mixins: [WithLogger,WithLifecycleLogging],
+    componentName: "PersonMoreInfo",
+
+    // TODO: described as bad practice to put props data in state
     getInitialState: function() {
         return {
-            email: this.props.moreInfo.email,
-            phone: this.props.moreInfo.phone,
-            homepage: this.props.moreInfo.homepage
+            email: undefined,
+            phone: undefined,
+            homepage: undefined
         }
+    },
+
+    componentWillReceiveProps: function(nextProps) {
+        this.setState({
+            email: _.first(nextProps.moreInfo.emails),
+            phone: _.first(nextProps.moreInfo.phones),
+            homepage: _.first(nextProps.moreInfo.homepages)
+        });
     },
 
     render: function() {
         var self = this;
-
-        // Get more info.
-        var moreInfo = this._getMoreInfo();
 
         // Define Html.
         var viewTree =
@@ -23,11 +32,11 @@ var PersonMoreInfo = React.createClass({
                 <li className="float-left">
                     <div className="email">
                         <div className="title-case">Email</div>
-                        <div className="content email-content">{moreInfo.email}</div>
+                        <div className="content email-content">{this.state.email}</div>
                     </div>
                     <div className="phone">
                         <div className="title-case">Phone</div>
-                        <div className="content email-content">{moreInfo.phone}</div>
+                        <div className="content email-content">{this.state.phone}</div>
                     </div>
                 </li>
                 <li className="float-left">
@@ -41,7 +50,7 @@ var PersonMoreInfo = React.createClass({
                     <div className="website">
                         <div className="title-case">Website</div>
                         <div className="content website-content">
-                            <a href="https://stample.co" target="_blank">{moreInfo.homepage}</a>
+                            <a href="https://stample.co" target="_blank">{this.state.homepage}</a>
                         </div>
                     </div>
                 </li>
@@ -60,7 +69,7 @@ var PersonMoreInfo = React.createClass({
                         <form onSubmit={this._handleSubmit}>
                             <input id="email"
                             type="text"
-                            defaultValue={moreInfo.email}
+                            defaultValue={this.state.email}
                             onChange={this._onChange}
                             />
                         </form>
@@ -72,7 +81,7 @@ var PersonMoreInfo = React.createClass({
                             <form onSubmit={this._handleSubmit}>
                                 <input id="phone"
                                 type="text"
-                                defaultValue={moreInfo.phone}
+                                defaultValue={this.state.phone}
                                 onChange={this._onChange}
                                 />
                             </form>
@@ -93,7 +102,7 @@ var PersonMoreInfo = React.createClass({
                                 <form onSubmit={this._handleSubmit}>
                                     <input id="homepage"
                                     type="text"
-                                    defaultValue={moreInfo.homepage}
+                                    defaultValue={this.state.homepage}
                                     onChange={this._onChange}
                                     />
                                 </form>
@@ -118,37 +127,16 @@ var PersonMoreInfo = React.createClass({
         this._infoMap[e.target.id](e.target.value, this);
     },
 
-    _getMoreInfo: function() {
-        var noValue = "...";
-
-        // Format info if needed.
-        var email = (this.state.email["1"] && this.state.email["1"].length>0)? this.state.email["1"][0]:noValue;
-        if (email.indexOf("mailto:") != -1) email = email.split("mailto:")[1];
-
-        var phone = (this.state.phone["1"] && this.state.phone["1"].length>0)? this.state.phone["1"][0]:noValue;
-        if (phone.indexOf("tel:") != -1) phone = phone.split("tel:")[1];
-
-        var homepage = (this.state.homepage["1"] && this.state.homepage["1"].length>0)? this.state.homepage["1"][0]:noValue;
-
-        return {
-            email: email,
-            phone: phone,
-            homepage: homepage
-        }
-    },
-
     _infoMap: {
         email: function(value, ref) {
-            ref.state.email["1"][0] = value;
-            return ref.setState({email: ref.state.email});
+            return ref.setState({email: value});
         },
         phone: function(value, ref) {
-            ref.state.phone["1"][0] = value;
-            return ref.setState({phone: ref.state.phone});
+            return ref.setState({phone: value});
         },
         homepage: function(value, ref) {
-            ref.state.homepage["1"][0] = value;
-            return ref.setState({homepage: ref.state.homepage});
+            return ref.setState({homepage: value});
         }
     }
+
 });

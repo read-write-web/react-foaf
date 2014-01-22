@@ -21,6 +21,7 @@ var Person = React.createClass({
     render: function () {
 
         if ( this.props.personPG ) {
+            this.debug("Rendering person")
             var personPG = this.toPgArrayHack(this.props.personPG); // TODO remove when possible
             // Set user name.
             var userName = foafUtils.getName(personPG);
@@ -106,7 +107,6 @@ var Person = React.createClass({
         var countryList = foafUtils.getContactCountry(personPG);
 
         //var address = ( addressList &&  addressList.address && addressList.address.length>0)? addressList.address[0]:null;
-        this.log(streetList)
         return {
             street: streetList,
             postalCode: postalCodeList,
@@ -136,13 +136,13 @@ var Person = React.createClass({
         var emailList = foafUtils.getEmails(personPG);
         var phoneList = foafUtils.getPhones(personPG);
         var homepageList = foafUtils.getHomepages(personPG);
-
         // Return.
-        return {
-            email:emailList,
-            phone:phoneList,
-            homepage:homepageList
+        var moreInfo = {
+            emails:emailList,
+            phones:phoneList,
+            homepages:homepageList
         };
+        return moreInfo;
     },
 
     getWebId: function() {

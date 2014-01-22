@@ -16,8 +16,6 @@ var PersonContactOnProfileBasicInfo = React.createClass({
     },
 
     _getBasicInfo: function() {
-        //var names = foafUtils.getNames(this.props.personPGs);
-        //var companies = foafUtils.getworkplaceHomepages(this.props.personPGs);
         var noValue = "...";
         var nameList=foafUtils.getName(this.props.personPGs);
         var givenNameList=foafUtils.getGivenName(this.props.personPGs);
