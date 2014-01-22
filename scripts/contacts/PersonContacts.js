@@ -30,7 +30,9 @@ var PersonContacts = React.createClass({
             .map(function (contactPG) {
                 console.log(contactPG)
                 var contactURL = contactPG.pointer.value;
-                var onContactClick = self.props.onContactSelected.bind(this,contactURL);
+                var onContactClick = function() {
+                    self.props.onContactSelected(this,contactURL);
+                }
                 return (<PersonContactOnProfile
                             onPersonContactClick={onContactClick}
                             personPG={contactPG}
