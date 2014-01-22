@@ -31,7 +31,7 @@ var PersonContacts = React.createClass({
                 console.log(contactPG)
                 var contactURL = contactPG.pointer.value;
                 var onContactClick = function() {
-                    self.props.onContactSelected(this,contactURL);
+                    self.props.onContactSelected(contactURL);
                 }
                 return (<PersonContactOnProfile
                             onPersonContactClick={onContactClick}
