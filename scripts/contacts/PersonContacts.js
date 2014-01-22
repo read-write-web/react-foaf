@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 var PersonContacts = React.createClass({
-    mixins: [WithLogger,WithLifecycleLogging],
+    mixins: [WithLogger,WithLifecycleLoggingLite],
     componentName: "PersonContacts",
 
     getInitialState: function() {
@@ -28,7 +28,6 @@ var PersonContacts = React.createClass({
 
         var foafs = _.chain(this.props.personPG.rel(FOAF("knows")))
             .map(function (contactPG) {
-                self.log("Contact PG:",contactPG)
                 var contactURL = contactPG.pointer.value;
                 var onContactClick = function() {
                     self.props.onContactSelected(contactURL);

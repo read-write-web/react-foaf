@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 var PersonContactOnProfile = React.createClass({
-    mixins: [WithLogger,WithLifecycleLogging],
+    mixins: [WithLogger,WithLifecycleLoggingLite],
     componentName: "PersonContactOnProfile",
 
     getInitialState: function() {
@@ -14,7 +14,7 @@ var PersonContactOnProfile = React.createClass({
         var self = this;
         this.props.personPG.jumpAsync(false).then(
             function (jumpedPersonPG) {
-			    self.log("Change:", self.state.jumpedPointedGraph.pointer.toNT(), "->", jumpedPersonPG);
+			    self.debug("Setting jumpedPersonPG: ", self.state.jumpedPointedGraph.pointer.toNT(), "->", jumpedPersonPG);
                 self.replaceState({
                     jumpedPointedGraph: jumpedPersonPG
                 })
