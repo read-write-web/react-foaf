@@ -1,6 +1,8 @@
 /** @jsx React.DOM */
 
 var FoafWindow = React.createClass({
+    mixins: [LoggingMixin],
+    componentName: "FoafWindow",
 
     getInitialState: function() {
         return {
@@ -24,17 +26,31 @@ var FoafWindow = React.createClass({
         var onRouteChangeHandler = {
             onGoToHome: function() {
                 if ( !self._isInitialized() ) {
-                    self._fetchURL(self.props.url);
+                    self._initState(self.props.url)
                 }
             },
             onVisitProfile : function(profileURL) {
                 if ( !self._isInitialized() ) {
-                    self._fetchURL(self.props.url);
-                    self._loadOrMaximizeUserProfileFromUrl(profileURL);
+                    self._initState(self.props.url,profileURL);
                 }
             }
         }
         createRouter(onRouteChangeHandler)
+    },
+
+    _initState: function(profileURL,openContactProfileURL) {
+        var self = this;
+        var lastAction = (openContactProfileURL ? this._loadOrMaximizeUserProfileFromUrl.bind(this,openContactProfileURL) : undefined);
+        this._fetchURL(profileURL)
+            .then(function (pg) {
+                self.setState({
+                    personPG: pg
+                });
+            })
+            .then(lastAction)
+            .fail(function (err) {
+                console.log("Error while initializing the FoafWindow with url="+profileURL+" and openContactProfileURL="+openContactProfileURL,err);
+            });
     },
 
     /**
@@ -59,9 +75,7 @@ var FoafWindow = React.createClass({
 
     render: function () {
         var self = this;
-        console.log("render FoafWindow with state");
-        console.log(this.state);
-
+        console.log("render FoafWindow",this.state,this.props);
         if ( !this._isInitialized() ) {
             return <div>{'LOADING'}</div>;
         }
@@ -76,8 +90,7 @@ var FoafWindow = React.createClass({
             }
             else {
                 var currentTab = this._getCurrentTab()
-                console.debug("Active tabs have been found, will display tab:");
-                console.debug(currentTab);
+                console.debug("Active tabs have been found, will display tab:",currentTab);
                 var minimizeCurrentTab = this._minimizeTab.bind(this,currentTab);
                 var closeCurrentTab = this._closeTab.bind(this,currentTab);
                 var content = <Person personPG={currentTab.personPG} submitEdition={this._submitEdition} />
@@ -103,22 +116,9 @@ var FoafWindow = React.createClass({
 
     _fetchURL: function(url) {
         if (!url) return;
-        var self = this;
         var fetcher = $rdf.fetcher(store, 10000, true);
         var referer = window.location; // TODO rework the referer with the url of a foaf profile previously visited
-        var future = fetcher.fetch(url, referer);
-        future.then(
-            function (pg) {
-                console.log("Setting pg for " + url);
-                console.log(pg);
-                self.setState({
-                    personPG: pg
-                });
-            },
-            function (err) {
-                console.log("returned from componentDidMount of " + url + " with error " + err);
-            })
-
+        return fetcher.fetch(url, referer);
     },
 
 /*
@@ -164,7 +164,7 @@ var FoafWindow = React.createClass({
 
 
     _loadOrMaximizeUserProfileFromUrl: function(url) {
-        console.log("_loadOrMaximizeUserProfileFromUrl " + url);
+        console.log("_loadOrMaximizeUserProfileFromUrl ",url);
         var maybeTab = this._getTabOpenForUrl(url);
         if ( maybeTab ) {
             this._maximizeTab(maybeTab); // it is not a problem to maximise an already active tab
@@ -176,13 +176,13 @@ var FoafWindow = React.createClass({
 
     _createNewUserTabFromUrl: function(url) {
         var self = this;
-        console.debug("_createNewUserTabFromUrl = " + url);
-        var fetcher = $rdf.fetcher(store, 10000, true);
-        var referer = window.location; // TODO rework the referer with the url of a foaf profile previously visited
-        var future = fetcher.fetch(url, referer);
-        future.then(function(pg) {
-            self._createNewUserTab(pg);
-        });
+        self._fetchURL(url)
+            .then(function(pg) {
+                self._createNewUserTab(pg);
+            })
+            .fail(function(err) {
+                console.error("Can't _createNewUserTabFromUrl for URL = " +url,err);
+            });
     },
 
     _createNewUserTab: function(pg){

@@ -1,6 +1,9 @@
 /** @jsx React.DOM */
 
 var MainSearchBox = React.createClass({
+    mixins: [LoggingMixin],
+    componentName: "MainSearchBox",
+
     getInitialState: function() {
         return {text: this.props.filterText};
     },

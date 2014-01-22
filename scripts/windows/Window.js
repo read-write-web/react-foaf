@@ -1,6 +1,8 @@
 /** @jsx React.DOM */
 
 var Window = React.createClass({
+    mixins: [LoggingMixin],
+    componentName: "Window",
 
     propTypes: {
         windowType: React.PropTypes.oneOf(['foafWindow','otherWindowTypeExemple']).required,

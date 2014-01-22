@@ -1,6 +1,9 @@
 /** @jsx React.DOM */
 
 var Footer = React.createClass({
+    mixins: [LoggingMixin],
+    componentName: "Footer",
+
     render: function() {
         var self = this;
 
@@ -43,7 +46,6 @@ var Footer = React.createClass({
 
     // Get image.
     _getUserImg: function(pg) {
-        console.log("In footer -> _getUserImg")
         var personPGArray = [pg]; // TODO should not be an array: hack
         var imgUrlList = foafUtils.getImg(personPGArray);
         return (imgUrlList && imgUrlList.length>0)? imgUrlList[0]:"img/avatar.png";

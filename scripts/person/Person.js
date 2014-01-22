@@ -1,6 +1,9 @@
 /** @jsx React.DOM */
 
 var Person = React.createClass({
+    mixins: [LoggingMixin],
+    componentName: "Person",
+
     getInitialState: function() {
         return {
             modeEdit:false,
@@ -16,11 +19,6 @@ var Person = React.createClass({
     },
 
     render: function () {
-        console.log('Render Person')
-        console.log(this.props)
-        console.log(this.state.modeEdit)
-
-
 
         if ( this.props.personPG ) {
             var personPG = this.toPgArrayHack(this.props.personPG); // TODO remove when possible
@@ -56,7 +54,7 @@ var Person = React.createClass({
     },
 
     _handleClickEdit: function(e) {
-        console.log('Edit !!! ');
+        console.log('Edit click ');
         this.setState({
             modeEdit:true,
             editText:"save"

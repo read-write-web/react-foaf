@@ -1,6 +1,9 @@
 /** @jsx React.DOM */
 
 var App = React.createClass({
+    mixins: [LoggingMixin],
+    componentName: "App",
+
 
     getInitialState: function() {
         var onlyHardcodedWindow = {

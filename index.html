@@ -31,6 +31,9 @@
     <!-- Application Renders Here-->
 </span>
 
+<!-- React custom libs -->
+<script type="text/jsx" src="scripts/mixins.js"></script>
+
 
 <!--
 Main application scripts
@@ -81,8 +84,11 @@ View component scripts
    /**
      * @jsx React.DOM
      */
+    var appComponent =  <App />;
+    var mountNode = document.getElementById('container');
+
     window.onload = function startApplication() {
-        React.renderComponent( <App />, document.getElementById('container') );
+        React.renderComponent(appComponent,mountNode);
     };
 </script>
 
