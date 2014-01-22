@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 var Person = React.createClass({
-    mixins: [LoggingMixin],
+    mixins: [WithLogger,WithLifecycleLogging],
     componentName: "Person",
 
     getInitialState: function() {
@@ -54,7 +54,7 @@ var Person = React.createClass({
     },
 
     _handleClickEdit: function(e) {
-        console.log('Edit click ');
+        this.log('Edit click ');
         this.setState({
             modeEdit:true,
             editText:"save"
@@ -106,7 +106,7 @@ var Person = React.createClass({
         var countryList = foafUtils.getContactCountry(personPG);
 
         //var address = ( addressList &&  addressList.address && addressList.address.length>0)? addressList.address[0]:null;
-        console.log(streetList)
+        this.log(streetList)
         return {
             street: streetList,
             postalCode: postalCodeList,

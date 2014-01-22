@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 var Footer = React.createClass({
-    mixins: [LoggingMixin],
+    mixins: [WithLogger,WithLifecycleLogging],
     componentName: "Footer",
 
     render: function() {

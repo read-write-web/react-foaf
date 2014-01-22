@@ -1,6 +1,9 @@
 /** @jsx React.DOM */
 
 var SearchBox = React.createClass({
+    mixins: [WithLogger,WithLifecycleLogging],
+    componentName: "SearchBox",
+
     getInitialState: function() {
         return {text: this.props.filterText};
     },
@@ -11,7 +14,7 @@ var SearchBox = React.createClass({
     },
 
     onChange: function(e) {
-        console.log("user input !!! : " + e.target.value);
+        this.log("user input: ",e);
         this.setState({text: e.target.value});
         this.props.onUserInput(e.target.value);
     },

@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 var App = React.createClass({
-    mixins: [LoggingMixin],
+    mixins: [WithLogger,WithLifecycleLogging],
     componentName: "App",
 
 

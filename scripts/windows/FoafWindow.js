@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 var FoafWindow = React.createClass({
-    mixins: [LoggingMixin],
+    mixins: [WithLogger,WithLifecycleLogging],
     componentName: "FoafWindow",
 
     getInitialState: function() {
@@ -49,7 +49,7 @@ var FoafWindow = React.createClass({
             })
             .then(lastAction)
             .fail(function (err) {
-                console.log("Error while initializing the FoafWindow with url="+profileURL+" and openContactProfileURL="+openContactProfileURL,err);
+                self.log("Error while initializing the FoafWindow with url="+profileURL+" and openContactProfileURL="+openContactProfileURL,err);
             });
     },
 
@@ -75,7 +75,7 @@ var FoafWindow = React.createClass({
 
     render: function () {
         var self = this;
-        console.log("render FoafWindow",this.state,this.props);
+        this.log("render FoafWindow",this.state,this.props);
         if ( !this._isInitialized() ) {
             return <div>{'LOADING'}</div>;
         }
@@ -84,13 +84,13 @@ var FoafWindow = React.createClass({
             var currentTab = this._getCurrentTab();
             this._updateRouteToCurrentState();
             if ( !currentTab ) {
-                console.debug("No active tab, will display PersonContacts");
+                this.debug("No active tab, will display PersonContacts");
                 var content = <PersonContacts personPG={this.state.personPG} onContactSelected={this._loadOrMaximizeUserProfileFromUrl}/>;
                 contentSpace = <ContentSpace clazz="space center">{content}</ContentSpace>;
             }
             else {
                 var currentTab = this._getCurrentTab()
-                console.debug("Active tabs have been found, will display tab:",currentTab);
+                this.debug("Active tabs have been found, will display tab:",currentTab);
                 var minimizeCurrentTab = this._minimizeTab.bind(this,currentTab);
                 var closeCurrentTab = this._closeTab.bind(this,currentTab);
                 var content = <Person personPG={currentTab.personPG} submitEdition={this._submitEdition} />
@@ -125,12 +125,11 @@ var FoafWindow = React.createClass({
     _submitEdition: function(data){
         var self = this;
 
-        console.log('update profile');
-        console.log(data);
+        self.log('update profile',data);
 
         _.chain(data)
             .map(function (d) {
-                console.log(d);
+                self.log(d);
                 // Test: Take the first graph to update.
                 self.state.personPG.update(FOAF("name"), d.fVal, d.nVal);
             })
@@ -142,16 +141,11 @@ var FoafWindow = React.createClass({
 */
     _submitEdition: function(newData, oldData){
         var self = this;
-
-        console.log('update profile');
-        console.log(newData);
-        console.log(oldData)
+        this.log("update profile",newData,oldData);
 
         _.chain(newData)
             .map(function (d) {
-                console.log(d);
-                console.log(d[1][0])
-                console.log(oldData["name"][1][0])
+                self.log(d);
                 // Test: Take the first graph to update.
                 self.state.activeTabs[0].personPG.update(FOAF("name"), d[1][0], oldData["name"][1][0]);
             })
@@ -164,7 +158,7 @@ var FoafWindow = React.createClass({
 
 
     _loadOrMaximizeUserProfileFromUrl: function(url) {
-        console.log("_loadOrMaximizeUserProfileFromUrl ",url);
+        this.log("_loadOrMaximizeUserProfileFromUrl ",url);
         var maybeTab = this._getTabOpenForUrl(url);
         if ( maybeTab ) {
             this._maximizeTab(maybeTab); // it is not a problem to maximise an already active tab
@@ -181,7 +175,7 @@ var FoafWindow = React.createClass({
                 self._createNewUserTab(pg);
             })
             .fail(function(err) {
-                console.error("Can't _createNewUserTabFromUrl for URL = " +url,err);
+                self.error("Can't _createNewUserTabFromUrl for URL = " +url,err);
             });
     },
 
@@ -236,7 +230,7 @@ var FoafWindow = React.createClass({
     },
 
     _maximizeTab: function(tab) {
-        console.log("Maximizing tab:",tab);
+        this.log("Maximizing tab:",tab);
         var tempActiveTabs = _.without(this.state.activeTabs,tab);
         var newActiveTabs = _.union([tab],tempActiveTabs);
         this.setState({
@@ -245,7 +239,7 @@ var FoafWindow = React.createClass({
     },
 
     _getTabOpenForUrl: function(url) {
-        console.debug("Tabs = "+this.state.tabs);
+        this.debug("Tabs = "+this.state.tabs);
         return _.find(this.state.tabs, function(tab) {
             return tab.personURL == url;
         });

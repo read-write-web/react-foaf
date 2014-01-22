@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 var Window = React.createClass({
-    mixins: [LoggingMixin],
+    mixins: [WithLogger,WithLifecycleLogging],
     componentName: "Window",
 
     propTypes: {

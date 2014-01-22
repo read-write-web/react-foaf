@@ -1,8 +1,10 @@
 /** @jsx React.DOM */
 
 var PersonAddress = React.createClass({
+    mixins: [WithLogger,WithLifecycleLogging],
+    componentName: "PersonAddress",
+
     getInitialState: function() {
-        console.log(this.props)
         return {
             street: this.props.address.street,
             postalCode: this.props.address.postalCode,
@@ -65,7 +67,7 @@ var PersonAddress = React.createClass({
     },
 
     _handleSubmit: function() {
-        console.log('Submit')
+        this.log('Submit')
         this.props.submitEdition(this.state);
         return false;
     },

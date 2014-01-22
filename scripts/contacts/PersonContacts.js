@@ -1,6 +1,9 @@
 /** @jsx React.DOM */
 
 var PersonContacts = React.createClass({
+    mixins: [WithLogger,WithLifecycleLogging],
+    componentName: "PersonContacts",
+
     getInitialState: function() {
         return {
             filterText:""
@@ -15,9 +18,6 @@ var PersonContacts = React.createClass({
 
     render: function () {
         var self = this;
-        console.log('Render PersonContacts')
-        console.log(this.props);
-
 
         if (!this.props.personPG) return (
             <div id="contacts" className="clearfix">
@@ -28,7 +28,7 @@ var PersonContacts = React.createClass({
 
         var foafs = _.chain(this.props.personPG.rel(FOAF("knows")))
             .map(function (contactPG) {
-                console.log(contactPG)
+                self.log("Contact PG:",contactPG)
                 var contactURL = contactPG.pointer.value;
                 var onContactClick = function() {
                     self.props.onContactSelected(contactURL);

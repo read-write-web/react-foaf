@@ -6,7 +6,7 @@
 /**
  * Mixin to log the component lifecycle
  */
-var LoggingMixin = {
+var WithLogger = {
 
     // TODO temporary, all JSX compiled components will all have a this.displayName so we won't have to use  this.componentName anymore
     getPrefix: function() {
@@ -16,31 +16,6 @@ var LoggingMixin = {
             throw "You need to declare componentName: \"xxx\" in your component in order to be able to use the LoggingMixin";
         }
     },
-
-    componentWillMount: function() {
-        this.debug("componentWillMount. Initial state:",this.state);
-    },
-
-    componentDidMount: function(rootNode) {
-        this.debug("componentDidMount",rootNode);
-    },
-
-    componentWillReceiveProps: function(nextProps) {
-        this.debug("componentWillReceiveProps. Current props/state:",this.props,this.state," New props:",nextProps);
-    },
-
-    componentWillUpdate: function(nextProps, nextState) {
-        this.debug("componentWillUpdate. Current props/state:  ",this.props,this.state," New props/state:",nextProps,nextState)
-    },
-
-    componentDidUpdate: function(prevProps, prevState, rootNode) {
-        this.debug("componentDidUpdate. Current props/state: ",this.props,this.state," Previous props/state:",prevProps,prevState);
-    },
-
-    componentWillUnmount: function() {
-        this.debug("componentWillUnmount");
-    },
-
 
     prefixLogArguments: function(arg) {
         var array = _.toArray(arg);
@@ -64,6 +39,40 @@ var LoggingMixin = {
         console.error.apply(console, this.prefixLogArguments(arguments));
     }
 
+
+};
+
+
+
+/**
+ * Mixin to log the component lifecycle
+ * It requires the WithLogger mixin to be used
+ */
+var WithLifecycleLogging = {
+
+    componentWillMount: function() {
+        this.debug("componentWillMount. Initial state:",this.state);
+    },
+
+    componentDidMount: function(rootNode) {
+        this.debug("componentDidMount",rootNode);
+    },
+
+    componentWillReceiveProps: function(nextProps) {
+        this.debug("componentWillReceiveProps. Current props/state:",this.props,this.state," New props:",nextProps);
+    },
+
+    componentWillUpdate: function(nextProps, nextState) {
+        this.debug("componentWillUpdate. Current props/state:  ",this.props,this.state," New props/state:",nextProps,nextState)
+    },
+
+    componentDidUpdate: function(prevProps, prevState, rootNode) {
+        this.debug("componentDidUpdate. Current props/state: ",this.props,this.state," Previous props/state:",prevProps,prevState);
+    },
+
+    componentWillUnmount: function() {
+        this.debug("componentWillUnmount");
+    }
 
 };
 
