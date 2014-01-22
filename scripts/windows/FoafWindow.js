@@ -121,7 +121,7 @@ var FoafWindow = React.createClass({
 
     },
 
-
+/*
     _submitEdition: function(data){
         var self = this;
 
@@ -135,6 +135,28 @@ var FoafWindow = React.createClass({
                 self.state.personPG.update(FOAF("name"), d.fVal, d.nVal);
             })
             .value()
+
+        // Return.
+        return false;
+    },
+*/
+    _submitEdition: function(newData, oldData){
+        var self = this;
+
+        console.log('update profile');
+        console.log(newData);
+        console.log(oldData)
+
+        _.chain(newData)
+            .map(function (d) {
+                console.log(d);
+                console.log(d[1][0])
+                console.log(oldData["name"][1][0])
+                // Test: Take the first graph to update.
+                self.state.activeTabs[0].personPG.update(FOAF("name"), d[1][0], oldData["name"][1][0]);
+            })
+            .value()
+
 
         // Return.
         return false;

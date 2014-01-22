@@ -8,13 +8,13 @@ var PersonContactOnProfile = React.createClass({
     },
 
     componentDidMount: function () {
-        //console.log('In componentDidMount of PersonContactOnProfile !!!!!!!!!! ********** ************');
-        //console.log(this.props.personPG)
+        console.log('In componentDidMount of PersonContactOnProfile !!!!!!!!!! ********** ************');
+        console.log(this.props.personPG)
         var component = this;
         this.props.personPG.jumpAsync(false).then(
             function (jumpedPersonPG) {
-				//console.log("Success");
-			    //console.log("Change:", component.state.jumpedPointedGraph.pointer.toNT(), "->", jumpedPersonPG);
+				console.log("Success");
+			    console.log("Change:", component.state.jumpedPointedGraph.pointer.toNT(), "->", jumpedPersonPG);
                 //console.log(jumpedPersonPG);
                 component.replaceState({
                     jumpedPointedGraph: jumpedPersonPG
@@ -22,7 +22,7 @@ var PersonContactOnProfile = React.createClass({
             },
             function (err) {
                 console.error(err);
-					//console.log("error:", component.state.jumpedPointedGraph.pointer.toNT(), "->", err);
+				console.log("error:", component.state.jumpedPointedGraph.pointer.toNT(), "->", err);
                 component.replaceState({
 						 jumpedPointedGraph: this.props.personPG,
 						 error: err
@@ -74,41 +74,6 @@ var PersonContactOnProfile = React.createClass({
 
         // Set appropriate class of li items.
         return "contact clearfix float-left "+ loadingStr + ((this.state.error)?" error":"");
-    },
-
-    componentWillReceiveProps: function(newProps) {
-        /*console.log('componentWillReceiveProps !!!!!!! *************** ****************')
-        console.log(this.state.jumpedPointedGraph)
-        console.log(newProps)*/
-
-        /*
-        this.setState({
-            jumpedPointedGraph:newProps.personPG
-        });
-        */
-
-        /*
-        var component = this;
-        newProps.personPG.jumpAsync(false).then(
-            function (jumpedPersonPG) {
-                //console.log("Change:", component.state.jumpedPointedGraph.pointer.toNT(), "->", jumpedPersonPG);
-                console.log("success")
-                console.log(jumpedPersonPG)
-                component.replaceState({
-                    jumpedPointedGraph: jumpedPersonPG
-                })
-            },
-            function (err) {
-                console.log("error")
-                //console.log("error:", component.state.jumpedPointedGraph.pointer.toNT(), "->", err);
-                component.replaceState({
-                    jumpedPointedGraph: this.props.personPG,
-                    error: err
-                })
-            }
-        )
-        */
-
     },
 
     render: function() {
