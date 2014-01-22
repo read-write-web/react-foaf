@@ -109,8 +109,8 @@ var PersonMoreInfo = React.createClass({
     },
 
     _handleSubmit: function() {
-        console.log('Submit')
-        this.props.submitEdition(this.state);
+        this.props.submitEdition(this.state, this.props.moreInfo);
+        //this.props.submitEdition(this.state);
         return false;
     },
 

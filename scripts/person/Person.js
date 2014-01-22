@@ -63,18 +63,17 @@ var Person = React.createClass({
         });
     },
 
-    _submitEdition: function(data) {
-        console.log("_submitEdition ");
-        console.log(data);
-
+    _submitEdition: function(newData, oldData) {
         // Update relative PG.
-        this.props.submitEdition(data);
+        this.props.submitEdition(newData, oldData);
 
         // Cancel Edit mode.
         this.setState({
             modeEdit:false,
             editText:"edit"
         });
+
+        return false;
     },
 
     _getUserImg: function() {
