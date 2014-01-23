@@ -4,30 +4,24 @@ var PersonContactOnProfile = React.createClass({
     mixins: [WithLogger,WithLifecycleLoggingLite],
     componentName: "PersonContactOnProfile",
 
-    getInitialState: function() {
-        return {
-            jumpedPointedGraph: this.props.personPG.jump()
-        }
-    },
-
-    componentDidMount: function () {
-        var self = this;
-        this.props.personPG.jumpAsync(false).then(
-            function (jumpedPersonPG) {
-			    self.debug("Setting jumpedPersonPG: ", self.state.jumpedPointedGraph.pointer.toNT(), "->", jumpedPersonPG);
-                self.replaceState({
-                    jumpedPointedGraph: jumpedPersonPG
-                })
-            },
-            function (err) {
-                self.error("error:", component.state.jumpedPointedGraph.pointer.toNT(), "->", err);
-                self.replaceState({
-						 jumpedPointedGraph: this.props.personPG,
-						 error: err
-					 })
-            }
-        )
-    },
+//    componentDidMount: function () {
+//        var self = this;
+//        this.props.personPG.jumpAsync(false).then(
+//            function (jumpedPersonPG) {
+//			    self.debug("Setting jumpedPersonPG: ", self.state.jumpedPointedGraph.pointer.toNT(), "->", jumpedPersonPG);
+//                self.replaceState({
+//                    jumpedPointedGraph: jumpedPersonPG
+//                })
+//            },
+//            function (err) {
+//                self.error("error:", component.state.jumpedPointedGraph.pointer.toNT(), "->", err);
+//                self.replaceState({
+//						 jumpedPointedGraph: this.props.personPG,
+//						 error: err
+//					 })
+//            }
+//        )
+//    },
 
     handleClick: function(e) {
         // TODO maybe not appropriate?
@@ -47,40 +41,48 @@ var PersonContactOnProfile = React.createClass({
 	 },
 
     setElementClasses: function() {
-        var loadingStr = "";
-        var info = undefined;
-        if (this.props.personPG.isLocalPointer()) {
-            if (this.props.personPG.pointer.termType === "bnode") {
-                info = (<p>not a webid</p>)
-            } else if (this.props.personPG.pointer.termType === "literal") {
-                info = (<p>a literal!!!</p>)
-            } else {
-                info = (<p>locally defined</p>)
-            }
-        } else {
-            jumpedState = this.state.jumpedPointedGraph;
-            if (jumpedState) {
-					if (jumpedState.isLocalPointer()) {
-						info = (<p>definitional info, page was loaded</p>)
-					} else {
-						info = (<p>there was not definitional info in the remote graph</p>)
-					}
-            } else {
-                info = (<p>no remote info yet</p>);
-                loadingStr = "loading"
-            }
-        }
-
-        // Set appropriate class of li items.
-        return "contact clearfix float-left "+ loadingStr + ((this.state.error)?" error":"");
+//        var loadingStr = "";
+//        var info = undefined;
+//        if (this.props.personPG.isLocalPointer()) {
+//            if (this.props.personPG.pointer.termType === "bnode") {
+//                info = (<p>not a webid</p>)
+//            } else if (this.props.personPG.pointer.termType === "literal") {
+//                info = (<p>a literal!!!</p>)
+//            } else {
+//                info = (<p>locally defined</p>)
+//            }
+//        } else {
+//            jumpedState = this.state.jumpedPointedGraph;
+//            if (jumpedState) {
+//					if (jumpedState.isLocalPointer()) {
+//						info = (<p>definitional info, page was loaded</p>)
+//					} else {
+//						info = (<p>there was not definitional info in the remote graph</p>)
+//					}
+//            } else {
+//                info = (<p>no remote info yet</p>);
+//                loadingStr = "loading"
+//            }
+//        }
+//
+//        // Set appropriate class of li items.
+//        return "contact clearfix float-left "+ loadingStr + ((this.state.error)?" error":"");
     },
 
     render: function() {
+		 var originalAndJumpedPG = [ this.props.personPG ]
+		  var jumpedPointedGraphPromise = this.props.personPG.jumpNowOrLater()
+		 console.info("jumpedPointedGraphPr",jumpedPointedGraphPromise)
+		  if (Q.isPromise(jumpedPointedGraphPromise)) {
+			  console.info("we came back with a promise")
+		  } else {
+			  console.info("we received the jumpedpointedgraph")
+			  originalAndJumpedPG.push(jumpedPointedGraphPromise)
+		  }
         // Check if user should be displayed.
-        var show = {display: (this.displayUser()) ? 'block' : 'none'};
+        var show = {display: (this.displayUser(originalAndJumpedPG)) ? 'block' : 'none'};
 
         // Set appropriate Pgs.
-        var originalAndJumpedPG = _.compact([this.props.personPG, this.state.jumpedPointedGraph ]);
 
         // Define appropriate class for the view.
         var clazz = this.setElementClasses();
@@ -97,8 +99,7 @@ var PersonContactOnProfile = React.createClass({
             );
     },
 
-    displayUser: function() {
-        var originalAndJumpedPG = _.compact([this.props.personPG, this.state.jumpedPointedGraph ]);
+    displayUser: function(originalAndJumpedPG) {
         var userName = foafUtils.getName(originalAndJumpedPG).toString().toLowerCase();
         var filterText = this.props.filterText;
         if (!filterText) return true;
