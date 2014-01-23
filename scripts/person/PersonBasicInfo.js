@@ -61,12 +61,13 @@ var PersonBasicInfo = React.createClass({
     * */
 
     _handleSubmit: function() {
-        this.props.submitEdition(this.state, this.props.basicInfo);
-        //this.props.submitEdition(this.state);
+        //this.props.submitEdition(this.state, this.props.basicInfo);
+        this.props.submitEdition();
         return false;
     },
 
     _onChange: function(e) {
+        this.props.updatePersonInfo(e.target.id, e.target.value);
         this._infoMap[e.target.id](e.target.value, this);
     },
 

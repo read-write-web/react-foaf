@@ -121,24 +121,6 @@ var FoafWindow = React.createClass({
         return fetcher.fetch(url, referer);
     },
 
-/*
-    _submitEdition: function(data){
-        var self = this;
-
-        self.log('update profile',data);
-
-        _.chain(data)
-            .map(function (d) {
-                self.log(d);
-                // Test: Take the first graph to update.
-                self.state.personPG.update(FOAF("name"), d.fVal, d.nVal);
-            })
-            .value()
-
-        // Return.
-        return false;
-    },
-*/
     _submitEdition: function(newData, oldData){
         var self = this;
         this.log("update profile",newData,oldData);

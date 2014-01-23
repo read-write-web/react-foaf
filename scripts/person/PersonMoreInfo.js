@@ -42,7 +42,6 @@ var PersonMoreInfo = React.createClass({
                 <li className="float-left">
                     <PersonAddress
                         modeEdit={this.props.modeEdit}
-                        submitEdition={this.props.submitEdition}
                         personPG={this.props.personPG}
                         address={this.props.address}/>
                 </li>
@@ -92,6 +91,7 @@ var PersonMoreInfo = React.createClass({
                     <PersonAddress
                         modeEdit={this.props.modeEdit}
                         submitEdition={this.props.submitEdition}
+                        updatePersonInfo={this.props.updatePersonInfo}
                         personPG={this.props.personPG}
                         address={this.props.address}/>
                 </li>
@@ -118,12 +118,13 @@ var PersonMoreInfo = React.createClass({
     },
 
     _handleSubmit: function() {
-        this.props.submitEdition(this.state, this.props.moreInfo);
-        //this.props.submitEdition(this.state);
+        //this.props.submitEdition(this.state, this.props.moreInfo);
+        this.props.submitEdition();
         return false;
     },
 
     _onChange: function(e) {
+        this.props.updatePersonInfo(e.target.id, e.target.value);
         this._infoMap[e.target.id](e.target.value, this);
     },
 

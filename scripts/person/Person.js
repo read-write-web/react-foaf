@@ -7,7 +7,9 @@ var Person = React.createClass({
     getInitialState: function() {
         return {
             modeEdit:false,
-            editText:"Edit"}
+            editText:"Edit",
+            personInfo:{}
+        }
     },
 
     // TODO fixme HACK !!!
@@ -33,6 +35,7 @@ var Person = React.createClass({
                     <PersonBasicInfo
                         modeEdit={this.state.modeEdit}
                         submitEdition={this._submitEdition}
+                        updatePersonInfo={this._updatePersonInfo}
                         basicInfo={this._getBasicInfo()}/>
                     <PersonNotifications notifications={this._getNotifications}/>
                     <PersonMessage userName={userName} lastMessage={this._getMessage()}/>
@@ -40,6 +43,7 @@ var Person = React.createClass({
                         modeEdit={this.state.modeEdit}
                         moreInfo={this._getMoreInfo()}
                         submitEdition={this._submitEdition}
+                        updatePersonInfo={this._updatePersonInfo}
                         address={this._getAddress()}/>
                     <PersonWebId getWebId={this.getWebId}/>
                 </div>
@@ -56,23 +60,38 @@ var Person = React.createClass({
 
     _handleClickEdit: function(e) {
         this.log('Edit click ');
-        this.setState({
-            modeEdit:true,
-            editText:"save"
-        });
+
+        if (this.state.modeEdit) {
+            this._submitEdition(this.state.personInfo, this.state.personInfo);
+        }
+        else {
+            this.setState({
+                modeEdit:true,
+                editText:"save",
+                personInfo:{}
+            });
+        }
     },
 
-    _submitEdition: function(newData, oldData) {
-        // Update relative PG.
-        this.props.submitEdition(newData, oldData);
+    _submitEdition: function() {
+        // Submit changes.
+        this.props.submitEdition(this.state.personInfo, this.state.personInfo);
 
         // Cancel Edit mode.
         this.setState({
             modeEdit:false,
-            editText:"edit"
+            editText:"edit",
+            personInfo:{}
         });
 
+        // And return false.
         return false;
+    },
+
+    _updatePersonInfo: function(id, value) {
+        this.log('update person info')
+        this.state.personInfo[id]=value;
+        this.log(this.state.personInfo)
     },
 
     _getUserImg: function() {
