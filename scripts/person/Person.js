@@ -87,7 +87,7 @@ var Person = React.createClass({
         var givenNameList=foafUtils.getGivenName(personPG);
         var familyNameList=foafUtils.getFamilyName(personPG);
         var firstNameList=foafUtils.getFirstName(personPG);
-        var workPlaceHomepageList = foafUtils.getworkplaceHomepages(personPG);
+        var workPlaceHomepageList = foafUtils.getworkplaceHomepage(personPG);
 
         return {
             name: nameList,

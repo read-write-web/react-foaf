@@ -71,20 +71,6 @@ foafUtils.getHomepages = function(pgList) {
 
 };
 
-foafUtils.getworkplaceHomepages = function(pgList) {
-    var resList =
-        _.chain(pgList)
-            .map(function (pg) {
-                return pg.getSymbol(FOAF("workplaceHomepage"))
-            }).flatten()
-            .value();
-
-    return {
-        0:"foaf:workplaceHomepage",
-        1: resList
-    };
-};
-
 foafUtils.getName = function(pgList) {
     var resList =
         _.chain(pgList)
@@ -117,7 +103,7 @@ foafUtils.getFamilyName = function(pgList) {
     var resList =
         _.chain(pgList)
             .map(function (pg) {
-                return pg.getLiteral(FOAF("family_name"), FOAF("family_name"))
+                return pg.getLiteral(FOAF("familyName"), FOAF("family_name"))
             }).flatten()
             .value();
 
@@ -131,7 +117,7 @@ foafUtils.getFirstName = function(pgList) {
     var resList =
         _.chain(pgList)
             .map(function (pg) {
-                return pg.getLiteral(FOAF("firstName"))
+                return pg.getLiteral(FOAF("firstName"), FOAF("first_name"))
             }).flatten()
             .value();
 
@@ -140,6 +126,64 @@ foafUtils.getFirstName = function(pgList) {
         1: resList
     };
 };
+
+foafUtils.getLastName = function(pgList) {
+    var resList =
+        _.chain(pgList)
+            .map(function (pg) {
+                return pg.getLiteral(FOAF("lastName"), FOAF("last_name"))
+            }).flatten()
+            .value();
+
+    return {
+        0:"foaf:lastName",
+        1: resList
+    };
+};
+
+foafUtils.getGender = function(pgList) {
+    var resList =
+        _.chain(pgList)
+            .map(function (pg) {
+                return pg.getLiteral(FOAF("gender"))
+            }).flatten()
+            .value();
+
+    return {
+        0:"foaf:gender",
+        1: resList
+    };
+};
+
+foafUtils.getworkplaceHomepage = function(pgList) {
+    var resList =
+        _.chain(pgList)
+            .map(function (pg) {
+                return pg.getSymbol(FOAF("workplaceHomepage"))
+            }).flatten()
+            .value();
+
+    return {
+        0:"foaf:workplaceHomepage",
+        1: resList
+    };
+};
+
+foafUtils.getWorkInfoHomepage = function(pgList) {
+    var resList =
+        _.chain(pgList)
+            .map(function (pg) {
+                return pg.getLiteral(FOAF("workInfoHomepage"))
+            }).flatten()
+            .value();
+
+    return {
+        0:"foaf:workInfoHomepage",
+        1: resList
+    };
+};
+
+
 
 foafUtils.getNames = function(pgList) {
     var relLiteral = function (relSym) {

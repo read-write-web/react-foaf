@@ -17,7 +17,7 @@ function RDFS(name) { return $rdf.sym("http://www.w3.org/2000/01/rdf-schema#"+na
 
 //var foafDocURL = "http://bblfish.net/people/henry/card#me";
 var foafDocURL = "https://my-profile.eu/people/deiu/card#me";
-//var foafDocURL = "https://localhost:8443/2013/card";
+//var foafDocURL = "https://localhost:8443/2013/backbone#me";
 
 
 // TODO need to add hash if needed: we do not look for primary topic anymore
