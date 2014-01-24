@@ -43,7 +43,8 @@ foafUtils.getLiteral = function(pgList, relSym){
 foafUtils.getEmails = function(pgList) {
     return _.chain(pgList)
         .map(function (pg) {
-            return pg.getLiteral(FOAF("mbox")) || pg.getSymbol(FOAF("mbox"))
+            var r = pg.getLiteral(FOAF("mbox"));
+            return (r.length==0)? pg.getSymbol(FOAF("mbox")) : r;
         })
         .flatten()
         .map(foafUtils.cleanEmail)
@@ -53,7 +54,8 @@ foafUtils.getEmails = function(pgList) {
 foafUtils.getPhones = function(pgList) {
     return _.chain(pgList)
         .map(function (pg) {
-            return pg.getLiteral(FOAF("phone")) || pg.getSymbol(FOAF("phone"))
+            var r = pg.getLiteral(FOAF("phone"));
+            return (r.length==0)? pg.getSymbol(FOAF("phone")) : r;
         })
         .flatten()
         .map(foafUtils.cleanPhone)
@@ -63,7 +65,8 @@ foafUtils.getPhones = function(pgList) {
 foafUtils.getHomepages = function(pgList) {
     return _.chain(pgList)
         .map(function (pg) {
-            return pg.getLiteral(FOAF("homepage")) || pg.getSymbol(FOAF("homepage"))
+            var r = pg.getLiteral(FOAF("homepage"));
+            return (r.length==0)? pg.getSymbol(FOAF("homepage")) : r;
         })
         .flatten()
         .value();
