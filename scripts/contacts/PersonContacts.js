@@ -28,11 +28,17 @@ var PersonContacts = React.createClass({
 
         var foafs = _.chain(this.props.personPG.rel(FOAF("knows")))
             .map(function (contactPG) {
-                var contactURL = contactPG.pointer.value;
                 var onContactClick = function() {
-                    self.props.onContactSelected(contactURL);
+                    var contactURL = contactPG.getPointerUrl();
+                    if ( contactURL ) {
+                        self.props.onContactSelected(contactURL)
+                    } else {
+                        // TODO maybe we can click on a bnode???
+                        alert("Can only click on a Symbol pointer, not Bnode/Literal")
+                    }
                 }
-                return (<PersonContactOnProfile
+                return (<PersonContactOnProfileJumpWrapper
+                            key={contactPG.getPointerKeyForReact()}
                             onPersonContactClick={onContactClick}
                             personPG={contactPG}
                             filterText={self.state.filterText}/>)
