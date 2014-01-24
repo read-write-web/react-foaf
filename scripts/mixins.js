@@ -4,6 +4,16 @@
 
 
 /**
+ * Just a simple way to declare the initial state is not null but is empty
+ */
+var WithEmptyInitialState = {
+    getInitialState: function() {
+        return {};
+    }
+}
+
+
+/**
  * Mixin to log the component lifecycle
  */
 var WithLogger = {
@@ -17,10 +27,16 @@ var WithLogger = {
         }
     },
 
+    prefixArray: function() {
+        if ( this.props.key ) {
+            return [this.getPrefix(),"["+this.props.key+"]"]
+        } else {
+            return [this.getPrefix()]
+        }
+    },
+
     prefixLogArguments: function(arg) {
-        var array = _.toArray(arg);
-        array.unshift( this.getPrefix() );
-        return array;
+        return _.union( this.prefixArray(), _.toArray(arg) )
     },
 
     debug: function() {
@@ -81,8 +97,12 @@ var WithLifecycleLogging = {
  */
 var WithLifecycleLoggingLite = {
 
+    componentWillMount: function() {
+        this.debug("componentWillMount");
+    },
+
     componentWillUpdate: function(nextProps, nextState) {
-        this.debug("componentWillUpdate. New props/state:",nextProps,nextState)
+        // this.debug("componentWillUpdate. New props/state:",nextProps,nextState)
     },
 
     componentWillUnmount: function() {

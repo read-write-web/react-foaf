@@ -22,7 +22,7 @@ var Footer = React.createClass({
             var active = _.contains(activeTabs,tab);
             var minimized = _.contains(minimizedTabs,tab);
             var current = (currentTab === tab);
-            return <FooterItem imgSrc={img} onFooterItemClick={onClick} isActiveTab={active} isMinimizedTab={minimized} isCurrentTab={current} />;
+            return <FooterItem key={tab.personPG.getPointerKeyForReact()} imgSrc={img} onFooterItemClick={onClick} isActiveTab={active} isMinimizedTab={minimized} isCurrentTab={current} />;
         });
 
         var globalCloseItemArray = [];

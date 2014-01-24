@@ -4,104 +4,74 @@ var PersonContactOnProfile = React.createClass({
     mixins: [WithLogger,WithLifecycleLoggingLite],
     componentName: "PersonContactOnProfile",
 
-    getInitialState: function() {
-        return {
-            jumpedPointedGraph: this.props.personPG.jump()
-        }
-    },
-
-    componentDidMount: function () {
-        var self = this;
-        this.props.personPG.jumpAsync(false).then(
-            function (jumpedPersonPG) {
-			    self.debug("Setting jumpedPersonPG: ", self.state.jumpedPointedGraph.pointer.toNT(), "->", jumpedPersonPG);
-                self.replaceState({
-                    jumpedPointedGraph: jumpedPersonPG
-                })
-            },
-            function (err) {
-                self.error("error:", component.state.jumpedPointedGraph.pointer.toNT(), "->", err);
-                self.replaceState({
-						 jumpedPointedGraph: this.props.personPG,
-						 error: err
-					 })
-            }
-        )
+    propTypes: {
+        onPersonContactClick: React.PropTypes.func.isRequired,
+        personPG: React.PropTypes.instanceOf($rdf.PointedGraph).isRequired,
+        filterText: React.PropTypes.string.isRequired,
+        // Optional:
+        jumpedPersonPG: React.PropTypes.instanceOf($rdf.PointedGraph),
+        jumpFailure: React.PropTypes.bool
     },
 
     handleClick: function(e) {
-        // TODO maybe not appropriate?
-		 if (this.state.jumpedPointedGraph) {
-			 this.log("clicked on Person box info->");
-             this.log(this.state.jumpedPointedGraph);
-		 } else {
-             this.log("graph not downloaded yet");
-         }
-
-        // ?
-		if ( ! ( this.state.jumpedPointedGraph.pointer.isBlank || this.state.jumpedPointedGraph.pointer.isVar)) {
-            var personContactUrl = this.props.personPG.pointer.value;
+        // TODO maybe not appropriate? we may be able to click on a namednode before it has been jumped?
+        if ( this.props.jumpedPersonPG ) {
             this.props.onPersonContactClick();
         }
-		return true;
-	 },
-
-    setElementClasses: function() {
-        var loadingStr = "";
-        var info = undefined;
-        if (this.props.personPG.isLocalPointer()) {
-            if (this.props.personPG.pointer.termType === "bnode") {
-                info = (<p>not a webid</p>)
-            } else if (this.props.personPG.pointer.termType === "literal") {
-                info = (<p>a literal!!!</p>)
-            } else {
-                info = (<p>locally defined</p>)
-            }
-        } else {
-            jumpedState = this.state.jumpedPointedGraph;
-            if (jumpedState) {
-					if (jumpedState.isLocalPointer()) {
-						info = (<p>definitional info, page was loaded</p>)
-					} else {
-						info = (<p>there was not definitional info in the remote graph</p>)
-					}
-            } else {
-                info = (<p>no remote info yet</p>);
-                loadingStr = "loading"
-            }
+        else {
+            alert("graph not jumped: can't click on it");
         }
-
-        // Set appropriate class of li items.
-        return "contact clearfix float-left "+ loadingStr + ((this.state.error)?" error":"");
+        return true;
     },
 
+
+    isJumpFailure: function() {
+        return this.props.jumpFailure;
+    },
+
+    isNotJumpedYet: function() {
+        return !this.props.jumpedPersonPG && !this.isJumpFailure();
+    },
+
+    getGraphList: function() {
+        // order matters I think because we'll try to get data from the first graph in priority
+        var graphs = [this.props.personPG];
+        if ( this.props.jumpedPersonPG ) {
+            graphs.unshift(this.props.jumpedPersonPG);
+        }
+        return graphs;
+    },
+
+
     render: function() {
-        // Check if user should be displayed.
-        var show = {display: (this.displayUser()) ? 'block' : 'none'};
+        var graphList = this.getGraphList();
 
-        // Set appropriate Pgs.
-        var originalAndJumpedPG = _.compact([this.props.personPG, this.state.jumpedPointedGraph ]);
-
-        // Define appropriate class for the view.
-        var clazz = this.setElementClasses();
+        var liClasses = React.addons.classSet({
+            'contact': true,
+            'clearfix': true,
+            'float-left': true,
+            'loading': this.isNotJumpedYet(),
+            'error': this.isJumpFailure(),
+            'filtered-user' : !this.displayUser(graphList)
+        });
 
         // Return.
         return (
-            <li className={clazz} style={show} onClick={this.handleClick}>
+            <li className={liClasses} onClick={this.handleClick}>
                 <div className="loader"></div>
-                <PersonContactOnProfilePix personPGs={originalAndJumpedPG} />
-                <PersonContactOnProfileBasicInfo personPGs={originalAndJumpedPG} />
-                <PersonContactOnProfileNotifications
-                    personPGs={originalAndJumpedPG}
-                    getNotifications={this.getNotifications}/>
-                <PersonContactOnProfileMessage personPG={originalAndJumpedPG}/>
+                <PersonContactOnProfilePix personPGs={graphList} />
+                <PersonContactOnProfileBasicInfo personPGs={graphList} />
+                <PersonContactOnProfileNotifications personPGs={graphList} getNotifications={this.getNotifications}/>
+                <PersonContactOnProfileMessage personPG={graphList}/>
             </li>
             );
     },
 
-    displayUser: function() {
-        var originalAndJumpedPG = _.compact([this.props.personPG, this.state.jumpedPointedGraph ]);
-        var userName = foafUtils.getName(originalAndJumpedPG).toString().toLowerCase();
+
+    // TODO maybe this should be handled on the top-level jump wrapper directly, to keep this comp simpler
+    displayUser: function(graphList) {
+        // TODO this is bad, we use toString on an object which contains an array, kind of strangrr
+        var userName = foafUtils.getName(graphList).toString().toLowerCase();
         var filterText = this.props.filterText;
         if (!filterText) return true;
         else {
