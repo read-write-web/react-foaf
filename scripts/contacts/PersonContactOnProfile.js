@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 var PersonContactOnProfile = React.createClass({
-    mixins: [WithLogger,WithLifecycleLoggingLite],
+    mixins: [WithLogger,WithLifecycleLogging],
     componentName: "PersonContactOnProfile",
 
     propTypes: {
@@ -10,27 +10,31 @@ var PersonContactOnProfile = React.createClass({
         filterText: React.PropTypes.string.isRequired,
         // Optional:
         jumpedPersonPG: React.PropTypes.instanceOf($rdf.PointedGraph),
-        jumpFailure: React.PropTypes.bool
+        jumpError: React.PropTypes.object
     },
+
 
     handleClick: function(e) {
         // TODO maybe not appropriate? we may be able to click on a namednode before it has been jumped?
         if ( this.props.jumpedPersonPG ) {
             this.props.onPersonContactClick();
         }
+        else if ( this.props.jumpError ) {
+            alert("Error during jump, can't click on this graph:\n"+JSON.stringify(this.props.jumpError));
+        }
         else {
-            alert("graph not jumped: can't click on it");
+            alert("Graph not jumped");
         }
         return true;
     },
 
 
-    isJumpFailure: function() {
-        return this.props.jumpFailure;
+    isJumpError: function() {
+        return !!this.props.jumpError;
     },
 
     isNotJumpedYet: function() {
-        return !this.props.jumpedPersonPG && !this.isJumpFailure();
+        return !this.props.jumpedPersonPG && !this.isJumpError();
     },
 
     getGraphList: function() {
@@ -51,9 +55,10 @@ var PersonContactOnProfile = React.createClass({
             'clearfix': true,
             'float-left': true,
             'loading': this.isNotJumpedYet(),
-            'error': this.isJumpFailure(),
+            'error': this.isJumpError(),
             'filtered-user' : !this.displayUser(graphList)
         });
+        this.debug("Classes Render person2. Jump error? ",this.props.jumpError);
 
         // Return.
         return (
