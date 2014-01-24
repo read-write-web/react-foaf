@@ -23,11 +23,11 @@ var PersonContactOnProfileBasicInfo = React.createClass({
         var firstNameList=foafUtils.getFirstName(this.props.personPGs);
         var workPlaceList = foafUtils.getworkplaceHomepage(this.props.personPGs);
 
-        var name = (nameList["1"] && nameList["1"].length>0)? nameList["1"][0]:noValue;
-        var givenName = (givenNameList["1"] && givenNameList["1"].length>0)? givenNameList["1"][0]:noValue;
-        var familyName = (familyNameList["1"] && familyNameList["1"].length>0)? familyNameList["1"][0]:noValue;
-        var firstName = (firstNameList["1"] && firstNameList["1"].length>0)? firstNameList["1"][0]:noValue;
-        var workPlace = (workPlaceList["1"] && workPlaceList["1"].length>0)? workPlaceList["1"][0]:noValue;
+        var name = (nameList && nameList.length>0)? nameList[0]:noValue;
+        var givenName = (givenNameList && givenNameList.length>0)? givenNameList[0]:noValue;
+        var familyName = (familyNameList && familyNameList.length>0)? familyNameList[0]:noValue;
+        var firstName = (firstNameList && firstNameList.length>0)? firstNameList[0]:noValue;
+        var workPlace = (workPlaceList && workPlaceList.length>0)? workPlaceList[0]:noValue;
 
         return names = {
             name: name,

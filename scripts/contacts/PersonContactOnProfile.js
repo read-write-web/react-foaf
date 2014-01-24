@@ -91,7 +91,9 @@ var PersonContactOnProfile = React.createClass({
                 <div className="loader"></div>
                 <PersonContactOnProfilePix personPGs={originalAndJumpedPG} />
                 <PersonContactOnProfileBasicInfo personPGs={originalAndJumpedPG} />
-                <PersonContactOnProfileNotifications personPGs={originalAndJumpedPG} getNotifications={this.getNotifications}/>
+                <PersonContactOnProfileNotifications
+                    personPGs={originalAndJumpedPG}
+                    getNotifications={this.getNotifications}/>
                 <PersonContactOnProfileMessage personPG={originalAndJumpedPG}/>
             </li>
             );

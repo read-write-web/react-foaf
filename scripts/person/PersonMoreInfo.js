@@ -7,23 +7,18 @@ var PersonMoreInfo = React.createClass({
     // TODO: described as bad practice to put props data in state
     getInitialState: function() {
         return {
-            email: undefined,
-            phone: undefined,
-            homepage: undefined
+            "foaf:mbox": this.props.moreInfo["foaf:mbox"],
+            "foaf:phone": this.props.moreInfo["foaf:phone"],
+            "foaf:homepage": this.props.moreInfo["foaf:homepage"]
         }
-    },
-
-    componentWillReceiveProps: function(nextProps) {
-        this.setState({
-            email: _.first(nextProps.moreInfo.emails),
-            phone: _.first(nextProps.moreInfo.phones),
-            homepage: _.first(nextProps.moreInfo.homepages)
-        });
     },
 
     render: function() {
         var self = this;
 
+        // Get more info.
+        var moreInfo = this._getMoreInfo();
+        this.log(moreInfo)
         // Define Html.
         var viewTree =
             <div id="details">
@@ -32,11 +27,11 @@ var PersonMoreInfo = React.createClass({
                 <li className="float-left">
                     <div className="email">
                         <div className="title-case">Email</div>
-                        <div className="content email-content">{this.state.email}</div>
+                        <div className="content email-content">{moreInfo["foaf:mbox"]}</div>
                     </div>
                     <div className="phone">
                         <div className="title-case">Phone</div>
-                        <div className="content email-content">{this.state.phone}</div>
+                        <div className="content email-content">{moreInfo["foaf:phone"]}</div>
                     </div>
                 </li>
                 <li className="float-left">
@@ -49,7 +44,7 @@ var PersonMoreInfo = React.createClass({
                     <div className="website">
                         <div className="title-case">Website</div>
                         <div className="content website-content">
-                            <a href="https://stample.co" target="_blank">{this.state.homepage}</a>
+                            <a href="https://stample.co" target="_blank">{moreInfo["foaf:homepage"]}</a>
                         </div>
                     </div>
                 </li>
@@ -66,9 +61,9 @@ var PersonMoreInfo = React.createClass({
                         <div className="title-case">Email</div>
                         <div className="content email-content">
                         <form onSubmit={this._handleSubmit}>
-                            <input id="email"
+                            <input id="foaf:mbox"
                             type="text"
-                            defaultValue={this.state.email}
+                            defaultValue={moreInfo["foaf:mbox"]}
                             onChange={this._onChange}
                             />
                         </form>
@@ -78,9 +73,9 @@ var PersonMoreInfo = React.createClass({
                         <div className="title-case">Phone</div>
                         <div className="content email-content">
                             <form onSubmit={this._handleSubmit}>
-                                <input id="phone"
+                                <input id="foaf:phone"
                                 type="text"
-                                defaultValue={this.state.phone}
+                                defaultValue={moreInfo["foaf:phone"]}
                                 onChange={this._onChange}
                                 />
                             </form>
@@ -100,9 +95,9 @@ var PersonMoreInfo = React.createClass({
                         <div className="title-case">Website</div>
                         <div className="content website-content">
                                 <form onSubmit={this._handleSubmit}>
-                                    <input id="homepage"
+                                    <input id="foaf:homepage"
                                     type="text"
-                                    defaultValue={this.state.homepage}
+                                    defaultValue={moreInfo["foaf:homepage"]}
                                     onChange={this._onChange}
                                     />
                                 </form>
@@ -117,26 +112,40 @@ var PersonMoreInfo = React.createClass({
         return (this.props.modeEdit)? viewTreeEdit: viewTree;
     },
 
-    _handleSubmit: function() {
-        //this.props.submitEdition(this.state, this.props.moreInfo);
+    _handleSubmit: function(e) {
+        e.preventDefault();
         this.props.submitEdition();
-        return false;
     },
 
     _onChange: function(e) {
-        this.props.updatePersonInfo(e.target.id, e.target.value);
-        this._infoMap[e.target.id](e.target.value, this);
+        var id = e.target.id;
+        var oldValue = this.props.moreInfo[id][0];
+        var newValue = e.target.value;
+        this.props.updatePersonInfo(id, newValue, oldValue);
+        this._infoMap[id](e.target.value, this);
+    },
+
+    _getMoreInfo: function() {
+        var noValue = "...";
+        return {
+            "foaf:mbox": (this.state["foaf:mbox"] && this.state["foaf:mbox"].length>0)? this.state["foaf:mbox"][0]:noValue,
+            "foaf:phone": (this.state["foaf:phone"] && this.state["foaf:phone"].length>0)? this.state["foaf:phone"][0]:noValue,
+            "foaf:homepage": (this.state["foaf:homepage"] && this.state["foaf:homepage"].length>0)? this.state["foaf:homepage"][0]:noValue
+        }
     },
 
     _infoMap: {
-        email: function(value, ref) {
-            return ref.setState({email: value});
+        "foaf:mbox": function(value, ref) {
+            ref.state["foaf:mbox"][0] = value;
+            return ref.setState({"foaf:mbox": ref.state["foaf:mbox"]});
         },
-        phone: function(value, ref) {
-            return ref.setState({phone: value});
+        "foaf:phone": function(value, ref) {
+            ref.state["foaf:phone"][0] = value;
+            return ref.setState({"foaf:phone": ref.state["foaf:phone"]});
         },
-        homepage: function(value, ref) {
-            return ref.setState({homepage: value});
+        "foaf:homepage": function(value, ref) {
+            ref.state["foaf:homepage"][0] = value;
+            return ref.setState({"foaf:homepage": ref.state["foaf:homepage"]});
         }
     }
 

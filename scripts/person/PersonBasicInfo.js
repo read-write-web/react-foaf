@@ -1,11 +1,14 @@
 /** @jsx React.DOM */
 
 var PersonBasicInfo = React.createClass({
+    mixins: [WithLogger,WithLifecycleLogging],
+    componentName: "PersonBasicInfo",
+
     getInitialState: function() {
         return {
-            name: this.props.basicInfo.name,
-            givenname: this.props.basicInfo.givenname,
-            company: this.props.basicInfo.workPlaceHomepage
+            "foaf:name": this.props.basicInfo["foaf:name"],
+            "foaf:givenname": this.props.basicInfo["foaf:givenname"],
+            "foaf:workPlaceHomepage": this.props.basicInfo["foaf:workPlaceHomepage"]
         }
     },
 
@@ -16,36 +19,36 @@ var PersonBasicInfo = React.createClass({
         // Define Html.
         var viewTree =
             <div className="basic">
-                <div className="name title-case">{info.name}</div>
-                <div className="surname title-case">{info.givenname}</div>
-                <div className="company">{info.company}</div>
+                <div className="name title-case">{info["foaf:name"]}</div>
+                <div className="surname title-case">{info["foaf:givenname"]}</div>
+                <div className="company">{info["foaf:workPlaceHomepage"]}</div>
             </div>
 
         var viewTreeEdit =
             <div className="basic">
                 <div className="name title-case">
                     <form onSubmit={this._handleSubmit}>
-                        <input id="name"
+                        <input id="foaf:name"
                         type="text"
-                        defaultValue={info.name}
+                        defaultValue={info["foaf:name"]}
                         onChange={this._onChange}
                         />
                     </form>
                 </div>
                 <div className="surname title-case">
                     <form onSubmit={this._handleSubmit}>
-                        <input id="givenname"
+                        <input id="foaf:givenname"
                         type="text"
-                        defaultValue={info.givenname}
+                        defaultValue={info["foaf:givenname"]}
                         onChange={this._onChange}
                         />
                     </form>
                 </div>
                 <div className="company">
                     <form onSubmit={this._handleSubmit}>
-                        <input id="company"
+                        <input id="foaf:workPlaceHomepage"
                         type="text"
-                        defaultValue={info.company}
+                        defaultValue={info["foaf:workPlaceHomepage"]}
                         onChange={this._onChange}
                         />
                     </form>
@@ -60,38 +63,40 @@ var PersonBasicInfo = React.createClass({
     *  Start our own functions here.
     * */
 
-    _handleSubmit: function() {
-        //this.props.submitEdition(this.state, this.props.basicInfo);
+    _handleSubmit: function(e) {
+        e.preventDefault();
         this.props.submitEdition();
-        return false;
     },
 
     _onChange: function(e) {
-        this.props.updatePersonInfo(e.target.id, e.target.value);
-        this._infoMap[e.target.id](e.target.value, this);
+        var id = e.target.id;
+        var oldValue = this.props.basicInfo[id][0];
+        var newValue = e.target.value;
+        this.props.updatePersonInfo(id, newValue, oldValue);
+        this._infoMap[id](e.target.value, this);
     },
 
     _getPersonInfo: function() {
         var noValue = "...";
         return {
-            name: (this.state.name["1"] && this.state.name["1"].length>0)? this.state.name["1"][0]:noValue,
-            givenname: (this.state.givenname["1"] && this.state.givenname["1"].length>0)? this.state.givenname["1"][0]:noValue,
-            company: (this.state.company["1"] && this.state.company["1"].length>0)? this.state.company["1"][0]:noValue
+            "foaf:name": (this.state["foaf:name"] && this.state["foaf:name"].length>0)? this.state["foaf:name"][0]:noValue,
+            "foaf:givenname": (this.state["foaf:givenname"] && this.state["foaf:givenname"].length>0)? this.state["foaf:givenname"][0]:noValue,
+            "foaf:workPlaceHomepage": (this.state["foaf:workPlaceHomepage"] && this.state["foaf:workPlaceHomepage"].length>0)? this.state["foaf:workPlaceHomepage"][0]:noValue
         }
     },
 
     _infoMap: {
-        name: function(value, ref) {
-            ref.state.name["1"][0] = value;
-            return ref.setState({name: ref.state.name});
+        "foaf:name": function(value, ref) {
+            ref.state["foaf:name"][0] = value;
+            return ref.setState({"foaf:name": ref.state["foaf:name"]});
         },
-        givenname: function(value, ref) {
-            ref.state.givenname["1"][0] = value;
-            return ref.setState({givenname: ref.state.givenname});
+        "foaf:givenname": function(value, ref) {
+            ref.state["foaf:givenname"][0] = value;
+            return ref.setState({"foaf:givenname": ref.state["foaf:givenname"]});
         },
-        company: function(value, ref) {
-            ref.state.company["1"][0] = value;
-            return ref.setState({company: ref.state.company});
+        "foaf:workPlaceHomepage": function(value, ref) {
+            ref.state["foaf:workPlaceHomepage"][0] = value;
+            return ref.setState({"foaf:workPlaceHomepage": ref.state["foaf:workPlaceHomepage"]});
         }
     }
 });

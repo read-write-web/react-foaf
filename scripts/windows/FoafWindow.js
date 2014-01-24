@@ -121,15 +121,15 @@ var FoafWindow = React.createClass({
         return fetcher.fetch(url, referer);
     },
 
-    _submitEdition: function(newData, oldData){
+    _submitEdition: function(data){
         var self = this;
-        this.log("update profile",newData,oldData);
+        this.log("update profile", data);
 
-        _.chain(newData)
-            .map(function (d) {
-                self.log(d);
-                // Test: Take the first graph to update.
-                self.state.activeTabs[0].personPG.update(FOAF("name"), d[1][0], oldData["name"][1][0]);
+        _.chain(data)
+            .map(function (d, k) {
+                var relUri = defaulfContext[k.split(":")[0]](k.split(":")[1]);
+                // From now take the first graph to update. TODO: remove list of PGs.
+                self.state.activeTabs[0].personPG.update(relUri, d[0], d[1]);
             })
             .value()
 

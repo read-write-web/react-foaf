@@ -21,8 +21,14 @@ var Person = React.createClass({
     },
 
     render: function () {
-
-        if ( this.props.personPG ) {
+        if (!this._isInitialized()) {
+            return (
+                <div id="profile" className="clearfix center">
+                    <span>Loading...</span>
+                </div>
+                );
+        }
+        else {
             this.debug("Rendering person")
             var personPG = this.toPgArrayHack(this.props.personPG); // TODO remove when possible
             // Set user name.
@@ -45,24 +51,22 @@ var Person = React.createClass({
                         submitEdition={this._submitEdition}
                         updatePersonInfo={this._updatePersonInfo}
                         address={this._getAddress()}/>
-                    <PersonWebId getWebId={this.getWebId}/>
-                </div>
-                );
-        }
-        else {
-            return (
-                <div id="profile" className="clearfix center">
-                    <span>Loading ...</span>
+                    <PersonWebId getWebId={this._getWebId}/>
                 </div>
                 );
         }
     },
 
+    _isInitialized: function() {
+        return this.props.personPG
+    },
+
     _handleClickEdit: function(e) {
-        this.log('Edit click ');
+        this.log('_handleClickEdit');
+        this.log(this.state.personInfo);
 
         if (this.state.modeEdit) {
-            this._submitEdition(this.state.personInfo, this.state.personInfo);
+            this._submitEdition(this.state.personInfo);
         }
         else {
             this.setState({
@@ -74,8 +78,11 @@ var Person = React.createClass({
     },
 
     _submitEdition: function() {
+        this.log('_submitEdition');
+        this.log(this.state.personInfo);
+
         // Submit changes.
-        this.props.submitEdition(this.state.personInfo, this.state.personInfo);
+        this.props.submitEdition(this.state.personInfo);
 
         // Cancel Edit mode.
         this.setState({
@@ -88,9 +95,9 @@ var Person = React.createClass({
         return false;
     },
 
-    _updatePersonInfo: function(id, value) {
+    _updatePersonInfo: function(id, newValue, oldValue) {
         this.log('update person info')
-        this.state.personInfo[id]=value;
+        this.state.personInfo[id]=[newValue, oldValue];
         this.log(this.state.personInfo)
     },
 
@@ -109,11 +116,11 @@ var Person = React.createClass({
         var workPlaceHomepageList = foafUtils.getworkplaceHomepage(personPG);
 
         return {
-            name: nameList,
-            givenname: givenNameList,
-            lastname: familyNameList,
-            firstname: firstNameList,
-            workPlaceHomepage: workPlaceHomepageList
+            "foaf:name": nameList,
+            "foaf:givenname": givenNameList,
+            "foaf:lastname": familyNameList,
+            "foaf:firstname": firstNameList,
+            "foaf:workPlaceHomepage": workPlaceHomepageList
         }
     },
 
@@ -127,10 +134,10 @@ var Person = React.createClass({
 
         //var address = ( addressList &&  addressList.address && addressList.address.length>0)? addressList.address[0]:null;
         return {
-            street: streetList,
-            postalCode: postalCodeList,
-            city: cityList,
-            country: countryList
+            "contact:street": streetList,
+            "contact:postalCode": postalCodeList,
+            "contact:city": cityList,
+            "contact:country": countryList
         }
     },
 
@@ -155,16 +162,17 @@ var Person = React.createClass({
         var emailList = foafUtils.getEmails(personPG);
         var phoneList = foafUtils.getPhones(personPG);
         var homepageList = foafUtils.getHomepages(personPG);
+
         // Return.
         var moreInfo = {
-            emails:emailList,
-            phones:phoneList,
-            homepages:homepageList
+            "foaf:mbox":emailList,
+            "foaf:phone":phoneList,
+            "foaf:homepage":homepageList
         };
         return moreInfo;
     },
 
-    getWebId: function() {
+    _getWebId: function() {
         var value = this.props.personPG.pointer.value;
         return {
             webId:value

@@ -6,24 +6,25 @@ var PersonAddress = React.createClass({
 
     getInitialState: function() {
         return {
-            street: this.props.address.street,
-            postalCode: this.props.address.postalCode,
-            city: this.props.address.city,
-            country: this.props.address.country
+            "contact:street": this.props.address["contact:street"],
+            "contact:postalCode": this.props.address["contact:postalCode"],
+            "contact:city": this.props.address["contact:city"],
+            "contact:country": this.props.address["contact:country"]
         }
     },
 
     render: function() {
+        // Get info of address.
         var address = this._getAddress();
 
         var viewTree =
             <div className="address">
                 <div className="title-case">Address</div>
                 <div className="content address-content">
-                {address.street}<br/>
-                {address.postalCode}
-                {address.city}<br/>
-                {address.country}<br/>
+                {address["contact:street"]}<br/>
+                {address["contact:postalCode"]}
+                {address["contact:city"]}<br/>
+                {address["contact:country"]}<br/>
                 </div>
             </div>
 
@@ -32,30 +33,30 @@ var PersonAddress = React.createClass({
                 <div className="title-case">Address</div>
                 <div className="content address-content">
                     <form onSubmit={this._handleSubmit}>
-                        <input id="street"
+                        <input id="contact:street"
                         type="text"
-                        defaultValue={address.street}
+                        defaultValue={address["contact:street"]}
                         onChange={this._onChange}
                         />
                     </form> <br/>
                     <form onSubmit={this._handleSubmit}>
-                        <input id="postalCode"
+                        <input id="contact:postalCode"
                         type="text"
-                        defaultValue={address.postalCode}
+                        defaultValue={address["contact:postalCode"]}
                         onChange={this._onChange}
                         />
                     </form>
                     <form onSubmit={this._handleSubmit}>
-                        <input id="city"
+                        <input id="contact:city"
                         type="text"
-                        defaultValue={address.city}
+                        defaultValue={address["contact:city"]}
                         onChange={this._onChange}
                         />
                     </form><br/>
                     <form onSubmit={this._handleSubmit}>
-                        <input id="country"
+                        <input id="contact:country"
                         type="text"
-                        defaultValue={address.country}
+                        defaultValue={address["contact:country"]}
                         onChange={this._onChange}
                         />
                     </form><br/>
@@ -66,49 +67,45 @@ var PersonAddress = React.createClass({
         return (this.props.modeEdit)? viewTreeEdit: viewTree;
     },
 
-    _handleSubmit: function() {
+    _handleSubmit: function(e) {
+        e.preventDefault();
         this.props.submitEdition();
-        return false;
     },
 
     _onChange: function(e) {
-        this.props.updatePersonInfo(e.target.id, e.target.value);
-        this._infoMap[e.target.id](e.target.value, this);
+        var id = e.target.id;
+        var oldValue = this.props.address[id][0];
+        var newValue = e.target.value;
+        this.props.updatePersonInfo(id, newValue, oldValue);
+        this._addressMap[id](e.target.value, this);
     },
 
     _getAddress: function() {
         var noValue = "...";
-
-        // Format info if needed.
-        var street = (this.state.street["1"] && this.state.street["1"].length>0)? this.state.street["1"][0]:noValue;
-        var postalCode = (this.state.postalCode["1"] && this.state.postalCode["1"].length>0)? this.state.postalCode["1"][0]:noValue;
-        var city = (this.state.city["1"] && this.state.city["1"].length>0)? this.state.city["1"][0]:noValue;
-        var country = (this.state.country["1"] && this.state.country["1"].length>0)? this.state.country["1"][0]:noValue;
-
         return {
-            street: street,
-            postalCode: postalCode,
-            city: city,
-            country:country
+            "contact:street": (this.state["contact:street"] && this.state["contact:street"].length>0)? this.state["contact:street"][0]:noValue,
+            "contact:postalCode": (this.state["contact:postalCode"] && this.state["contact:postalCode"].length>0)? this.state["contact:postalCode"][0]:noValue,
+            "contact:city":  (this.state["contact:city"] && this.state["contact:city"].length>0)? this.state["contact:city"][0]:noValue,
+            "contact:country": (this.state["contact:country"] && this.state["contact:country"].length>0)? this.state["contact:country"][0]:noValue
         }
     },
 
-    _infoMap: {
-        street: function(value, ref) {
-            ref.state.street["1"][0] = value;
-            return ref.setState({street: ref.state.street});
+    _addressMap: {
+        "contact:street": function(value, ref) {
+            ref.state["contact:street"][0] = value;
+            return ref.setState({"contact:street": ref.state["contact:street"]});
         },
-        postalCode: function(value, ref) {
-            ref.state.postalCode["1"][0] = value;
-            return ref.setState({postalCode: ref.state.postalCode});
+        "contact:postalCode": function(value, ref) {
+            ref.state["contact:postalCode"][0] = value;
+            return ref.setState({"contact:postalCode": ref.state["contact:postalCode"]});
         },
-        city: function(value, ref) {
-            ref.state.city["1"][0] = value;
-            return ref.setState({city: ref.state.city});
+        "contact:city": function(value, ref) {
+            ref.state["contact:city"][0] = value;
+            return ref.setState({"contact:city": ref.state["contact:city"]});
         },
-        country: function(value, ref) {
-            ref.state.country["1"][0] = value;
-            return ref.setState({country: ref.state.country});
+        "contact:country": function(value, ref) {
+            ref.state["contact:country"][0] = value;
+            return ref.setState({"contact:country": ref.state["contact:country"]});
         }
     }
 

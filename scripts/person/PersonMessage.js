@@ -8,7 +8,7 @@ var PersonMessage = React.createClass({
 
         // Format the name.
         var noValue = "...";
-        var name = (propName["1"] && propName["1"].length>0)? propName["1"][0]:noValue;
+        var name = (propName && propName.length>0)? propName[0]:noValue;
         var nameTrunc = name.split(" ");
 
         return (
