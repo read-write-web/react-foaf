@@ -26,9 +26,9 @@ var defaulfContext = { // TODO : Find better denomination.
 }
 
 
-//var foafDocURL = "http://bblfish.net/people/henry/card#me";
+var foafDocURL = "http://bblfish.net/people/henry/card#me";
 //var foafDocURL = "https://my-profile.eu/people/deiu/card#me";
-var foafDocURL = "https://localhost:8443/2013/backbone#me";
+//var foafDocURL = "https://localhost:8443/2013/backbone#me";
 
 
 // TODO need to add hash if needed: we do not look for primary topic anymore
