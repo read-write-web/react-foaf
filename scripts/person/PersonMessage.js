@@ -3,7 +3,7 @@
 var PersonMessage = React.createClass({
     render: function() {
         // Get props.
-        var message = this.props.lastMessage;
+        var message = this._getMessage();
         var propName = this.props.userName;
 
         // Format the name.
@@ -18,5 +18,14 @@ var PersonMessage = React.createClass({
                 <div className="nextStep"><a href="#">Write back</a></div>
             </div>
             );
-    }
+    },
+
+    _getMessage: function() {
+        var noValue = "";
+        return {
+            lastMessageDate:noValue,
+            lastMessage:"No message"
+        }
+    },
+
 });

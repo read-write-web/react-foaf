@@ -7,6 +7,12 @@ function CONTACT(name) { return $rdf.sym("http://www.w3.org/2000/10/swap/pim/con
 function GEOLOC(name) { return $rdf.sym("http://www.w3.org/2003/01/geo/wgs84_pos#" + name) }
 function RDFS(name) { return $rdf.sym("http://www.w3.org/2000/01/rdf-schema#"+name) }
 
+var defaulfContext = { // TODO : Find better denomination.
+    "foaf": function(attr) {return FOAF(attr)},
+    "contact": function(attr) {return CONTACT(attr)},
+    "geoloc": function(attr) {return GEOLOC(attr)},
+    "rdfs": function(attr) {return RDFS(attr)}
+}
 
 /*
 * Local Utils.
@@ -16,6 +22,16 @@ function getValue(pgList) {
     var res =  _.chain(pgList)
         .map(function (pg) {
             var r = pg.getLiteral(args);
+            return (r.length==0)? pg.getSymbol(args) : r;
+        }).flatten()
+        .value();
+    return res;
+}
+
+foafUtils.getValue2 = function(pgList, relUri) {
+    var res =  _.chain(pgList)
+        .map(function (pg) {
+            var r = pg.getLiteral(relUri);
             return (r.length==0)? pg.getSymbol(args) : r;
         }).flatten()
         .value();
@@ -39,15 +55,12 @@ function cleanPhone(phone) {
     return removeStringPrefix(phone,"tel:");
 }
 
-var fMap = {
-    "foaf:name": foafUtils.getName,
-    "foaf:givenName": foafUtils.getGivenName,
-    "foaf:familyName": foafUtils.getFamilyName,
-    "foaf:firstName": foafUtils.getFirstName,
-    "foaf:workplaceHomepage": foafUtils.getworkplaceHomepage
-}
-
 foafUtils.getEmails = function(pgList) {
+    var res = getValue(pgList, FOAF("mbox"));
+    return _.map(res, cleanEmail);
+};
+
+foafUtils.getMbox = function(pgList) {
     var res = getValue(pgList, FOAF("mbox"));
     return _.map(res, cleanEmail);
 };
@@ -258,3 +271,18 @@ foafUtils.getContactAddress = function(pgList) {
             .value();
 };
 
+foafUtils.mapAttrToFunc = {
+    "foaf:name": foafUtils.getName,
+    "foaf:givenName": foafUtils.getGivenName,
+    "foaf:givenname": foafUtils.getGivenName,
+    "foaf:familyName": foafUtils.getFamilyName,
+    "foaf:firstName": foafUtils.getFirstName,
+    "foaf:workplaceHomepage": foafUtils.getworkplaceHomepage,
+    "foaf:mbox": foafUtils.getMbox,
+    "foaf:phone": foafUtils.getPhones,
+    "foaf:homepage": foafUtils.getHomepages,
+    "contact:street": foafUtils.getContactStreet,
+    "contact:postalCode": foafUtils.getContactPostalCode,
+    "contact:city": foafUtils.getContactCity,
+    "contact:country": foafUtils.getContactCountry
+};

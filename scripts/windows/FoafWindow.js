@@ -126,6 +126,7 @@ var FoafWindow = React.createClass({
         var noValue = "...";
         this.log("update profile", data);
 
+        /*
         _.chain(data)
             .map(function (d, k) {
                 var relUri = defaulfContext[k.split(":")[0]](k.split(":")[1]);
@@ -142,7 +143,7 @@ var FoafWindow = React.createClass({
             })
             .value()
 
-
+        */
         // Return.
         return false;
     },

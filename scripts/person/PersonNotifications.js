@@ -4,7 +4,7 @@ var PersonNotifications = React.createClass({
 
     render: function() {
 
-        var notifications = this.props.notifications();
+        var notifications = this._getNotifications();
 
         return (
             <div className="notifications">
@@ -13,5 +13,13 @@ var PersonNotifications = React.createClass({
                 <div className="updates float-left">{notifications.nbUpdates}</div>
             </div>
             );
-    }
+    },
+
+    _getNotifications: function() {
+        return {
+            nbNewMessages:0,
+            nbRecentInteraction:0,
+            nbUpdates:0
+        }
+    },
 });

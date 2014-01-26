@@ -3,7 +3,7 @@
 var PersonWebId = React.createClass({
 
     render: function() {
-        var webId = this.props.getWebId();
+        var webId = this._getWebId();
         return (
             <div id="webid" className="clearfix">
                 <a href="https://edwardsilhol.com/me#card">
@@ -12,8 +12,13 @@ var PersonWebId = React.createClass({
                 <div id="webid-address" class="float-left"><span className="title-case">Web ID </span> {webId.webId}</div>
             </div>
             );
+    },
 
-            //<img src="img/webid.png" alt="Web ID logo" className="float-left"/>
+    _getWebId: function() {
+        var value = this.props.personPG.pointer.value;
+        return {
+            webId:value
+        };
     }
 });
 

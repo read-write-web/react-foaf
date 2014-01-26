@@ -31,29 +31,26 @@ var Person = React.createClass({
         else {
             this.debug("Rendering person")
             var personPG = this.toPgArrayHack(this.props.personPG); // TODO remove when possible
+
             // Set user name.
             var userName = foafUtils.getName(personPG);
 
-            //basicInfo={this._getBasicInfo()}
             return (
                 <div id="profile" className="clearfix center">
                     <div className="edit-profile" onClick={this._handleClickEdit}>{this.state.editText}</div>
                     <Pix src={this._getUserImg()}/>
                     <PersonBasicInfo
-                        modeEdit={this.state.modeEdit}
                         personPG={personPG}
-                        submitEdition={this._submitEdition}
-                        updatePersonInfo={this._updatePersonInfo}/>
-                    <PersonNotifications notifications={this._getNotifications}/>
-                    <PersonMessage userName={userName} lastMessage={this._getMessage()}/>
+                        modeEdit={this.state.modeEdit}
+                        submitEdition={this._submitEdition}/>
+                    <PersonNotifications personPG={personPG}/>
+                    <PersonMessage userName={userName} personPG={personPG}/>
                     <PersonMoreInfo
-                        modeEdit={this.state.modeEdit}
-                        moreInfo={this._getMoreInfo()}
-                        submitEdition={this._submitEdition}
-                        updatePersonInfo={this._updatePersonInfo}
                         personPG={personPG}
-                        address={this._getAddress()}/>
-                    <PersonWebId getWebId={this._getWebId}/>
+                        modeEdit={this.state.modeEdit}
+                        personPG={personPG}
+                        submitEdition={this._submitEdition}/>
+                    <PersonWebId personPG={this.props.personPG}/>
                 </div>
                 );
         }
@@ -97,90 +94,10 @@ var Person = React.createClass({
         return false;
     },
 
-    _updatePersonInfo: function(id, newValue, oldValue) {
-        this.log('update person info')
-        this.state.personInfo[id]=[newValue, oldValue];
-        this.log(this.state.personInfo)
-    },
-
     _getUserImg: function() {
         var personPG = this.toPgArrayHack(this.props.personPG); // TODO remove when possible
         var imgUrlList = foafUtils.getImg(personPG);
         return (imgUrlList && imgUrlList.length>0)? imgUrlList[0]:"img/avatar.png";
     },
-
-    /*
-    _getBasicInfo: function() {
-        var personPG = this.toPgArrayHack(this.props.personPG); // TODO remove when possible
-        var nameList=foafUtils.getName(personPG);
-        var givenNameList=foafUtils.getGivenName(personPG);
-        var familyNameList=foafUtils.getFamilyName(personPG);
-        var firstNameList=foafUtils.getFirstName(personPG);
-        var workPlaceHomepageList = foafUtils.getworkplaceHomepage(personPG);
-
-        return {
-            "foaf:name": nameList,
-            "foaf:givenname": givenNameList,
-            "foaf:lastname": familyNameList,
-            "foaf:firstname": firstNameList,
-            "foaf:workPlaceHomepage": workPlaceHomepageList
-        }
-    },*/
-
-    _getAddress: function(){
-        var personPG = this.toPgArrayHack(this.props.personPG); // TODO remove when possible
-        this.log("**************************************************************************")
-        this.log(personPG);
-
-        var streetList = foafUtils.getContactStreet(personPG);
-        var postalCodeList = foafUtils.getContactPostalCode(personPG);
-        var cityList = foafUtils.getContactCity(personPG);
-        var countryList = foafUtils.getContactCountry(personPG);
-
-        return {
-            "contact:street": streetList,
-            "contact:postalCode": postalCodeList,
-            "contact:city": cityList,
-            "contact:country": countryList
-        }
-    },
-
-    _getNotifications: function() {
-        return {
-            nbNewMessages:0,
-            nbRecentInteraction:0,
-            nbUpdates:0
-        }
-    },
-
-    _getMessage: function() {
-        var noValue = "";
-        return {
-            lastMessageDate:noValue,
-            lastMessage:"No message"
-        }
-    },
-
-    _getMoreInfo: function() {
-        var personPG = this.toPgArrayHack(this.props.personPG); // TODO remove when possible
-        var emailList = foafUtils.getEmails(personPG);
-        var phoneList = foafUtils.getPhones(personPG);
-        var homepageList = foafUtils.getHomepages(personPG);
-
-        // Return.
-        var moreInfo = {
-            "foaf:mbox":emailList,
-            "foaf:phone":phoneList,
-            "foaf:homepage":homepageList
-        };
-        return moreInfo;
-    },
-
-    _getWebId: function() {
-        var value = this.props.personPG.pointer.value;
-        return {
-            webId:value
-        };
-    }
 
 });

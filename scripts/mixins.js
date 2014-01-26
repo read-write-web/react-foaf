@@ -139,10 +139,35 @@ var WithLifecycleLoggingLite = {
  * @param {*} value current value of the link
  * @param {function} requestChange callback to request a change
  */
-function ReactLink(value, requestChange) {
+function ReactLink(value, requestChange,  PG, rel) {
     this.value = value;
     this.requestChange = requestChange;
+    this.PG = PG;
+    this.rel = rel
 }
+
+
+//
+function FOAF(key) { return $rdf.sym("http://xmlns.com/foaf/0.1/"+key) }
+function CONTACT(key) { return $rdf.sym("http://www.w3.org/2000/10/swap/pim/contact#"+key) }
+function GEOLOC(key) { return $rdf.sym("http://www.w3.org/2003/01/geo/wgs84_pos#" + key) }
+function RDFS(key) { return $rdf.sym("http://www.w3.org/2000/01/rdf-schema#"+key) }
+
+var mapKeyToSym = {
+    "foaf:name": FOAF("name"),
+    "foaf:givenName": FOAF("givenName"),
+    "foaf:givenname": FOAF("givenname"),
+    "foaf:familyName": FOAF("familyName"),
+    "foaf:firstName": FOAF("firstName"),
+    "foaf:workplaceHomepage": FOAF("workplaceHomepage"),
+    "foaf:mbox": FOAF("mbox"),
+    "foaf:phone": FOAF("phone"),
+    "foaf:homepage": FOAF("homepage"),
+    "contact:street": CONTACT("street"),
+    "contact:postalCode": CONTACT("postalCode"),
+    "contact:city": CONTACT("city"),
+    "contact:country": CONTACT("country")
+};
 
 
 /**
@@ -158,19 +183,35 @@ var RdfLinkedPgMixin = {
      * if you're using Google Closure Compiler advanced mode.
      * @return {ReactLink} ReactLink instance linking to the state.
      */
-    linkToPgLiteral: function(PG, key) {
+
+    linkToPgLiteral: function(PG, rel) {
         function getCurrentValue() {
-            // get value from PG
-            var currentValue = foafUtils.getValue(PG, key);
-            return currentValue;
+            console.log("********************* getCurrentValue ****************************")
+            console.log(this)
+            console.log(rel);
+            console.log(foafUtils.mapAttrToFunc    )
+            var currentValue = foafUtils.mapAttrToFunc[rel](PG);
+            console.log(currentValue)
+
+            return currentValue[0];
         }
         function onRequestChange(newValue) {
-            console.log('In mixim ******************************************************')
+            var rootObject = RdfLinkedPgMixin;
+            console.log("********************* onRequestChange !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             console.log(this)
+            console.log(newValue)
+            console.log(mapKeyToSym[this.rel])
+
+            if (!this.value) {
+                this.PG.insert(mapKeyToSym[this.rel], newValue);
+            }
+            else {
+                this.PG.update(mapKeyToSym[this.rel], newValue, this.value);
+            }
+
             // set new value on PH
             this.value = newValue;
         }
-        return new ReactLink(getCurrentValue(),onRequestChange);
+        return new ReactLink(getCurrentValue(),onRequestChange, PG[0], rel);
     }
 };
-

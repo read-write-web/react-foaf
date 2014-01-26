@@ -1,21 +1,19 @@
 /** @jsx React.DOM */
 
 var PersonAddress = React.createClass({
-    mixins: [WithLogger,WithLifecycleLogging],
+    mixins: [WithLogger,WithLifecycleLogging, RdfLinkedPgMixin],
     componentName: "PersonAddress",
 
     getInitialState: function() {
         return {
-            "contact:street": this.props.address["contact:street"],
-            "contact:postalCode": this.props.address["contact:postalCode"],
-            "contact:city": this.props.address["contact:city"],
-            "contact:country": this.props.address["contact:country"]
+            personPGCopy: this.props.personPG
         }
     },
 
     render: function() {
         // Get info of address.
         var address = this._getAddress();
+        this.log(address);
 
         var viewTree =
             <div className="address">
@@ -33,32 +31,16 @@ var PersonAddress = React.createClass({
                 <div className="title-case">Address</div>
                 <div className="content address-content">
                     <form onSubmit={this._handleSubmit}>
-                        <input id="contact:street"
-                        type="text"
-                        defaultValue={address["contact:street"]}
-                        onChange={this._onChange}
-                        />
+                        <input type="text" valueLink={this.linkToPgLiteral(this.state.personPGCopy, 'contact:street')}/>
                     </form> <br/>
                     <form onSubmit={this._handleSubmit}>
-                        <input id="contact:postalCode"
-                        type="text"
-                        defaultValue={address["contact:postalCode"]}
-                        onChange={this._onChange}
-                        />
+                        <input type="text" valueLink={this.linkToPgLiteral(this.state.personPGCopy, 'contact:postalCode')}/>
                     </form>
                     <form onSubmit={this._handleSubmit}>
-                        <input id="contact:city"
-                        type="text"
-                        defaultValue={address["contact:city"]}
-                        onChange={this._onChange}
-                        />
+                        <input type="text" valueLink={this.linkToPgLiteral(this.state.personPGCopy, 'contact:city')}/>
                     </form><br/>
                     <form onSubmit={this._handleSubmit}>
-                        <input id="contact:country"
-                        type="text"
-                        defaultValue={address["contact:country"]}
-                        onChange={this._onChange}
-                        />
+                        <input type="text" valueLink={this.linkToPgLiteral(this.state.personPGCopy, 'contact:country')}/>
                     </form><br/>
                 </div>
             </div>
@@ -72,40 +54,18 @@ var PersonAddress = React.createClass({
         this.props.submitEdition();
     },
 
-    _onChange: function(e) {
-        var id = e.target.id;
-        var oldValue = this.props.address[id][0];
-        var newValue = e.target.value;
-        this.props.updatePersonInfo(id, newValue, oldValue);
-        this._addressMap[id](e.target.value, this);
-    },
+    _getAddress: function(){
+        var personPG = this.props.personPG;
+        var streetList = foafUtils.getContactStreet(personPG);
+        var postalCodeList = foafUtils.getContactPostalCode(personPG);
+        var cityList = foafUtils.getContactCity(personPG);
+        var countryList = foafUtils.getContactCountry(personPG);
 
-    _getAddress: function() {
-        var noValue = "...";
         return {
-            "contact:street": (this.state["contact:street"] && this.state["contact:street"].length>0)? this.state["contact:street"][0]:noValue,
-            "contact:postalCode": (this.state["contact:postalCode"] && this.state["contact:postalCode"].length>0)? this.state["contact:postalCode"][0]:noValue,
-            "contact:city":  (this.state["contact:city"] && this.state["contact:city"].length>0)? this.state["contact:city"][0]:noValue,
-            "contact:country": (this.state["contact:country"] && this.state["contact:country"].length>0)? this.state["contact:country"][0]:noValue
-        }
-    },
-
-    _addressMap: {
-        "contact:street": function(value, ref) {
-            ref.state["contact:street"][0] = value;
-            return ref.setState({"contact:street": ref.state["contact:street"]});
-        },
-        "contact:postalCode": function(value, ref) {
-            ref.state["contact:postalCode"][0] = value;
-            return ref.setState({"contact:postalCode": ref.state["contact:postalCode"]});
-        },
-        "contact:city": function(value, ref) {
-            ref.state["contact:city"][0] = value;
-            return ref.setState({"contact:city": ref.state["contact:city"]});
-        },
-        "contact:country": function(value, ref) {
-            ref.state["contact:country"][0] = value;
-            return ref.setState({"contact:country": ref.state["contact:country"]});
+            "contact:street": streetList[0],
+            "contact:postalCode": postalCodeList[0],
+            "contact:city": cityList[0],
+            "contact:country": countryList[0]
         }
     }
 
