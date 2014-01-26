@@ -191,9 +191,8 @@ var RdfLinkedPgMixin = {
             return currentValue[0];
         }
         function onRequestChange(newValue) {
-            var rootObject = RdfLinkedPgMixin;
             console.log("********************* onRequestChange !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            
+
             if (!this.value) {
                 this.PG.insert(mapKeyToSym[this.rel], newValue);
             }

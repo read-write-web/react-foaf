@@ -7,13 +7,6 @@ function CONTACT(name) { return $rdf.sym("http://www.w3.org/2000/10/swap/pim/con
 function GEOLOC(name) { return $rdf.sym("http://www.w3.org/2003/01/geo/wgs84_pos#" + name) }
 function RDFS(name) { return $rdf.sym("http://www.w3.org/2000/01/rdf-schema#"+name) }
 
-var defaulfContext = { // TODO : Find better denomination.
-    "foaf": function(attr) {return FOAF(attr)},
-    "contact": function(attr) {return CONTACT(attr)},
-    "geoloc": function(attr) {return GEOLOC(attr)},
-    "rdfs": function(attr) {return RDFS(attr)}
-}
-
 /*
 * Local Utils.
 * */

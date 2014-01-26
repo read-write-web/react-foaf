@@ -11,21 +11,6 @@ $rdf.PointedGraph.setLogLevel("nologs");
 var foafSpec = "http://xmlns.com/foaf/spec/";
 var store = new $rdf.IndexedFormula();
 
-
-// *** ?
-function FOAF(attr) { return $rdf.sym("http://xmlns.com/foaf/0.1/"+attr) }
-function CONTACT(attr) { return $rdf.sym("http://www.w3.org/2000/10/swap/pim/contact#"+attr) }
-function GEOLOC(attr) { return $rdf.sym("http://www.w3.org/2003/01/geo/wgs84_pos#" + attr) }
-function RDFS(attr) { return $rdf.sym("http://www.w3.org/2000/01/rdf-schema#"+attr) }
-
-var defaulfContext = { // TODO : Find better denomination.
-    "foaf": function(attr) {return FOAF(attr)},
-    "contact": function(attr) {return CONTACT(attr)},
-    "geoloc": function(attr) {return GEOLOC(attr)},
-    "rdfs": function(attr) {return RDFS(attr)}
-}
-
-
 //var foafDocURL = "http://bblfish.net/people/henry/card#me";
 //var foafDocURL = "https://my-profile.eu/people/deiu/card#me";
 var foafDocURL = "https://localhost:8443/2013/backbone#me";
