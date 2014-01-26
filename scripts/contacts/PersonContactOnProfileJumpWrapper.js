@@ -26,7 +26,7 @@ var PersonContactOnProfileJumpWrapper = React.createClass({
                 function(err) {
                     self.error("Can't jump pg:",err);
                     self.replaceState({
-                        jumpFailure: true
+                        jumpError: err
                     });
                 }
             )
@@ -45,7 +45,7 @@ var PersonContactOnProfileJumpWrapper = React.createClass({
             onPersonContactClick={this.props.onPersonContactClick}
             personPG={this.props.personPG}
             jumpedPersonPG={this.state.jumpedPersonPG}
-            jumpFailure={this.state.jumpFailure}
+            jumpError={this.state.jumpError}
             filterText={this.props.filterText}/>
             )
     }
