@@ -28,17 +28,6 @@ function getValue(pgList) {
     return res;
 }
 
-foafUtils.getValue2 = function(pgList, relUri) {
-    var res =  _.chain(pgList)
-        .map(function (pg) {
-            var r = pg.getLiteral(relUri);
-            return (r.length==0)? pg.getSymbol(args) : r;
-        }).flatten()
-        .value();
-    return res;
-}
-
-
 function removeStringPrefix(string,prefix) {
     if ( string && string.indexOf(prefix) != -1)  {
         return string.split(prefix)[1];

@@ -187,21 +187,13 @@ var RdfLinkedPgMixin = {
     linkToPgLiteral: function(PG, rel) {
         function getCurrentValue() {
             console.log("********************* getCurrentValue ****************************")
-            console.log(this)
-            console.log(rel);
-            console.log(foafUtils.mapAttrToFunc    )
             var currentValue = foafUtils.mapAttrToFunc[rel](PG);
-            console.log(currentValue)
-
             return currentValue[0];
         }
         function onRequestChange(newValue) {
             var rootObject = RdfLinkedPgMixin;
             console.log("********************* onRequestChange !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            console.log(this)
-            console.log(newValue)
-            console.log(mapKeyToSym[this.rel])
-
+            
             if (!this.value) {
                 this.PG.insert(mapKeyToSym[this.rel], newValue);
             }
