@@ -23,7 +23,7 @@ function getValue(pgList) {
 }
 
 
-removeStringPrefix = function(string,prefix) {
+function removeStringPrefix(string,prefix) {
     if ( string && string.indexOf(prefix) != -1)  {
         return string.split(prefix)[1];
     } else {
@@ -31,11 +31,11 @@ removeStringPrefix = function(string,prefix) {
     }
 }
 
-function cleanEmail (email) {
+function cleanEmail(email) {
     return removeStringPrefix(email,"mailto:");
 }
 
-function cleanPhone (phone) {
+function cleanPhone(phone) {
     return removeStringPrefix(phone,"tel:");
 }
 
