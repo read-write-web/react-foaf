@@ -1,21 +1,30 @@
 /** @jsx React.DOM */
 
 var PersonBasicInfo = React.createClass({
-    mixins: [WithLogger,WithLifecycleLogging],
+    mixins: [WithLogger,WithLifecycleLogging, RdfLinkedPgMixin],
     componentName: "PersonBasicInfo",
 
     getInitialState: function() {
         return {
-            "foaf:name": this.props.basicInfo["foaf:name"],
+            personPGCopy: this.props.personPG
+            /*"foaf:name": undefined,
+            "foaf:givenname": undefined,
+            "foaf:workPlaceHomepage": undefined*/
+            /*"foaf:name": this.props.basicInfo["foaf:name"],
             "foaf:givenname": this.props.basicInfo["foaf:givenname"],
-            "foaf:workPlaceHomepage": this.props.basicInfo["foaf:workPlaceHomepage"]
+            "foaf:workPlaceHomepage": this.props.basicInfo["foaf:workPlaceHomepage"]*/
         }
     },
 
     render: function() {
-        // Get info.
-        var info = this._getPersonInfo();
+        var personPG = this.props.personPG; // TODO remove when possible
 
+        // TODO: Test presence of PG.
+
+        // Get info.
+        var info = this._getBasicInfo();
+        console.log('*********************************************************')
+        console.log(this.state)
         // Define Html.
         var viewTree =
             <div className="basic">
@@ -23,34 +32,23 @@ var PersonBasicInfo = React.createClass({
                 <div className="surname title-case">{info["foaf:givenname"]}</div>
                 <div className="company">{info["foaf:workPlaceHomepage"]}</div>
             </div>
-
+        console.log("****************************************************************")
+        console.log(this)
         var viewTreeEdit =
             <div className="basic">
                 <div className="name title-case">
                     <form onSubmit={this._handleSubmit}>
-                        <input id="foaf:name"
-                        type="text"
-                        defaultValue={info["foaf:name"]}
-                        onChange={this._onChange}
-                        />
+                        <input/>
                     </form>
                 </div>
                 <div className="surname title-case">
                     <form onSubmit={this._handleSubmit}>
-                        <input id="foaf:givenname"
-                        type="text"
-                        defaultValue={info["foaf:givenname"]}
-                        onChange={this._onChange}
-                        />
+                        <input/>
                     </form>
                 </div>
                 <div className="company">
                     <form onSubmit={this._handleSubmit}>
-                        <input id="foaf:workPlaceHomepage"
-                        type="text"
-                        defaultValue={info["foaf:workPlaceHomepage"]}
-                        onChange={this._onChange}
-                        />
+                        <input/>
                     </form>
                 </div>
             </div>
@@ -74,6 +72,23 @@ var PersonBasicInfo = React.createClass({
         var newValue = e.target.value;
         this.props.updatePersonInfo(id, newValue, oldValue);
         this._infoMap[id](e.target.value, this);
+    },
+
+    _getBasicInfo: function() {
+        var personPG = this.props.personPG; // TODO remove when possible
+        var nameList=foafUtils.getName(personPG);
+        var givenNameList=foafUtils.getGivenName(personPG);
+        var familyNameList=foafUtils.getFamilyName(personPG);
+        var firstNameList=foafUtils.getFirstName(personPG);
+        var workPlaceHomepageList = foafUtils.getworkplaceHomepage(personPG);
+
+        return {
+            "foaf:name": nameList[0],
+            "foaf:givenname": givenNameList[0],
+            "foaf:lastname": familyNameList[0],
+            "foaf:firstname": firstNameList[0],
+            "foaf:workPlaceHomepage": workPlaceHomepageList[0]
+        }
     },
 
     _getPersonInfo: function() {

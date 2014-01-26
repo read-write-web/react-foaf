@@ -34,15 +34,16 @@ var Person = React.createClass({
             // Set user name.
             var userName = foafUtils.getName(personPG);
 
+            //basicInfo={this._getBasicInfo()}
             return (
                 <div id="profile" className="clearfix center">
                     <div className="edit-profile" onClick={this._handleClickEdit}>{this.state.editText}</div>
                     <Pix src={this._getUserImg()}/>
                     <PersonBasicInfo
                         modeEdit={this.state.modeEdit}
+                        personPG={personPG}
                         submitEdition={this._submitEdition}
-                        updatePersonInfo={this._updatePersonInfo}
-                        basicInfo={this._getBasicInfo()}/>
+                        updatePersonInfo={this._updatePersonInfo}/>
                     <PersonNotifications notifications={this._getNotifications}/>
                     <PersonMessage userName={userName} lastMessage={this._getMessage()}/>
                     <PersonMoreInfo
@@ -50,6 +51,7 @@ var Person = React.createClass({
                         moreInfo={this._getMoreInfo()}
                         submitEdition={this._submitEdition}
                         updatePersonInfo={this._updatePersonInfo}
+                        personPG={personPG}
                         address={this._getAddress()}/>
                     <PersonWebId getWebId={this._getWebId}/>
                 </div>
@@ -107,6 +109,7 @@ var Person = React.createClass({
         return (imgUrlList && imgUrlList.length>0)? imgUrlList[0]:"img/avatar.png";
     },
 
+    /*
     _getBasicInfo: function() {
         var personPG = this.toPgArrayHack(this.props.personPG); // TODO remove when possible
         var nameList=foafUtils.getName(personPG);
@@ -122,17 +125,18 @@ var Person = React.createClass({
             "foaf:firstname": firstNameList,
             "foaf:workPlaceHomepage": workPlaceHomepageList
         }
-    },
+    },*/
 
     _getAddress: function(){
         var personPG = this.toPgArrayHack(this.props.personPG); // TODO remove when possible
-        //var addressList = foafUtils.getContactHome(personPG);
+        this.log("**************************************************************************")
+        this.log(personPG);
+
         var streetList = foafUtils.getContactStreet(personPG);
         var postalCodeList = foafUtils.getContactPostalCode(personPG);
         var cityList = foafUtils.getContactCity(personPG);
         var countryList = foafUtils.getContactCountry(personPG);
 
-        //var address = ( addressList &&  addressList.address && addressList.address.length>0)? addressList.address[0]:null;
         return {
             "contact:street": streetList,
             "contact:postalCode": postalCodeList,

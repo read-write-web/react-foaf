@@ -111,3 +111,66 @@ var WithLifecycleLoggingLite = {
 
 };
 
+
+/**
+ * ReactLink encapsulates a common pattern in which a component wants to modify
+ * a prop received from its parent. ReactLink allows the parent to pass down a
+ * value coupled with a callback that, when invoked, expresses an intent to
+ * modify that value. For example:
+ *
+ * React.createClass({
+ *   getInitialState: function() {
+ *     return {value: ''};
+ *   },
+ *   render: function() {
+ *     var valueLink = new ReactLink(this.state.value, this._handleValueChange);
+ *     return <input valueLink={valueLink} />;
+ *   },
+ *   this._handleValueChange: function(newValue) {
+ *     this.setState({value: newValue});
+ *   }
+ * });
+ *
+ * We have provided some sugary mixins to make the creation and
+ * consumption of ReactLink easier; see LinkedValueMixin and LinkedStateMixin.
+ */
+
+/**
+ * @param {*} value current value of the link
+ * @param {function} requestChange callback to request a change
+ */
+function ReactLink(value, requestChange) {
+    this.value = value;
+    this.requestChange = requestChange;
+}
+
+
+/**
+ * A simple mixin around ReactLink.forState().
+ */
+var RdfLinkedPgMixin = {
+    /**
+     * Create a ReactLink that's linked to part of this component's state. The
+     * ReactLink will have the current value of this.state[key] and will call
+     * setState() when a change is requested.
+     *
+     * @param {string} key state key to update. Note: you may want to use keyOf()
+     * if you're using Google Closure Compiler advanced mode.
+     * @return {ReactLink} ReactLink instance linking to the state.
+     */
+    linkToPgLiteral: function(PG, key) {
+        function getCurrentValue() {
+            // get value from PG
+            var currentValue = foafUtils.getValue(PG, key);
+            return currentValue;
+        }
+        function onRequestChange(newValue) {
+            console.log('In mixim ******************************************************')
+            console.log(this)
+            // set new value on PH
+            this.value = newValue;
+        }
+        return new ReactLink(getCurrentValue(),onRequestChange);
+    }
+};
+

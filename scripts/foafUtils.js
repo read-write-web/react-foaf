@@ -8,7 +8,22 @@ function GEOLOC(name) { return $rdf.sym("http://www.w3.org/2003/01/geo/wgs84_pos
 function RDFS(name) { return $rdf.sym("http://www.w3.org/2000/01/rdf-schema#"+name) }
 
 
-foafUtils.removeStringPrefix = function(string,prefix) {
+/*
+* Local Utils.
+* */
+function getValue(pgList) {
+    var args = (slice.call(arguments, 1));
+    var res =  _.chain(pgList)
+        .map(function (pg) {
+            var r = pg.getLiteral(args);
+            return (r.length==0)? pg.getSymbol(args) : r;
+        }).flatten()
+        .value();
+    return res;
+}
+
+
+removeStringPrefix = function(string,prefix) {
     if ( string && string.indexOf(prefix) != -1)  {
         return string.split(prefix)[1];
     } else {
@@ -16,147 +31,74 @@ foafUtils.removeStringPrefix = function(string,prefix) {
     }
 }
 
-foafUtils.cleanEmail = function(email) {
-    return foafUtils.removeStringPrefix(email,"mailto:");
+function cleanEmail (email) {
+    return removeStringPrefix(email,"mailto:");
 }
 
-
-foafUtils.cleanPhone = function(phone) {
-    return foafUtils.removeStringPrefix(phone,"tel:");
+function cleanPhone (phone) {
+    return removeStringPrefix(phone,"tel:");
 }
 
-/**
- * @params {PointedGraph, $rdf.sym1, $rdf.sym2, ...} $rdf.sym: relUri the relation from this node
- * @returns => List[Literal] or List[Symbol]
- */
-foafUtils.getLiteral = function(pgList, relSym){
-    return _.chain(pgList)
-            .map(function (pg) {
-                return pg.rels(relSym)
-            })
-            .flatten()
-            .map(function(pg) {
-                return pg.pointer.value;
-            }).value();
-};
+var fMap = {
+    "foaf:name": foafUtils.getName,
+    "foaf:givenName": foafUtils.getGivenName,
+    "foaf:familyName": foafUtils.getFamilyName,
+    "foaf:firstName": foafUtils.getFirstName,
+    "foaf:workplaceHomepage": foafUtils.getworkplaceHomepage
+}
 
 foafUtils.getEmails = function(pgList) {
-    return _.chain(pgList)
-        .map(function (pg) {
-            var r = pg.getLiteral(FOAF("mbox"));
-            return (r.length==0)? pg.getSymbol(FOAF("mbox")) : r;
-        })
-        .flatten()
-        .map(foafUtils.cleanEmail)
-        .value();
+    var res = getValue(pgList, FOAF("mbox"));
+    return _.map(res, cleanEmail);
 };
 
 foafUtils.getPhones = function(pgList) {
-    return _.chain(pgList)
-        .map(function (pg) {
-            var r = pg.getLiteral(FOAF("phone"));
-            return (r.length==0)? pg.getSymbol(FOAF("phone")) : r;
-        })
-        .flatten()
-        .map(foafUtils.cleanPhone)
-        .value();
+    var res = getValue(pgList, FOAF("phone"));
+    return _.map(res, cleanPhone);
 };
 
 foafUtils.getHomepages = function(pgList) {
-    return _.chain(pgList)
-        .map(function (pg) {
-            var r = pg.getLiteral(FOAF("homepage"));
-            return (r.length==0)? pg.getSymbol(FOAF("homepage")) : r;
-        })
-        .flatten()
-        .value();
-
+    return getValue(pgList, FOAF("homepage"));
 };
 
-foafUtils.getName = function(pgList) {
-    return _.chain(pgList)
-                .map(function (pg) {
-                    return pg.getLiteral(FOAF("name"))
-                }).flatten()
-                .value();
+foafUtils.getName = function(pgList, options) {
+    return getValue(pgList, FOAF("name"));
 };
 
-foafUtils.getGivenName = function(pgList) {
-    return _.chain(pgList)
-            .map(function (pg) {
-                return pg.getLiteral(FOAF("givenName"), FOAF("givenname"))
-            }).flatten()
-            .value();
+foafUtils.getGivenName = function(pgList, options) {
+    return getValue(pgList, FOAF("givenName"), FOAF("givenname"));
 };
 
-foafUtils.getFamilyName = function(pgList) {
-    return _.chain(pgList)
-            .map(function (pg) {
-                return pg.getLiteral(FOAF("familyName"), FOAF("family_name"))
-            }).flatten()
-            .value();
+foafUtils.getFamilyName = function(pgList, options) {
+    return getValue(pgList, FOAF("familyName"), FOAF("family_name"));
 };
 
-foafUtils.getFirstName = function(pgList) {
-    return _.chain(pgList)
-            .map(function (pg) {
-                return pg.getLiteral(FOAF("firstName"), FOAF("first_name"))
-            }).flatten()
-            .value();
+foafUtils.getFirstName = function(pgList, options) {
+    return getValue(pgList, FOAF("firstName"), FOAF("first_name"));
 };
 
-foafUtils.getLastName = function(pgList) {
-    return _.chain(pgList)
-            .map(function (pg) {
-                return pg.getLiteral(FOAF("lastName"), FOAF("last_name"))
-            }).flatten()
-            .value();
+foafUtils.getLastName = function(pgList, options) {
+    return getValue(pgList, FOAF("lastName"), FOAF("last_name"));
 };
 
-foafUtils.getGender = function(pgList) {
-    return _.chain(pgList)
-            .map(function (pg) {
-                return pg.getLiteral(FOAF("gender"))
-            }).flatten()
-            .value();
+foafUtils.getGender = function(pgList, options) {
+    return getValue(pgList, FOAF("gender"));
 };
 
-foafUtils.getworkplaceHomepage = function(pgList) {
-    return _.chain(pgList)
-            .map(function (pg) {
-                return pg.getSymbol(FOAF("workplaceHomepage"))
-            }).flatten()
-            .value();
+foafUtils.getworkplaceHomepage = function(pgList, options) {
+    return getValue(pgList, FOAF("workplaceHomepage"));
 };
 
-foafUtils.getWorkInfoHomepage = function(pgList) {
-    return _.chain(pgList)
-            .map(function (pg) {
-                return pg.getLiteral(FOAF("workInfoHomepage"))
-            }).flatten()
-            .value();
+foafUtils.getWorkInfoHomepage = function(pgList, options) {
+    return getValue(pgList, FOAF("workInfoHomepage"));
 };
 
-foafUtils.getNames = function(pgList) {
-    var relLiteral = function (relSym) {
-        return _.chain(pgList)
-            .map(function (pg){
-                    return _.compact(_.map(pg.rels(relSym),function (litPG) {
-                            return (litPG.pointer.termType === "literal") ? litPG.pointer.value  : undefined
-                        }))
-                }
-            )
-            .flatten().value();
-    };
+foafUtils.getImg = function (pgList, options) {
+    return getValue(pgList, FOAF("logo"), FOAF("img"), FOAF("depiction"));
+};
 
-    var nameObject = {
-        "foaf:name": relLiteral(FOAF("name")),
-        "foaf:givenname": relLiteral(FOAF("givenName"),FOAF("givenname")),
-        "foaf:family_name": relLiteral(FOAF("familyName"),FOAF("family_name")),
-        "foaf:firstname": relLiteral(FOAF("firstName"))
-    };
-
-    return nameObject;
+foafUtils.getThumbnail = function (pgList) {
+    return getValue(pgList, FOAF("thumbnail"));
 };
 
 foafUtils.getContactHome = function(pgList) {
@@ -221,7 +163,6 @@ foafUtils.getContactStreet = function(pgList) {
             .value();
 
 };
-
 
 foafUtils.getContactPostalCode = function(pgList) {
     var relLiteral = function (pg, relSym) {
@@ -316,39 +257,4 @@ foafUtils.getContactAddress = function(pgList) {
             }).flatten()
             .value();
 };
-
-
-foafUtils.getImg = function (pgList) {
-    var imgUrlList =
-        _.chain(pgList)
-            .map(function (pg) {
-                return pg.rels(FOAF("logo"), FOAF("img"), FOAF("depiction"))
-            })
-            .flatten()
-            .map(function(imgPG) {
-                return imgPG.pointer.value;
-            }).value();
-
-    return imgUrlList;
-};
-
-
-foafUtils.getThumbnail = function (pgList) {
-    var imgUrlList = [];
-    var pixSyms =
-        _.chain(pgList)
-            .map(function (imgPG) {
-                var thumbs = _.chain(imgPG.rel(FOAF("thumbnail"))).map(function (thumbPG) {
-                    return (thumbPG.pointer.termType == "symbol") ? [thumbPG.pointer] :
-                        (imgPG.pointer.termType == "symbol") ? [imgPG.pointer] : []
-
-                })
-                    .flatten().value();
-                return (thumbs.length == 0) ? [imgPG.pointer] : thumbs
-            }
-        ).flatten().value();
-
-    return imgUrlList;
-};
-
 

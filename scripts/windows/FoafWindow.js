@@ -123,13 +123,22 @@ var FoafWindow = React.createClass({
 
     _submitEdition: function(data){
         var self = this;
+        var noValue = "...";
         this.log("update profile", data);
 
         _.chain(data)
             .map(function (d, k) {
                 var relUri = defaulfContext[k.split(":")[0]](k.split(":")[1]);
+                self.log("****************************************************************")
+                self.log(d)
                 // From now take the first graph to update. TODO: remove list of PGs.
-                self.state.activeTabs[0].personPG.update(relUri, d[0], d[1]);
+                if (!d[1]) {
+                    self.state.activeTabs[0].personPG.insert(relUri, d[0]);
+                }
+                else {
+                    self.state.activeTabs[0].personPG.update(relUri, d[0], d[1]);
+                }
+
             })
             .value()
 
