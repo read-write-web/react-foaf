@@ -19,13 +19,13 @@ var PersonContactOnProfileJumpWrapper = React.createClass({
             jumpedPersonPG.then(
                 function(pg) {
                     self.debug("Person PG has been jumped later successfully. Jumped pg:",pg);
-                    self.replaceState({
+                    self.setState({
                         jumpedPersonPG: pg
                     });
                 },
                 function(err) {
                     self.error("Can't jump pg:",err);
-                    self.replaceState({
+                    self.setState({
                         jumpError: err
                     });
                 }
@@ -33,7 +33,7 @@ var PersonContactOnProfileJumpWrapper = React.createClass({
         }
         else {
             self.debug("Person PG has been jumped immediately successfully. Jumped pg:",jumpedPersonPG);
-            self.replaceState({
+            self.setState({
                 jumpedPersonPG: jumpedPersonPG
             });
         }
@@ -42,6 +42,7 @@ var PersonContactOnProfileJumpWrapper = React.createClass({
     render: function() {
         return (
             <PersonContactOnProfile
+            key={this.props.personPG.getPointerKeyForReact()}
             onPersonContactClick={this.props.onPersonContactClick}
             personPG={this.props.personPG}
             jumpedPersonPG={this.state.jumpedPersonPG}

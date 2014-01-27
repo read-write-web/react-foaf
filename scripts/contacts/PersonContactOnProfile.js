@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 var PersonContactOnProfile = React.createClass({
-    mixins: [WithLogger,WithLifecycleLogging],
+    mixins: [WithLogger,WithLifecycleLoggingLite],
     componentName: "PersonContactOnProfile",
 
     propTypes: {
@@ -9,8 +9,8 @@ var PersonContactOnProfile = React.createClass({
         personPG: React.PropTypes.instanceOf($rdf.PointedGraph).isRequired,
         filterText: React.PropTypes.string.isRequired,
         // Optional:
-        jumpedPersonPG: React.PropTypes.instanceOf($rdf.PointedGraph),
-        jumpError: React.PropTypes.object
+        jumpedPersonPG: React.PropTypes.instanceOf($rdf.PointedGraph)
+        // jumpError: optional and undefined type
     },
 
 
@@ -27,7 +27,6 @@ var PersonContactOnProfile = React.createClass({
         }
         return true;
     },
-
 
     isJumpError: function() {
         return !!this.props.jumpError;
@@ -73,7 +72,7 @@ var PersonContactOnProfile = React.createClass({
     },
 
 
-    // TODO maybe this should be handled on the top-level jump wrapper directly, to keep this comp simpler
+    // TODO BAD: this should be handled in PersonContacts and filter the userlist
     displayUser: function(graphList) {
         // TODO this is bad, we use toString on an object which contains an array, kind of strangrr
         var userName = foafUtils.getName(graphList).toString().toLowerCase();
