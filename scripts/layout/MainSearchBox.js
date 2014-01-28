@@ -12,11 +12,11 @@ var MainSearchBox = React.createClass({
         return (
             <form id="search" onSubmit={this._handleSubmit}>
                 <input type="text"
-                placeholder="Search your contacts"
-                value={this.state.text}
-                width="100"
-                ref="url"
-                onChange={this._onChange}
+                    placeholder="Search your contacts"
+                    value={this.state.text}
+                    width="100"
+                    ref="url"
+                    onChange={this._onChange}
                 />
                 <button type="submit"  class="fontawesome-ok"></button>
                 <button type="submit" onClick={routeHelper.goToHome} class="fontawesome-ok">
@@ -40,7 +40,8 @@ var MainSearchBox = React.createClass({
 
     // Get image.
     _getUserImg: function() {
-        var imgUrlList = foafUtils.getImg(this.props.personPGs);
+        var personPG = this.props.personPG;
+        var imgUrlList = foafUtils.getImg([personPG]);
         return (imgUrlList && imgUrlList.length>0)? imgUrlList[0]:"img/avatar.png";
     }
 });

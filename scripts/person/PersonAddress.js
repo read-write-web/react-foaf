@@ -62,27 +62,17 @@ var PersonAddress = React.createClass({
         return viewTree;
     },
 
-    // TODO fixme HACK !!!
-    // TODO fixme HACK !!!
-    // TODO fixme HACK !!!
-    // TODO fixme HACK !!!
-    toPgArrayHack: function(pg) {
-        return [pg];
-    },
-
-
     _handleSubmit: function(e) {
         e.preventDefault();
-        console.log(this.props.personPG)
         this.props.submitEdition(this.props.personPG);
     },
 
     _getAddress: function(){
-        var personPG = this.toPgArrayHack(this.props.personPG); // TODO remove when possible
-        var streetList = foafUtils.getContactStreet(personPG);
-        var postalCodeList = foafUtils.getContactPostalCode(personPG);
-        var cityList = foafUtils.getContactCity(personPG);
-        var countryList = foafUtils.getContactCountry(personPG);
+        var personPG = this.props.personPG;
+        var streetList = foafUtils.getContactStreet([personPG]);
+        var postalCodeList = foafUtils.getContactPostalCode([personPG]);
+        var cityList = foafUtils.getContactCity([personPG]);
+        var countryList = foafUtils.getContactCountry([personPG]);
 
         return {
             "contact:street": streetList[0],

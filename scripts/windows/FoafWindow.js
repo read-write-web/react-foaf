@@ -89,7 +89,7 @@ var FoafWindow = React.createClass({
                 contentSpace = <ContentSpace clazz="space center">{content}</ContentSpace>;
             }
             else {
-                var currentTab = this._getCurrentTab()
+                //var currentTab = this._getCurrentTab()
                 this.debug("Active tabs have been found, will display tab:",currentTab);
                 var minimizeCurrentTab = this._minimizeTab.bind(this,currentTab);
                 var closeCurrentTab = this._closeTab.bind(this,currentTab);
@@ -99,15 +99,18 @@ var FoafWindow = React.createClass({
 
             var foafBoxTree =
                 <div className="PersonalProfileDocument">
-                    <MainSearchBox filterText={this.state.filterText} onUserInput={this._inputInSearchBox}/>
+                    <MainSearchBox
+                        personPG={this.state.personPG}
+                        filterText={this.state.filterText}
+                        onUserInput={this._inputInSearchBox}/>
                     <div id="actionNeeded">Action needed</div>
                     <div className="tabs">{contentSpace}</div>
                     <Footer
-                    activeTabs={this.state.activeTabs}
-                    tabs={this.state.tabs}
-                    onTabClicked={this._toggleTab}
-                    minimizeAllTabs={this._minimizeAllTabs}
-                    closeAllTabs={this._closeAllTabs}
+                        activeTabs={this.state.activeTabs}
+                        tabs={this.state.tabs}
+                        onTabClicked={this._toggleTab}
+                        minimizeAllTabs={this._minimizeAllTabs}
+                        closeAllTabs={this._closeAllTabs}
                     />
                 </div>;
             return foafBoxTree;

@@ -55,26 +55,18 @@ var PersonBasicInfo = React.createClass({
     /*
     *  Start our own functions here.
     * */
-    // TODO fixme HACK !!!
-    // TODO fixme HACK !!!
-    // TODO fixme HACK !!!
-    // TODO fixme HACK !!!
-    toPgArrayHack: function(pg) {
-        return [pg];
-    },
-
      _handleSubmit: function(e) {
         e.preventDefault();
         this.props.submitEdition(this.props.personPG);
     },
 
     _getBasicInfo: function() {
-        var personPG = this.toPgArrayHack(this.props.personPG); // TODO remove when possible
-        var nameList=foafUtils.getName(personPG);
-        var givenNameList=foafUtils.getGivenName(personPG);
-        var familyNameList=foafUtils.getFamilyName(personPG);
-        var firstNameList=foafUtils.getFirstName(personPG);
-        var workplaceHomepageList = foafUtils.getworkplaceHomepage(personPG);
+        var personPG = this.props.personPG;
+        var nameList=foafUtils.getName([personPG]);
+        var givenNameList=foafUtils.getGivenName([personPG]);
+        var familyNameList=foafUtils.getFamilyName([personPG]);
+        var firstNameList=foafUtils.getFirstName([personPG]);
+        var workplaceHomepageList = foafUtils.getworkplaceHomepage([personPG]);
 
         return {
             "foaf:name": nameList[0],

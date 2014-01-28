@@ -102,24 +102,16 @@ var PersonMoreInfo = React.createClass({
         return viewTree;
     },
 
-    // TODO fixme HACK !!!
-    // TODO fixme HACK !!!
-    // TODO fixme HACK !!!
-    // TODO fixme HACK !!!
-    toPgArrayHack: function(pg) {
-        return [pg];
-    },
-
     _handleSubmit: function(e) {
         e.preventDefault();
         this.props.submitEdition(this.props.personPG);
     },
 
     _getMoreInfo: function() {
-        var personPG = this.toPgArrayHack(this.props.personPG); // TODO remove when possible
-        var emailList = foafUtils.getEmails(personPG);
-        var phoneList = foafUtils.getPhones(personPG);
-        var homepageList = foafUtils.getHomepages(personPG);
+        var personPG = this.props.personPG;
+        var emailList = foafUtils.getEmails([personPG]);
+        var phoneList = foafUtils.getPhones([personPG]);
+        var homepageList = foafUtils.getHomepages([personPG]);
 
         // Return.
         return {
