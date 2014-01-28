@@ -96,7 +96,7 @@ var FoafWindow = React.createClass({
                 this.debug("Active tabs have been found, will display tab:",currentTab);
                 var minimizeCurrentTab = this._minimizeTab.bind(this,currentTab);
                 var closeCurrentTab = this._closeTab.bind(this,currentTab);
-                var content = <Person personPG={currentTab.personPG} submitEdition={this._submitEdition} />
+                var content = <Person personPG={currentTab.personPG} submitEdition={this._submitEdition} onContactSelected={this._loadOrMaximizeUserProfileFromUrl}/>
                 contentSpace = <ContentSpace onMinimize={minimizeCurrentTab} onClose={closeCurrentTab} isDefaultTab={this._isDefaultTab}>{content}</ContentSpace>;
             }
 
@@ -126,27 +126,27 @@ var FoafWindow = React.createClass({
 
     _submitEdition: function(personPG){
         var self = this;
-        var noValue = "...";
-        this.log("update profile", data);
+        var currentTab = this._getCurrentTab();
+        var currentTabPG = currentTab.personPG;
+        var baseUri = currentTab.personPG.pointer.value;
+        var data = new $rdf.Serializer(personPG.store).toN3(personPG.store);
+        currentTabPG.ajaxPut(baseUri, data,
+            function success() {
+                console.log("************** Success");
+                // Replace statements in current PG and change component state.
+                currentTabPG.replaceStatements(personPG);
+                self.setState({
+                    personPG: currentTabPG
+                });
+            },
+            function error(status, xhr) {
+                //TODO Restore current PG.
+                console.log("************** Error");
+                console.log(status)
+                console.log(xhr)
+            }
+        )
 
-        /*
-         _.chain(data)
-         .map(function (d, k) {
-         var relUri = defaulfContext[k.split(":")[0]](k.split(":")[1]);
-         self.log("****************************************************************")
-         self.log(d)
-         // From now take the first graph to update. TODO: remove list of PGs.
-         if (!d[1]) {
-         self.state.activeTabs[0].personPG.insert(relUri, d[0]);
-         }
-         else {
-         self.state.activeTabs[0].personPG.update(relUri, d[0], d[1]);
-         }
-
-         })
-         .value()
-
-         */
         // Return.
         return false;
     },

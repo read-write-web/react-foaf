@@ -1,6 +1,6 @@
 
 // proxy
-$rdf.Fetcher.crossSiteProxyTemplate = "http://localhost:9000/srv/cors?url=";
+//$rdf.Fetcher.crossSiteProxyTemplate = "http://localhost:9000/srv/cors?url=";
 //$rdf.Fetcher.homeServer = "http://localhost:9000/";
 //$rdf.Fetcher.crossSiteProxyTemplate = "http://data.fm/proxy?uri=";
 //$rdf.Fetcher.onlyUseProxy = false;
@@ -12,9 +12,9 @@ var foafSpec = "http://xmlns.com/foaf/spec/";
 var store = new $rdf.IndexedFormula();
 $rdf.fetcher(store, 1000, true); // this makes "store.fetcher" variable available
 
-var foafDocURL = "http://bblfish.net/people/henry/card#me";
+//var foafDocURL = "http://bblfish.net/people/henry/card#me";
 //var foafDocURL = "https://my-profile.eu/people/deiu/card#me";
-//var foafDocURL = "https://localhost:8443/2013/backbone#me";
+var foafDocURL = "https://localhost:8443/2013/backbone#me";
 
 
 // TODO need to add hash if needed: we do not look for primary topic anymore
