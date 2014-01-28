@@ -30,8 +30,8 @@ var MainSearchBox = React.createClass({
 
      // Handlers.
      _handleSubmit: function(e) {
+         e.preventDefault(); // Cancel browser default behavior of submit.
         //this.props.onUserInput(this.state.text);
-        return false; //don't send result to web server
     },
 
     _onChange: function(e) {

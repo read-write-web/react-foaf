@@ -1,14 +1,22 @@
 /** @jsx React.DOM */
 
 var ContentSpace = React.createClass({
+    mixins: [WithLogger,WithLifecycleLoggingLite],
+    componentName: "ContentSpace",
 
     render:function(){
+
+        var ulClasses = React.addons.classSet({
+            'hidden': this.props.isDefaultTab(), // Hide space tools if default tab.
+            'space-tools': true,
+            'float-right': true
+        });
 
         var spaceTree =
             <div className="space center">
                 <div className="space-bar clearfix">
                     <div className="space-title float-left title-case">"Test Title"</div>
-                    <ul className="space-tools float-right">
+                    <ul className={ulClasses}>
                         <li className="space-options" style={{display: "inline-block"}}>
                             <i class="fa fa-cog"></i>
                         </li>
@@ -28,6 +36,4 @@ var ContentSpace = React.createClass({
 
         return spaceTree;
     }
-
-
 });

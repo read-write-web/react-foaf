@@ -21,6 +21,12 @@ var FoafWindow = React.createClass({
         return this.state.personPG
     },
 
+
+    _isDefaultTab: function() {
+        var currentTab = this._getCurrentTab();
+        return (!currentTab)? true:false;
+    },
+
     _initRouter: function() {
         var self = this;
         var onRouteChangeHandler = {
@@ -86,7 +92,7 @@ var FoafWindow = React.createClass({
             if ( !currentTab ) {
                 this.debug("No active tab, will display PersonContacts");
                 var content = <PersonContacts personPG={this.state.personPG} onContactSelected={this._loadOrMaximizeUserProfileFromUrl}/>;
-                contentSpace = <ContentSpace clazz="space center">{content}</ContentSpace>;
+                contentSpace = <ContentSpace clazz="space center" isDefaultTab={this._isDefaultTab}>{content}</ContentSpace>;
             }
             else {
                 //var currentTab = this._getCurrentTab()
@@ -94,7 +100,7 @@ var FoafWindow = React.createClass({
                 var minimizeCurrentTab = this._minimizeTab.bind(this,currentTab);
                 var closeCurrentTab = this._closeTab.bind(this,currentTab);
                 var content = <Person personPG={currentTab.personPG} submitEdition={this._submitEdition} />
-                contentSpace = <ContentSpace onMinimize={minimizeCurrentTab} onClose={closeCurrentTab}>{content}</ContentSpace>;
+                contentSpace = <ContentSpace onMinimize={minimizeCurrentTab} onClose={closeCurrentTab} isDefaultTab={this._isDefaultTab}>{content}</ContentSpace>;
             }
 
             var foafBoxTree =
