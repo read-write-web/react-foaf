@@ -19,7 +19,7 @@ var MainSearchBox = React.createClass({
                     onChange={this._onChange}
                 />
                 <button type="submit"  class="fontawesome-ok"></button>
-                <button type="submit" onClick={routeHelper.goToHome} class="fontawesome-ok">
+                <button type="submit" onClick={this.props.minimizeAllTabs} class="fontawesome-ok">
                     <Pix src={this._getUserImg()}/>
                 </button>
             </form>

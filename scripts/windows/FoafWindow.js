@@ -102,7 +102,9 @@ var FoafWindow = React.createClass({
                     <MainSearchBox
                         personPG={this.state.personPG}
                         filterText={this.state.filterText}
-                        onUserInput={this._inputInSearchBox}/>
+                        onUserInput={this._inputInSearchBox}
+                        minimizeAllTabs={this._minimizeAllTabs}
+                    />
                     <div id="actionNeeded">Action needed</div>
                     <div className="tabs">{contentSpace}</div>
                     <Footer
