@@ -47,16 +47,13 @@ var FoafWindow = React.createClass({
     _initState: function(profileURL,openContactProfileURL) {
         var self = this;
         var lastAction = (openContactProfileURL ? this._loadOrMaximizeUserProfileFromUrl.bind(this,openContactProfileURL) : undefined);
-        this._fetchURL(profileURL)
+        fetchPointedGraph(profileURL)
             .then(function (pg) {
                 self.setState({
                     personPG: pg
                 });
             })
-            .then(lastAction)
-            .fail(function (err) {
-                self.log("Error while initializing the FoafWindow with url="+profileURL+" and openContactProfileURL="+openContactProfileURL,err);
-            });
+            .then(lastAction);
     },
 
     /**
@@ -125,36 +122,31 @@ var FoafWindow = React.createClass({
         }
     },
 
-    _fetchURL: function(url) {
-        if (!url) return;
-        var fetcher = $rdf.fetcher(store, 10000, true);
-        var referer = window.location; // TODO rework the referer with the url of a foaf profile previously visited
-        return fetcher.fetch(url, referer);
-    },
+
 
     _submitEdition: function(personPG){
         var self = this;
-        var currentTab = this._getCurrentTab();
-        var currentTabPG = currentTab.personPG;
-        var baseUri = currentTab.personPG.pointer.value;
-        var data = new $rdf.Serializer(personPG.store).toN3(personPG.store);
+        var noValue = "...";
+        this.log("update profile", data);
 
-        currentTabPG.ajaxPut(baseUri, data,
-            function success() {
-                console.log("************** Success");
-                // Replace statements in current PG.
-                currentTabPG.replaceStatements(personPG);
+        /*
+         _.chain(data)
+         .map(function (d, k) {
+         var relUri = defaulfContext[k.split(":")[0]](k.split(":")[1]);
+         self.log("****************************************************************")
+         self.log(d)
+         // From now take the first graph to update. TODO: remove list of PGs.
+         if (!d[1]) {
+         self.state.activeTabs[0].personPG.insert(relUri, d[0]);
+         }
+         else {
+         self.state.activeTabs[0].personPG.update(relUri, d[0], d[1]);
+         }
 
-                self.setState({
-                    personPG: currentTabPG
-                });
-            },
-            function error() {
-                //TODO Restore current PG.
-                console.log("************** Error");
-            }
-        )
+         })
+         .value()
 
+         */
         // Return.
         return false;
     },
@@ -172,12 +164,9 @@ var FoafWindow = React.createClass({
 
     _createNewUserTabFromUrl: function(url) {
         var self = this;
-        self._fetchURL(url)
+        fetchPointedGraph(url)
             .then(function(pg) {
                 self._createNewUserTab(pg);
-            })
-            .fail(function(err) {
-                self.error("Can't _createNewUserTabFromUrl for URL = " +url,err);
             });
     },
 

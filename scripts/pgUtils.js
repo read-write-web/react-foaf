@@ -1,24 +1,6 @@
 var pgUtils = {};
 
 
-// TODO this will be enhanced later, not used yet!
-
-
-pgUtils.literalNodePredicate = function(node) {
-    return node instanceof $rdf.Literal;
-}
-pgUtils.symbolNodePredicate = function(node) {
-    return node instanceof $rdf.Symbol;
-}
-pgUtils.blankNodePredicate = function(node) {
-    return node instanceof $rdf.BlankNode;
-}
-
-pgUtils.literalNodeToValue = function(literalNode) {
-    return literalNode.value;
-}
-
-
 /**
  * Get the nodes for a given relation symbol
  * @param pg
@@ -34,25 +16,61 @@ pgUtils.getNodes = function(pg, relSym) {
 
 pgUtils.getLiteralNodes = function(pg, relSym) {
     return _.chain(pgUtils.getNodes(pg,relSym))
-        .filter(pgUtils.literalNodePredicate)
+        .filter($rdf.Stmpl.isLiteralNode)
         .value();
 }
 pgUtils.getSymbolNodes = function(pg, relSym) {
     return _.chain(pgUtils.getNodes(pg,relSym))
-        .filter(pgUtils.symbolNodePredicate)
+        .filter($rdf.Stmpl.isSymbolNode)
         .value();
 }
 pgUtils.getBlankNodes = function(pg, relSym) {
     return _.chain(pgUtils.getNodes(pg,relSym))
-        .filter(pgUtils.blankNodePredicate)
+        .filter($rdf.Stmpl.isBlankNode)
         .value();
 }
 
 
-pgUtils.getLiteralValues = function(pg, relSym) {
-    return _.chain(pgUtils.getLiteralNodes(pg,relSym))
-        .map(pgUtils.literalNodeToValue)
+/**
+ *
+ * @param pgList
+ * @returns {*}
+ */
+pgUtils.getLiteralValues = function(pgList) {
+    var rels = (slice.call(arguments, 1));
+    var res =  _.chain(pgList)
+        .map(function (pg) {
+            return pg.getLiteral(rels);
+        })
+        .flatten()
         .value();
+    return res;
 }
 
+pgUtils.pointerPredicate = function(nodePredicate) {
+    return function(pg) {
+
+    }
+}
+
+
+pgUtils.pgFilters = {};
+pgUtils.pgFilters.isLiteralPointer = function(pg) {
+    return pg.isLiteralPointer();
+}
+pgUtils.pgFilters.isBlankNodePointer = function(pg) {
+    return pg.isBlankNodePointer();
+}
+pgUtils.pgFilters.isSymbolPointer = function(pg) {
+    return pg.isSymbolPointer();
+}
+
+
+pgUtils.pgTransformers = {};
+pgUtils.pgTransformers.literalPointerToValue = function(pg) {
+    return $rdf.Stmpl.literalNodeToValue(pg.pointer);
+}
+pgUtils.pgTransformers.symbolPointerToValue = function(pg) {
+    return $rdf.Stmpl.symbolNodeToValue(pg.pointer);
+}
 

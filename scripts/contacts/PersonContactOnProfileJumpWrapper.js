@@ -24,7 +24,7 @@ var PersonContactOnProfileJumpWrapper = React.createClass({
                     });
                 },
                 function(err) {
-                    self.error("Can't jump pg:",err);
+                    self.warn("Can't jump pg:",err.message);
                     self.setState({
                         jumpError: err
                     });

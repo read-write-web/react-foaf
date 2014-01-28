@@ -57,7 +57,6 @@ var PersonContactOnProfile = React.createClass({
             'error': this.isJumpError(),
             'filtered-user' : !this.displayUser(graphList)
         });
-        this.debug("Classes Render person2. Jump error? ",this.props.jumpError);
 
         // Return.
         return (

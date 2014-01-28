@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv='Content-type' content='text/html; charset=utf-8'>
+    <title>Basic Example with external JSX</title>
+    <link rel="stylesheet/less" href="css/base.less">
+    <script src="lib/less.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+    <!--script src="scripts/showdown.js"></script-->
+    <!--script src="http://code.jquery.com/jquery-1.10.0.min.js"></script-->
+    <!--script src="http://underscorejs.org/underscore.js"></script-->
+    <!--script src="http://cdnjs.cloudflare.com/ajax/libs/rxjs/2.2.10/rx.js"></script-->
+    <!--script src="http://cdnjs.cloudflare.com/ajax/libs/rxjs/2.2.10/rx.async.js"></script-->
+    <!--script src="http://fb.me/react-0.8.0.min.js"></script-->
+    <!--script src="http://fb.me/react-with-addons-0.8.0.js"></script-->
+
+    <script src="lib/jquery-2.0.3.min.js"></script>
+    <script src="lib/underscore.js"></script>
+    <script src="lib/underscore.string.js"></script>
+    <script src="lib/stacktrace.js"></script>
+    <script src="lib/rx.js"></script>
+    <script src="lib/rx.async.js"></script>
+    <script src="lib/react-0.8.0.js"></script>
+    <script src="lib/react-with-addons-0.8.0.js"></script>
+    <script src="lib/q.js"></script>
+    <script src="lib/JSXTransformer.js"></script>
+    <script src="lib/rdflib.js"></script>
+    <script src="scripts/Stample.rdfibutils.js"></script>
+    <script src="lib/pointedGraph.js"></script>
+    <script src="lib/fetcherWithPromise.js"></script>
+    <script src="lib/director.js"></script>
+
+    <script src="scripts/pgUtils.js"></script>
+    <script src="scripts/foafUtils.js"></script>
+
+</head>
+<body>
+
+
+
+<script type="text/javascript" src="scripts/routing.js"></script>
+<script type="text/javascript" src="scripts/AppConfig.js"></script>
+
+<input type="button" value="Click"/>
+
+<script>
+
+    function FOAF(name) { return $rdf.sym("http://xmlns.com/foaf/0.1/"+name) }
+    function CONTACT(name) { return $rdf.sym("http://www.w3.org/2000/10/swap/pim/contact#"+name) }
+    function GEOLOC(name) { return $rdf.sym("http://www.w3.org/2003/01/geo/wgs84_pos#" + name) }
+    function RDFS(name) { return $rdf.sym("http://www.w3.org/2000/01/rdf-schema#"+name) }
+
+    var profileURL = "http://bblfish.net/people/henry/card#me";
+    fetchPointedGraph(profileURL).then(function(pg) {
+        console.debug("Fetched:",profileURL);
+        console.debug("Literal values:", pgUtils.getLiteralValues([pg],FOAF("name"),FOAF("nick")) )
+        console.debug("Literal values:", pgUtils.getLiteralValues([pg],FOAF("toto")) )
+    });
+
+</script>
+
+
+</body>
+</html>

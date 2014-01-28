@@ -4,12 +4,35 @@
 
 $rdf.Stmpl = {
 
-	/**
-	 * remove hash from URL - this gets the document location
-	 * @param url
-	 * @returns {*}
-	 */
-	fragmentless: function(url) {
-		return url.split('#')[0];
-	}
+    /**
+     * remove hash from URL - this gets the document location
+     * @param url
+     * @returns {*}
+     */
+    fragmentless: function(url) {
+        return url.split('#')[0];
+    },
+
+
+    isLiteralNode: function(node) {
+        return node.termType == 'literal';
+    },
+    isSymbolNode: function(node) {
+        return node.termType == 'symbol';
+    },
+    isBlankNode: function(node) {
+        return node.termType == 'bnode';
+    },
+
+    literalNodeToValue: function(node) {
+        Preconditions.checkArgument(this.isLiteralNode(node), "Node is not a literal node:"+node);
+        return node.value;
+    },
+    symbolNodeToValue: function(node) {
+        Preconditions.checkArgument(this.isSymbolNode(node), "Node is not a symbol node:"+node);
+        return node.value;
+    }
+
+    
+
 }
