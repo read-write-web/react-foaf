@@ -13,6 +13,14 @@ $rdf.Stmpl = {
         return url.split('#')[0];
     },
 
+    isFragmentless: function(url) {
+        return url.indexOf('#') == -1;
+    },
+
+    isFragmentlessSymbol: function(node) {
+        return this.isSymbolNode(node) && this.isFragmentless(this.symbolNodeToValue(node));
+    },
+
 
     isLiteralNode: function(node) {
         return node.termType == 'literal';
