@@ -10,7 +10,14 @@ function RDFS(name) { return $rdf.sym("http://www.w3.org/2000/01/rdf-schema#"+na
 /*
 * Local Utils.
 * */
-function getValue(pgList) {
+foafUtils.getValue = function(pg) {
+    var args = (slice.call(arguments, 1));
+    var resList = pg.getLiteral(args);
+    if (resList.length == 0) resList = pg.getSymbol(args);
+    return resList;
+}
+
+function getValueList(pgList) {
     var args = (slice.call(arguments, 1));
     var res =  _.chain(pgList)
         .map(function (pg) {
@@ -38,62 +45,62 @@ function cleanPhone(phone) {
 }
 
 foafUtils.getEmails = function(pgList) {
-    var res = getValue(pgList, FOAF("mbox"));
+    var res = getValueList(pgList, FOAF("mbox"));
     return _.map(res, cleanEmail);
 };
 
 foafUtils.getMbox = function(pgList) {
-    var res = getValue(pgList, FOAF("mbox"));
+    var res = getValueList(pgList, FOAF("mbox"));
     return _.map(res, cleanEmail);
 };
 
 foafUtils.getPhones = function(pgList) {
-    var res = getValue(pgList, FOAF("phone"));
+    var res = getValueList(pgList, FOAF("phone"));
     return _.map(res, cleanPhone);
 };
 
 foafUtils.getHomepages = function(pgList) {
-    return getValue(pgList, FOAF("homepage"));
+    return getValueList(pgList, FOAF("homepage"));
 };
 
 foafUtils.getName = function(pgList, options) {
-    return getValue(pgList, FOAF("name"));
+    return getValueList(pgList, FOAF("name"));
 };
 
 foafUtils.getGivenName = function(pgList, options) {
-    return getValue(pgList, FOAF("givenName"), FOAF("givenname"));
+    return getValueList(pgList, FOAF("givenName"), FOAF("givenname"));
 };
 
 foafUtils.getFamilyName = function(pgList, options) {
-    return getValue(pgList, FOAF("familyName"), FOAF("family_name"));
+    return getValueList(pgList, FOAF("familyName"), FOAF("family_name"));
 };
 
 foafUtils.getFirstName = function(pgList, options) {
-    return getValue(pgList, FOAF("firstName"), FOAF("first_name"));
+    return getValueList(pgList, FOAF("firstName"), FOAF("first_name"));
 };
 
 foafUtils.getLastName = function(pgList, options) {
-    return getValue(pgList, FOAF("lastName"), FOAF("last_name"));
+    return getValueList(pgList, FOAF("lastName"), FOAF("last_name"));
 };
 
 foafUtils.getGender = function(pgList, options) {
-    return getValue(pgList, FOAF("gender"));
+    return getValueList(pgList, FOAF("gender"));
 };
 
 foafUtils.getworkplaceHomepage = function(pgList, options) {
-    return getValue(pgList, FOAF("workplaceHomepage"));
+    return getValueList(pgList, FOAF("workplaceHomepage"));
 };
 
 foafUtils.getWorkInfoHomepage = function(pgList, options) {
-    return getValue(pgList, FOAF("workInfoHomepage"));
+    return getValueList(pgList, FOAF("workInfoHomepage"));
 };
 
 foafUtils.getImg = function (pgList, options) {
-    return getValue(pgList, FOAF("logo"), FOAF("img"), FOAF("depiction"));
+    return getValueList(pgList, FOAF("logo"), FOAF("img"), FOAF("depiction"));
 };
 
 foafUtils.getThumbnail = function (pgList) {
-    return getValue(pgList, FOAF("thumbnail"));
+    return getValueList(pgList, FOAF("thumbnail"));
 };
 
 foafUtils.getContactHome = function(pgList) {

@@ -6,56 +6,79 @@ var PersonAddress = React.createClass({
 
     getInitialState: function() {
         return {
-            personPGCopy: this.props.personPG
+            personPG: undefined
         }
     },
 
     render: function() {
-        // Get info of address.
+        var personPG = this.props.personPG; // TODO: Test presence of PG.
+
+        // Get info.
         var address = this._getAddress();
         this.log(address);
 
-        var viewTree =
-            <div className="address">
-                <div className="title-case">Address</div>
-                <div className="content address-content">
-                {address["contact:street"]}<br/>
+        // Define HTML.
+        var viewTree;
+        if (!this.props.modeEdit) {
+            viewTree =
+                <div className="address">
+                    <div className="title-case">Address</div>
+                    <div className="content address-content">
+                {address["contact:street"]}
+                        <br/>
                 {address["contact:postalCode"]}
-                {address["contact:city"]}<br/>
-                {address["contact:country"]}<br/>
+                {address["contact:city"]}
+                        <br/>
+                {address["contact:country"]}
+                        <br/>
+                    </div>
                 </div>
-            </div>
-
-        var viewTreeEdit =
-            <div className="address">
-                <div className="title-case">Address</div>
-                <div className="content address-content">
-                    <form onSubmit={this._handleSubmit}>
-                        <input type="text" valueLink={this.linkToPgLiteral(this.state.personPGCopy, 'contact:street')}/>
-                    </form> <br/>
-                    <form onSubmit={this._handleSubmit}>
-                        <input type="text" valueLink={this.linkToPgLiteral(this.state.personPGCopy, 'contact:postalCode')}/>
-                    </form>
-                    <form onSubmit={this._handleSubmit}>
-                        <input type="text" valueLink={this.linkToPgLiteral(this.state.personPGCopy, 'contact:city')}/>
-                    </form><br/>
-                    <form onSubmit={this._handleSubmit}>
-                        <input type="text" valueLink={this.linkToPgLiteral(this.state.personPGCopy, 'contact:country')}/>
-                    </form><br/>
+        }
+        else {
+            viewTree =
+                <div className="address">
+                    <div className="title-case">Address</div>
+                    <div className="content address-content">
+                        <form onSubmit={this._handleSubmit}>
+                            <input type="text" valueLink={this.linkToPgLiteral(personPG, 'contact:street')}/>
+                        </form>
+                        <br/>
+                        <form onSubmit={this._handleSubmit}>
+                            <input type="text" valueLink={this.linkToPgLiteral(personPG, 'contact:postalCode')}/>
+                        </form>
+                        <form onSubmit={this._handleSubmit}>
+                            <input type="text" valueLink={this.linkToPgLiteral(personPG, 'contact:city')}/>
+                        </form>
+                        <br/>
+                        <form onSubmit={this._handleSubmit}>
+                            <input type="text" valueLink={this.linkToPgLiteral(personPG, 'contact:country')}/>
+                        </form>
+                        <br/>
+                    </div>
                 </div>
-            </div>
+        }
 
-        // Return depending on the mode.
-        return (this.props.modeEdit)? viewTreeEdit: viewTree;
+        // Return.
+        return viewTree;
     },
+
+    // TODO fixme HACK !!!
+    // TODO fixme HACK !!!
+    // TODO fixme HACK !!!
+    // TODO fixme HACK !!!
+    toPgArrayHack: function(pg) {
+        return [pg];
+    },
+
 
     _handleSubmit: function(e) {
         e.preventDefault();
-        this.props.submitEdition();
+        console.log(this.props.personPG)
+        this.props.submitEdition(this.props.personPG);
     },
 
     _getAddress: function(){
-        var personPG = this.props.personPG;
+        var personPG = this.toPgArrayHack(this.props.personPG); // TODO remove when possible
         var streetList = foafUtils.getContactStreet(personPG);
         var postalCodeList = foafUtils.getContactPostalCode(personPG);
         var cityList = foafUtils.getContactCity(personPG);

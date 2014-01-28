@@ -139,11 +139,10 @@ var WithLifecycleLoggingLite = {
  * @param {*} value current value of the link
  * @param {function} requestChange callback to request a change
  */
-function ReactLink(value, requestChange,  PG, rel) {
+function ReactLink(value, requestChange) {
     this.value = value;
     this.requestChange = requestChange;
-    this.PG = PG;
-    this.rel = rel
+    // TODO: devrais être
 }
 
 
@@ -179,30 +178,25 @@ var RdfLinkedPgMixin = {
      * ReactLink will have the current value of this.state[key] and will call
      * setState() when a change is requested.
      *
-     * @param {string} key state key to update. Note: you may want to use keyOf()
-     * if you're using Google Closure Compiler advanced mode.
+     * @param {pointedGraph, rel}
+     *      pointerGraph: pointedGraph containing the graph to be updated.
+     *      rel: string of attribute that is being updated (foaf:name, foaf:name, ...)
      * @return {ReactLink} ReactLink instance linking to the state.
      */
 
     linkToPgLiteral: function(PG, rel) {
         function getCurrentValue() {
-            console.log("********************* getCurrentValue ****************************")
-            var currentValue = foafUtils.mapAttrToFunc[rel](PG);
-            return currentValue[0];
+            // Use rel and PG to get corresponding value.
+            var currentValueList =  foafUtils.getValue(PG, mapKeyToSym[rel]);
+            return currentValueList[0];
         }
         function onRequestChange(newValue) {
-            console.log("********************* onRequestChange !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            // Update the store with newValue.
+            PG.updateStore(mapKeyToSym[rel], newValue);
 
-            if (!this.value) {
-                this.PG.insert(mapKeyToSym[this.rel], newValue);
-            }
-            else {
-                this.PG.update(mapKeyToSym[this.rel], newValue, this.value);
-            }
-
-            // set new value on PH
+            // Set new value on component.
             this.value = newValue;
         }
-        return new ReactLink(getCurrentValue(),onRequestChange, PG[0], rel);
+        return new ReactLink(getCurrentValue(),onRequestChange);
     }
 };

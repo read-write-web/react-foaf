@@ -6,66 +6,75 @@ var PersonBasicInfo = React.createClass({
 
     getInitialState: function() {
         return {
-            personPGCopy: this.props.personPG
+            personPG: undefined
         }
     },
 
     render: function() {
-        var personPG = this.state.personPGCopy; // TODO remove when possible
-
-        // TODO: Test presence of PG.
+        var personPG = this.props.personPG; // // TODO: Test presence of PG.
 
         // Get info.
         var info = this._getBasicInfo();
         this.log(info);
 
         // Define Html.
-        var viewTree =
+        var viewTree;
+        if (!this.props.modeEdit) {
+            viewTree =
             <div className="basic">
                 <div className="name title-case">{info["foaf:name"]}</div>
                 <div className="surname title-case">{info["foaf:givenname"]}</div>
                 <div className="company">{info["foaf:workplaceHomepage"]}</div>
             </div>
-
-        var viewTreeEdit =
+        }
+        else {
+            viewTree =
             <div className="basic">
                 <div className="name title-case">
                     <form onSubmit={this._handleSubmit}>
-                        <input type="text" valueLink={this.linkToPgLiteral(this.state.personPGCopy, 'foaf:name')} />
+                        <input type="text" valueLink={this.linkToPgLiteral(personPG, 'foaf:name')} />
                     </form>
                 </div>
                 <div className="surname title-case">
                     <form onSubmit={this._handleSubmit}>
-                        <input type="text" valueLink={this.linkToPgLiteral(this.state.personPGCopy, 'foaf:givenname')} />
+                        <input type="text" valueLink={this.linkToPgLiteral(personPG, 'foaf:givenname')} />
                     </form>
                 </div>
                 <div className="company">
                     <form onSubmit={this._handleSubmit}>
-                        <input type="text" valueLink={this.linkToPgLiteral(this.state.personPGCopy, 'foaf:workplaceHomepage')} />
+                        <input type="text" valueLink={this.linkToPgLiteral(personPG, 'foaf:workplaceHomepage')} />
                     </form>
                 </div>
             </div>
+        }
 
-        // Return depending on the mode.
-        return (this.props.modeEdit)? viewTreeEdit: viewTree;
+        // Return.
+        return viewTree;
     },
 
     /*
     *  Start our own functions here.
     * */
+    // TODO fixme HACK !!!
+    // TODO fixme HACK !!!
+    // TODO fixme HACK !!!
+    // TODO fixme HACK !!!
+    toPgArrayHack: function(pg) {
+        return [pg];
+    },
 
-    _handleSubmit: function(e) {
+     _handleSubmit: function(e) {
         e.preventDefault();
-        this.props.submitEdition();
+        this.props.submitEdition(this.props.personPG);
     },
 
     _getBasicInfo: function() {
-        var personPG = this.props.personPG;
-        var nameList=foafUtils.getName(this.state.personPGCopy);
-        var givenNameList=foafUtils.getGivenName(this.state.personPGCopy);
-        var familyNameList=foafUtils.getFamilyName(this.state.personPGCopy);
-        var firstNameList=foafUtils.getFirstName(this.state.personPGCopy);
-        var workplaceHomepageList = foafUtils.getworkplaceHomepage(this.state.personPGCopy);
+        var personPG = this.toPgArrayHack(this.props.personPG); // TODO remove when possible
+        var nameList=foafUtils.getName(personPG);
+        var givenNameList=foafUtils.getGivenName(personPG);
+        var familyNameList=foafUtils.getFamilyName(personPG);
+        var firstNameList=foafUtils.getFirstName(personPG);
+        var workplaceHomepageList = foafUtils.getworkplaceHomepage(personPG);
 
         return {
             "foaf:name": nameList[0],

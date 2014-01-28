@@ -8,7 +8,7 @@ var Person = React.createClass({
         return {
             modeEdit:false,
             editText:"Edit",
-            personInfo:{}
+            personPGCopy: undefined
         }
     },
 
@@ -29,11 +29,18 @@ var Person = React.createClass({
                 );
         }
         else {
-            this.debug("Rendering person")
-            var personPG = this.toPgArrayHack(this.props.personPG); // TODO remove when possible
+            this.debug("Rendering person");
+            var personPG;
+            if (!this.state.modeEdit) {
+                personPG = this.props.personPG;
+            }
+            else {
+                personPG = this.props.personPG.deepCopyOfGraph()
+            }
+            this.log(personPG);
 
             // Set user name.
-            var userName = foafUtils.getName(personPG);
+            var userName = foafUtils.getName([personPG]);
 
             return (
                 <div id="profile" className="clearfix center">
@@ -48,9 +55,8 @@ var Person = React.createClass({
                     <PersonMoreInfo
                         personPG={personPG}
                         modeEdit={this.state.modeEdit}
-                        personPG={personPG}
                         submitEdition={this._submitEdition}/>
-                    <PersonWebId personPG={this.props.personPG}/>
+                    <PersonWebId personPG={personPG}/>
                 </div>
                 );
         }
@@ -62,32 +68,31 @@ var Person = React.createClass({
 
     _handleClickEdit: function(e) {
         this.log('_handleClickEdit');
-        this.log(this.state.personInfo);
 
         if (this.state.modeEdit) {
-            this._submitEdition(this.state.personInfo);
+            this._submitEdition();
         }
         else {
             this.setState({
                 modeEdit:true,
-                editText:"save",
-                personInfo:{}
+                editText:"save"
             });
         }
     },
 
-    _submitEdition: function() {
+    _submitEdition: function(personPG) {
+        this.log('***************************************************');
+        this.log('***************************************************');
+        this.log('***************************************************');
         this.log('_submitEdition');
-        this.log(this.state.personInfo);
-
+        console.log(personPG);
         // Submit changes.
-        this.props.submitEdition(this.state.personInfo);
+        this.props.submitEdition(personPG);
 
         // Cancel Edit mode.
         this.setState({
             modeEdit:false,
-            editText:"edit",
-            personInfo:{}
+            editText:"edit"
         });
 
         // And return false.
@@ -98,6 +103,6 @@ var Person = React.createClass({
         var personPG = this.toPgArrayHack(this.props.personPG); // TODO remove when possible
         var imgUrlList = foafUtils.getImg(personPG);
         return (imgUrlList && imgUrlList.length>0)? imgUrlList[0]:"img/avatar.png";
-    },
+    }
 
 });

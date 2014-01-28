@@ -121,33 +121,32 @@ var FoafWindow = React.createClass({
         return fetcher.fetch(url, referer);
     },
 
-    _submitEdition: function(data){
+    _submitEdition: function(personPG){
         var self = this;
-        var noValue = "...";
-        this.log("update profile", data);
+        var currentTab = this._getCurrentTab();
+        var currentTabPG = currentTab.personPG;
+        var baseUri = currentTab.personPG.pointer.value;
+        var data = new $rdf.Serializer(personPG.store).toN3(personPG.store);
 
-        /*
-        _.chain(data)
-            .map(function (d, k) {
-                var relUri = defaulfContext[k.split(":")[0]](k.split(":")[1]);
-                self.log("****************************************************************")
-                self.log(d)
-                // From now take the first graph to update. TODO: remove list of PGs.
-                if (!d[1]) {
-                    self.state.activeTabs[0].personPG.insert(relUri, d[0]);
-                }
-                else {
-                    self.state.activeTabs[0].personPG.update(relUri, d[0], d[1]);
-                }
+        currentTabPG.ajaxPut(baseUri, data,
+            function success() {
+                console.log("************** Success");
+                // Replace statements in current PG.
+                currentTabPG.replaceStatements(personPG);
 
-            })
-            .value()
+                self.setState({
+                    personPG: currentTabPG
+                });
+            },
+            function error() {
+                //TODO Restore current PG.
+                console.log("************** Error");
+            }
+        )
 
-        */
         // Return.
         return false;
     },
-
 
     _loadOrMaximizeUserProfileFromUrl: function(url) {
         this.log("_loadOrMaximizeUserProfileFromUrl ",url);
