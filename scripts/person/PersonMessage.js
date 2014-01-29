@@ -4,16 +4,10 @@ var PersonMessage = React.createClass({
     render: function() {
         // Get props.
         var message = this._getMessage();
-        var propName = this.props.userName;
-
-        // Format the name.
-        var noValue = "...";
-        var name = (propName && propName.length>0)? propName[0]:noValue;
-        var nameTrunc = name.split(" ");
 
         return (
             <div className="moreInfo">
-                <div className="lastInteraction">Last message from {nameTrunc[0]}: <span>{message.lastMessageDate}</span></div>
+                <div className="lastInteraction">Last message from {this._getUsername()}: <span>{message.lastMessageDate}</span></div>
                 <div className="message">{message.lastMessage}</div>
                 <div className="nextStep"><a href="#">Write back</a></div>
             </div>
@@ -28,4 +22,11 @@ var PersonMessage = React.createClass({
         }
     },
 
+    _getUsername: function() {
+        var userName = foafUtils.getName([this.props.personPG]);
+        var noValue = "...";
+        var name = (userName && userName.length>0)? userName[0]:noValue;
+        // Only take the first name.
+        return name.split(" ")[0];
+    }
 });

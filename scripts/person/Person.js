@@ -38,9 +38,6 @@ var Person = React.createClass({
                 personPG = this.props.personPG.deepCopyOfGraph()
             }
 
-            // Set user name.
-            var userName = foafUtils.getName([personPG]);
-
             return (
                 <div id="profile" className="clearfix center">
                     <div className="edit-profile" onClick={this._handleClickEdit}>{this.state.editText}</div>
@@ -50,7 +47,7 @@ var Person = React.createClass({
                         modeEdit={this.state.modeEdit}
                         submitEdition={this._submitEdition}/>
                     <PersonNotifications personPG={personPG}/>
-                    <PersonMessage userName={userName} personPG={personPG}/>
+                    <PersonMessage personPG={personPG}/>
                     <PersonMoreInfo
                         personPG={personPG}
                         modeEdit={this.state.modeEdit}

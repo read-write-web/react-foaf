@@ -7,7 +7,7 @@ var ContentSpace = React.createClass({
     render:function(){
 
         var ulClasses = React.addons.classSet({
-            'hidden': this.props.isDefaultTab(), // Hide space tools if default tab.
+            'hide': this.props.isDefaultTab(), // Hide space tools if default tab.
             'space-tools': true,
             'float-right': true
         });

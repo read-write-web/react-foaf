@@ -32,13 +32,17 @@ var MainSearchBox = React.createClass({
         this.props.loadCurrentUserProfileFromUrl(contactURL);
     },
 
-     // Handlers.
+     /*
+     * Handlers.
+     * Use e.preventDefault() or return false to : Cancel browser default behavior of submit.
+     * */
      _handleSubmit: function(e) {
-         e.preventDefault(); // Cancel browser default behavior of submit.
+         e.preventDefault();
         //this.props.onUserInput(this.state.text);
     },
 
     _onChange: function(e) {
+        e.preventDefault();
         this.setState({text: e.target.value});
     },
 

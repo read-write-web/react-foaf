@@ -5,32 +5,32 @@ var SearchBox = React.createClass({
     componentName: "SearchBox",
 
     getInitialState: function() {
-        return {text: this.props.filterText};
-    },
-
-    handleSubmit: function(e) {
-        this.props.onUserInput(this.state.text);
-        return false; //don't send result to web server
-    },
-
-    onChange: function(e) {
-        this.log("user input: ",e);
-        this.setState({text: e.target.value});
-        this.props.onUserInput(e.target.value);
+        return {filterText: this.props.filterText};
     },
 
     render: function() {
         return (
-            <form id="filterUser" onSubmit={this.handleSubmit}>
+            <form class="filterContacts" onSubmit={this._handleSubmit}>
             <input type="text"
                 placeholder="Filter your contacts"
                 value={this.state.text}
                 width="100"
                 ref="url"
-                onChange={this.onChange}
+                onChange={this._onChange}
             />
-            <button type="submit" class="fontawesome-ok"></button>
+            <button type="submit" class="fontawesome-ok" onClick={this._handleSubmit}></button>
             </form>
         );
-    }
+    },
+
+    _handleSubmit: function(e) {
+        e.preventDefault();
+    },
+
+    _onChange: function(e) {
+        e.preventDefault();
+        this.log("user input: ",e);
+        this.setState({text: e.target.value});
+        this.props.onUserInput(e.target.value);
+    },
 });

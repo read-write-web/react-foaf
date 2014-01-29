@@ -88,7 +88,7 @@ var FoafWindow = React.createClass({
             this._updateRouteToCurrentState();
             if ( !currentTab ) {
                 this.debug("No active tab, will display PersonContacts");
-                var content = <PersonContacts personPG={this.state.personPG} onContactSelected={this._loadOrMaximizeUserProfileFromUrl}/>;
+                var content = <PersonContacts toolsBarVisible='true' personPG={this.state.personPG} onContactSelected={this._loadOrMaximizeUserProfileFromUrl}/>;
                 contentSpace = <ContentSpace clazz="space center" isDefaultTab={this._isDefaultTab}>{content}</ContentSpace>;
             }
             else {
