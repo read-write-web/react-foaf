@@ -33,6 +33,7 @@ var PersonContacts = React.createClass({
         var foafs = _.chain(this.props.personPG.rel(FOAF("knows")))
             .filter(function(contactPG) {
                 var name = foafUtils.getName([contactPG]);
+                if (!name || name.length == 0) return true;
                 return name[0].toLowerCase().indexOf(self.state.filterText) !== -1
             })
             .map(function (contactPG) {
