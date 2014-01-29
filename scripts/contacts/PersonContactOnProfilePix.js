@@ -2,19 +2,25 @@
 
 var PersonContactOnProfilePix = React.createClass({
     render: function() {
-        var imgUrl = this.getUserImg();
         return (
             <div className="picture float-right">
-                <img src={imgUrl} alt="Picture"/>
+                <img src={this._getUserImg()} alt="Picture"/>
             </div>
             );
     },
 
-	getUserImg: function() {
-		var imgUrlList = foafUtils.getImg(this.props.personPGs);
-		return (imgUrlList && imgUrlList.length>0)? imgUrlList[0]:"img/avatar.png";
-	}
-
+	_getUserImg: function() {
+        var personPG = this.props.personPG; // TODO remove when possible
+        var imgUrlList = foafUtils.getImg(personPG);
+        if (!imgUrlList || imgUrlList.length == 0) return "img/avatar.png";
+        var imgUrlListCheck = _.chain(imgUrlList)
+            .filter(function(img) {
+                // TODO: temporary, need to check the validity of img Url.
+                return img.indexOf("http") !== -1
+            })
+            .value();
+        return imgUrlListCheck[0];
+    }
 
 });
 

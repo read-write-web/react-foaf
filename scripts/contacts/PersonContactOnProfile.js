@@ -62,7 +62,7 @@ var PersonContactOnProfile = React.createClass({
         return (
             <li className={liClasses} onClick={this.handleClick}>
                 <div className="loader"></div>
-                <PersonContactOnProfilePix personPGs={graphList} />
+                <PersonContactOnProfilePix personPG={graphList} />
                 <PersonContactOnProfileBasicInfo personPGs={graphList} />
                 <PersonContactOnProfileNotifications personPGs={graphList} getNotifications={this.getNotifications}/>
                 <PersonContactOnProfileMessage personPG={graphList}/>

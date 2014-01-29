@@ -46,11 +46,17 @@ var MainSearchBox = React.createClass({
         this.setState({text: e.target.value});
     },
 
-    // Get image.
     _getUserImg: function() {
-        var personPG = this.props.personPG;
+        var personPG = this.props.personPG; // TODO remove when possible
         var imgUrlList = foafUtils.getImg([personPG]);
-        return (imgUrlList && imgUrlList.length>0)? imgUrlList[0]:"img/avatar.png";
+        if (!imgUrlList || imgUrlList.length == 0) return "img/avatar.png";
+        var imgUrlListCheck = _.chain(imgUrlList)
+            .filter(function(img) {
+                // TODO: temporary, need to check the validity of img Url.
+                return img.indexOf("http") !== -1
+            })
+            .value();
+        return imgUrlListCheck[0];
     }
 });
 
