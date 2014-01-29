@@ -38,11 +38,10 @@ var PersonContacts = React.createClass({
             })
             .map(function (contactPG) {
                 var onContactClick = function() {
-                    var contactURL = contactPG.getPointerUrl();
-                    if ( contactURL ) {
-                        self.props.onContactSelected(contactURL)
+                    if ( contactPG.isSymbolPointer() ) {
+                        self.props.onContactSelected( contactPG.getSymbolPointerUrl() )
                     } else {
-                        // TODO maybe we can click on a bnode???
+                        // TODO maybe we can click on a bnode or literal???
                         alert("Can only click on a Symbol pointer, not Bnode/Literal")
                     }
                 }

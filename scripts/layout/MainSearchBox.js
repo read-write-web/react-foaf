@@ -28,8 +28,8 @@ var MainSearchBox = React.createClass({
 
     //
     _loadProfileFromUrl: function() {
-        var contactURL = this.props.personPG.getPointerUrl();
-        this.props.loadCurrentUserProfileFromUrl(contactURL);
+        var profileURL = this.props.personPG.getSymbolPointerUrl();
+        this.props.loadCurrentUserProfileFromUrl(profileURL);
     },
 
      /*

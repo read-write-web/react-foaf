@@ -71,6 +71,6 @@ pgUtils.pgTransformers.literalPointerToValue = function(pg) {
     return $rdf.Stmpl.literalNodeToValue(pg.pointer);
 }
 pgUtils.pgTransformers.symbolPointerToValue = function(pg) {
-    return $rdf.Stmpl.symbolNodeToValue(pg.pointer);
+    return $rdf.Stmpl.symbolNodeToUrl(pg.pointer);
 }
 

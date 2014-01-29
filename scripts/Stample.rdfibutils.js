@@ -18,7 +18,7 @@ $rdf.Stmpl = {
     },
 
     isFragmentlessSymbol: function(node) {
-        return this.isSymbolNode(node) && this.isFragmentless(this.symbolNodeToValue(node));
+        return this.isSymbolNode(node) && this.isFragmentless(this.symbolNodeToUrl(node));
     },
 
 
@@ -36,9 +36,9 @@ $rdf.Stmpl = {
         Preconditions.checkArgument(this.isLiteralNode(node), "Node is not a literal node:"+node);
         return node.value;
     },
-    symbolNodeToValue: function(node) {
+    symbolNodeToUrl: function(node) {
         Preconditions.checkArgument(this.isSymbolNode(node), "Node is not a symbol node:"+node);
-        return node.value;
+        return node.uri;
     }
 
     

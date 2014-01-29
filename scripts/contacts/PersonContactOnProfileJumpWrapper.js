@@ -13,30 +13,18 @@ var PersonContactOnProfileJumpWrapper = React.createClass({
 
     componentDidMount: function() {
         var self = this;
-        // TODO maybe in this case jumpAsync would work better?
-        var jumpedPersonPG = this.props.personPG.jumpNowOrLater(false);
-        if ( Q.isPromise(jumpedPersonPG) ) {
-            jumpedPersonPG.then(
-                function(pg) {
-                    self.debug("Person PG has been jumped later successfully. Jumped pg:",pg);
-                    self.setState({
-                        jumpedPersonPG: pg
-                    });
-                },
-                function(err) {
-                    self.warn("Can't jump pg:",err.message);
-                    self.setState({
-                        jumpError: err
-                    });
-                }
-            )
-        }
-        else {
-            self.debug("Person PG has been jumped immediately successfully. Jumped pg:",jumpedPersonPG);
-            self.setState({
-                jumpedPersonPG: jumpedPersonPG
+        this.props.personPG.jumpAsync()
+            .then(function(pg) {
+                self.setState({
+                    jumpedPersonPG: pg
+                });
+            })
+            .fail(function(err) {
+                self.warn("Can't jump pg:",err.message);
+                self.setState({
+                    jumpError: err
+                });
             });
-        }
     },
 
     render: function() {
