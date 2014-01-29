@@ -37,7 +37,6 @@ var Person = React.createClass({
             else {
                 personPG = this.props.personPG.deepCopyOfGraph()
             }
-            this.log(personPG);
 
             // Set user name.
             var userName = foafUtils.getName([personPG]);
@@ -57,6 +56,7 @@ var Person = React.createClass({
                         modeEdit={this.state.modeEdit}
                         submitEdition={this._submitEdition}/>
                     <PersonWebId personPG={personPG}/>
+
                 </div>
                 );
         }

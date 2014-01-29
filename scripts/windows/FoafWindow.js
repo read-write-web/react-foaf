@@ -47,7 +47,7 @@ var FoafWindow = React.createClass({
     _initState: function(profileURL,openContactProfileURL) {
         var self = this;
         var lastAction = (openContactProfileURL ? this._loadOrMaximizeUserProfileFromUrl.bind(this,openContactProfileURL) : undefined);
-        fetchPointedGraph(profileURL)
+        store.fetcher.fetch(profileURL)
             .then(function (pg) {
                 self.setState({
                     personPG: pg
@@ -106,7 +106,7 @@ var FoafWindow = React.createClass({
                         personPG={this.state.personPG}
                         filterText={this.state.filterText}
                         onUserInput={this._inputInSearchBox}
-                        minimizeAllTabs={this._minimizeAllTabs}
+                        loadCurrentUserProfileFromUrl={this._loadOrMaximizeUserProfileFromUrl}
                     />
                     <div id="actionNeeded">Action needed</div>
                     <div className="tabs">{contentSpace}</div>
@@ -121,8 +121,6 @@ var FoafWindow = React.createClass({
             return foafBoxTree;
         }
     },
-
-
 
     _submitEdition: function(personPG){
         var self = this;
@@ -164,7 +162,7 @@ var FoafWindow = React.createClass({
 
     _createNewUserTabFromUrl: function(url) {
         var self = this;
-        fetchPointedGraph(url)
+        store.fetcher.fetch(url)
             .then(function(pg) {
                 self._createNewUserTab(pg);
             });

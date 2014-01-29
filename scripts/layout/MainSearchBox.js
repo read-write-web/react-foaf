@@ -19,14 +19,18 @@ var MainSearchBox = React.createClass({
                     onChange={this._onChange}
                 />
                 <button type="submit"  class="fontawesome-ok"></button>
-                <button type="submit" onClick={this.props.minimizeAllTabs} class="fontawesome-ok">
+                <button type="submit" onClick={this._loadProfileFromUrl} class="fontawesome-ok">
                     <Pix src={this._getUserImg()}/>
                 </button>
             </form>
             );
     },
 
-
+    //
+    _loadProfileFromUrl: function() {
+        var contactURL = this.props.personPG.getPointerUrl();
+        this.props.loadCurrentUserProfileFromUrl(contactURL);
+    },
 
      // Handlers.
      _handleSubmit: function(e) {
