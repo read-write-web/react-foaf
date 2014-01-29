@@ -14,12 +14,12 @@ var PersonContactOnProfilePix = React.createClass({
         var imgUrlList = foafUtils.getImg(personPG);
         if (!imgUrlList || imgUrlList.length == 0) return "img/avatar.png";
         var imgUrlListCheck = _.chain(imgUrlList)
-            .filter(function(img) {
+            .filter(function(url) {
                 // TODO: temporary, need to check the validity of img Url.
-                return img.indexOf("http") !== -1
+                return httpUtils.checkImgURL(url);
             })
             .value();
-        return imgUrlListCheck[0];
+        return (imgUrlListCheck.length !== 0) ? imgUrlListCheck[0]:"img/avatar.png";
     }
 
 });
