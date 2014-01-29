@@ -25,7 +25,7 @@ var PersonContacts = React.createClass({
                 </ul>
             </div>
             );
-        console.log(this.props.personPG)
+
         var foafs = _.chain(this.props.personPG.rel(FOAF("knows")))
             .map(function (contactPG) {
                 var onContactClick = function() {
@@ -37,12 +37,8 @@ var PersonContacts = React.createClass({
                         alert("Can only click on a Symbol pointer, not Bnode/Literal")
                     }
                 }
-                console.log("*********************")
-                console.log("*********************")
-                console.log("*********************")
-                console.log(contactPG)
                 return (<PersonContactOnProfileJumpWrapper
-
+                            key={contactPG.getPointerKeyForReact()}
                             onPersonContactClick={onContactClick}
                             personPG={contactPG}
                             filterText={self.state.filterText}/>)

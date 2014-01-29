@@ -56,7 +56,7 @@ var Person = React.createClass({
                         modeEdit={this.state.modeEdit}
                         submitEdition={this._submitEdition}/>
                     <PersonWebId personPG={personPG}/>
-
+                    <PersonContacts personPG={personPG} onContactSelected={this.props.onContactSelected}/>
                 </div>
                 );
         }
