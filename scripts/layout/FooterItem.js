@@ -12,7 +12,7 @@ var Footer = React.createClass({
         var minimizedTabs = _.difference(allTabs,activeTabs);
         var currentTab = _.first(activeTabs); // can be undefined if no active tab
 
-        var desktopItem = <FooterItem imgSrc={'img/friends_icon_yellow.png'} onFooterItemClick={this.props.minimizeAllTabs}/>;
+        var desktopItem = <FooterItem key="desktopButton" imgSrc={'img/friends_icon_yellow.png'} onFooterItemClick={this.props.minimizeAllTabs}/>;
 
         var tabsFooterItems = _.map(allTabs, function(tab) {
             var img = self._getUserImg(tab.personPG);
@@ -27,7 +27,7 @@ var Footer = React.createClass({
 
         var globalCloseItemArray = [];
         if ( !_.isEmpty(this.props.tabs) ) {
-            var globalCloseItem = <FooterItem imgSrc={'img/close_icon.png'} onFooterItemClick={this.props.closeAllTabs}/>;
+            var globalCloseItem = <FooterItem key="globalCloseButton" imgSrc={'img/close_icon.png'} onFooterItemClick={this.props.closeAllTabs}/>;
             globalCloseItemArray.push(globalCloseItem);
         }
 
