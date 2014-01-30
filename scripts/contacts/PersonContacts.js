@@ -31,6 +31,7 @@ var PersonContacts = React.createClass({
             );
 
         var foafs = _.chain(this.props.personPG.rel(FOAF("knows")))
+            // TODO this is not good because it doesn't jump: the local friend info may not even contain the name...
             .filter(function(contactPG) {
                 var name = foafUtils.getName([contactPG]);
                 if (!name || name.length == 0) return true;
