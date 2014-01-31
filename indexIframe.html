@@ -93,18 +93,33 @@ View component scripts
 
 
 
-<script type="text/jsx">
-   /**
-     * @jsx React.DOM
-     */
-    var appComponent =  <App profileURL={foafDocURL}/>;
-    var mountNode = document.getElementById('container');
-</script>
+
 <script>
-    window.onload = function startApplication() {
-        React.renderComponent(appComponent,mountNode);
-    };
+    var mountNode = document.getElementById('container');
+
+    function initApp(profileURL) {
+        console.info("Will init app with "+profileURL);
+        var appComponent = App({
+            profileURL: profileURL
+        })
+        React.renderComponent(appComponent, mountNode);
+    }
+
+    function initAppFromData(data) {
+        initApp(data.url);
+    }
+
+
+    function windowMessageListener(event) {
+        initAppFromData( event.data );
+    }
+    if (window.addEventListener){
+        window.addEventListener("message", windowMessageListener, false)
+    } else {
+        window.attachEvent("onmessage", windowMessageListener)
+    }
 </script>
+
 
 
 </body>
