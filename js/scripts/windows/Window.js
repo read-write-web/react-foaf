@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 
-define(['react', 'mixins', 'jsx!scripts/windows/FoafWindow'], function (React, mixins, FoafWindow) {
+define(['react', 'mixins', 'jsx!FoafWindow'], function (React, mixins, FoafWindow) {
 
 var Window = React.createClass({
     mixins: [mixins.WithLogger, mixins.WithLifecycleLogging],

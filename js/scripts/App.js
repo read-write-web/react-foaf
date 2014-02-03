@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 
-define(['react', 'mixins', 'jsx!scripts/windows/Window'], function (React, mixins, Window) {
+define(['react', 'mixins', 'jsx!Window'], function (React, mixins, Window) {
 
 var App = React.createClass({
     mixins: [mixins.WithLogger, mixins.WithLifecycleLogging],

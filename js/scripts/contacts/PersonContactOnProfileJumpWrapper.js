@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 define(['react', 'mixins',
-    'jsx!scripts/contacts/PersonContactOnProfile'], function (React, mixins, PersonContactOnProfile) {
+    'jsx!PersonContactOnProfile'], function (React, mixins, PersonContactOnProfile) {
 
 var PersonContactOnProfileJumpWrapper = React.createClass({
     mixins: [mixins.WithLogger, mixins.WithLifecycleLoggingLite, mixins.WithEmptyInitialState],

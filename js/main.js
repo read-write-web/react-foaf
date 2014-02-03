@@ -44,8 +44,8 @@ require.config({
         "PersonContactOnProfilePix": "scripts/contacts/PersonContactOnProfilePix",
         "PersonContactOnProfile": "scripts/contacts/PersonContactOnProfile",
         "PersonContactOnProfileJumpWrapper": "scripts/contacts/PersonContactOnProfileJumpWrapper",
-        "PersonContacts": "scripts/scripts/contacts/PersonContacts",
-        "SearchBox": "scripts/scripts/contacts/SearchBox",
+        "PersonContacts": "scripts/contacts/PersonContacts",
+        "SearchBox": "scripts/contacts/SearchBox",
 
         "PersonBasicInfo": "scripts/person/PersonBasicInfo",
         "PersonNotifications": "scripts/person/PersonNotifications",
@@ -94,7 +94,7 @@ require([
     "rdflib",
     "q",
     "routing",
-    "jsx!scripts/App"],
+    "jsx!App"],
     function ($, React, rdflib, Q, routing, App) {
 
         // Make these variable globals.

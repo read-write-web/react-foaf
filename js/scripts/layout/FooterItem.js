@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 
-define(['react', 'mixins', 'reactAddons', 'jsx!scripts/common/Pix'], function (React, mixins, ReactWithAddons, Pix) {
+define(['react', 'mixins', 'reactAddons', 'jsx!Pix'], function (React, mixins, ReactWithAddons, Pix) {
 
 var Footer = React.createClass({
     mixins: [mixins.WithLogger, mixins.WithLifecycleLogging],

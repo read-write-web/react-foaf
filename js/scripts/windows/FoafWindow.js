@@ -9,11 +9,11 @@ define([
     'pointedGraph',
     'fetcherWithPromise',
     'StampleRdfibutils',
-    'jsx!scripts/layout/ContentSpace',
-    'jsx!scripts/layout/MainSearchBox',
-    'jsx!scripts/person/Person',
-    'jsx!scripts/contacts/PersonContacts',
-    'jsx!scripts/layout/FooterItem'
+    'jsx!ContentSpace',
+    'jsx!MainSearchBox',
+    'jsx!Person',
+    'jsx!PersonContacts',
+    'jsx!FooterItem'
 ], function (React,
              mixins,
              Q,
