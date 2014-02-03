@@ -99,43 +99,56 @@ require([
 
         // Make these variable globals.
         window.Q = Q;
-        window.$rdf = $rdf;
+        //window.$rdf = $rdf;
         avatar = "/assets/react-foaf/img/avatar.png";
-        friendIcon = '/assets/react-foaf/img/friends_icon_yellow.png'
+        friendIcon = '/assets/react-foaf/img/friends_icon_yellow.png';
+        closeIcon = '/assets/react-foaf/img/close_icon.png';
+        webIdIcon = '/assets/react-foaf/img/webid.png';
 
-    // proxy
-    //$rdf.Fetcher.crossSiteProxyTemplate = "http://localhost:9000/srv/cors?url=";
-    //$rdf.Fetcher.homeServer = "http://localhost:9000/";
-    //$rdf.Fetcher.crossSiteProxyTemplate = "http://data.fm/proxy?uri=";
-    //$rdf.Fetcher.onlyUseProxy = false;
+        // proxy
+        //$rdf.Fetcher.crossSiteProxyTemplate = "http://localhost:9000/srv/cors?url=";
+        //$rdf.Fetcher.homeServer = "http://localhost:9000/";
+        //$rdf.Fetcher.crossSiteProxyTemplate = "http://data.fm/proxy?uri=";
+        //$rdf.Fetcher.onlyUseProxy = false;
 
-    // Level of logs in external libs.
-    //$rdf.PointedGraph.setLogLevel("warning");
+        // Level of logs in external libs.
+        //$rdf.PointedGraph.setLogLevel("warning");
 
-    window.foafSpec = "http://xmlns.com/foaf/spec/";
-    window.store = new $rdf.IndexedFormula();
-    window.fetcherTimeout = 10000; // TODO this doesn't work because of https://github.com/linkeddata/rdflib.js/issues/30
-    $rdf.fetcher(store, fetcherTimeout, true); // this makes "store.fetcher" variable available
+        window.foafSpec = "http://xmlns.com/foaf/spec/";
 
-    //foafDocURL = "http://bblfish.net/people/henry/card#me";
-    //var foafDocURL = "https://my-profile.eu/people/deiu/card#me";
-    foafDocURL = "https://localhost:8443/2013/backbone#me";
+        /*
+        store = new $rdf.IndexedFormula();
+        fetcherTimeout = 10000; // TODO this doesn't work because of https://github.com/linkeddata/rdflib.js/issues/30
+        $rdf.fetcher(store, fetcherTimeout, true); // this makes "store.fetcher" variable available
+        */
 
-    // TODO need to add hash if needed: we do not look for primary topic anymore
-    //var foafDocURL = "https://my-profile.eu/people/mtita/card";// Not working
-    //var foafDocURL = "http://presbrey.mit.edu/foaf";
-    //var foafDocURL = 'https://localhost:8443/2013/backbone';
-    //var foafDocURL = "https://my-profile.eu/people/tim/card";
-    //var foafDocURL = "https://my-profile.eu/people/deiu/card";
+        function createNewRdfStore() {
+            var store = new $rdf.IndexedFormula();
+            var fetcherTimeout = 10000; // TODO this doesn't work because of https://github.com/linkeddata/rdflib.js/issues/30
+            $rdf.fetcher(store, fetcherTimeout, true); // this makes "store.fetcher" variable available
+            return store;
+        }
+        store = createNewRdfStore();
 
-    // maybe this should be injected as props???
-    routeHelper = new RouteHelper();
+        //foafDocURL = "http://bblfish.net/people/henry/card#me";
+        //var foafDocURL = "https://my-profile.eu/people/deiu/card#me";
+        foafDocURL = "https://localhost:8443/2013/backbone#me";
 
-    // ???
-    Q.longStackSupport = true;
+        // TODO need to add hash if needed: we do not look for primary topic anymore
+        //var foafDocURL = "https://my-profile.eu/people/mtita/card";// Not working
+        //var foafDocURL = "http://presbrey.mit.edu/foaf";
+        //var foafDocURL = 'https://localhost:8443/2013/backbone';
+        //var foafDocURL = "https://my-profile.eu/people/tim/card";
+        //var foafDocURL = "https://my-profile.eu/people/deiu/card";
 
-    // Launch the App.
-    var mountNode = document.getElementById('container');
-    React.renderComponent(App(null), mountNode);
+        // maybe this should be injected as props???
+        routeHelper = new RouteHelper();
+
+        // ???
+        Q.longStackSupport = true;
+
+        // Launch the App.
+        var mountNode = document.getElementById('container');
+        React.renderComponent(App(null), mountNode);
 
 });

@@ -193,6 +193,7 @@ var FoafWindow = React.createClass({
         var self = this;
         store.fetcher.fetch(url)
             .then(function(pg) {
+                self.log(pg)
                 self._createNewUserTab(pg);
             });
     },

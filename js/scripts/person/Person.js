@@ -1,8 +1,23 @@
 /** @jsx React.DOM */
 
-define(['react', 'mixins'], function (React, mixins) {
+define(['react', 'mixins',
+    'jsx!Pix',
+    'jsx!PersonBasicInfo',
+    'jsx!PersonNotifications',
+    'jsx!PersonMessage',
+    'jsx!PersonMoreInfo',
+    'jsx!PersonWebId',
+    'jsx!PersonContacts'],
+    function (React, mixins,
+              Pix,
+              PersonBasicInfo,
+              PersonNotifications,
+              PersonMessage,
+              PersonMoreInfo,
+              PersonWebId,
+              PersonContacts) {
 
-var Person = React.createClass({
+    var Person = React.createClass({
     mixins: [mixins.WithLogger, mixins.WithLifecycleLogging],
     componentName: "Person",
 

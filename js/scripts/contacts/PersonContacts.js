@@ -1,8 +1,8 @@
 /** @jsx React.DOM */
 
 define(['react', 'mixins', 'reactAddons',
-    'jsx!scripts/contacts/PersonContactOnProfileJumpWrapper',
-    'jsx!scripts/contacts/SearchBox'
+        'jsx!PersonContactOnProfileJumpWrapper',
+        'jsx!SearchBox'
      ], function (React, mixins, ReactWithAddons, PersonContactOnProfileJumpWrapper, SearchBox) {
 
 var PersonContacts = React.createClass({

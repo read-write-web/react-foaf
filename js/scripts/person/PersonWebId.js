@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 
-define(['react', 'mixins'], function (React, mixins) {
+define(['react', 'mixins', 'jsx!Pix'], function (React, mixins, Pix) {
 
 var PersonWebId = React.createClass({
 
@@ -10,7 +10,7 @@ var PersonWebId = React.createClass({
         return (
             <div id="webid" className="clearfix">
                 <a href="https://edwardsilhol.com/me#card">
-                    <Pix src="img/webid.png" alt="Web ID logo" className="float-left"/>
+                    <Pix src={webIdIcon} alt="Web ID logo" className="float-left"/>
                 </a>
                 <div id="webid-address" class="float-left"><span className="title-case">Web ID </span> {webId.webId}</div>
             </div>

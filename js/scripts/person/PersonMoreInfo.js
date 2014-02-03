@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 
-define(['react', 'mixins'], function (React, mixins) {
+define(['react', 'mixins', 'jsx!PersonAddress'], function (React, mixins, PersonAddress) {
 
 var PersonMoreInfo = React.createClass({
     mixins: [mixins.WithLogger, mixins.WithLifecycleLogging, mixins.RdfLinkedPgMixin],

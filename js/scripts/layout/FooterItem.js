@@ -29,7 +29,7 @@ var Footer = React.createClass({
 
         var globalCloseItemArray = [];
         if ( !_.isEmpty(this.props.tabs) ) {
-            var globalCloseItem = <FooterItem key="globalCloseButton" imgSrc={'img/close_icon.png'} onFooterItemClick={this.props.closeAllTabs}/>;
+            var globalCloseItem = <FooterItem key="globalCloseButton" imgSrc={closeIcon} onFooterItemClick={this.props.closeAllTabs}/>;
             globalCloseItemArray.push(globalCloseItem);
         }
 
