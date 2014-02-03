@@ -159,7 +159,7 @@ var FoafWindow = React.createClass({
         var data = new $rdf.Serializer(personPG.store).toN3(personPG.store);
         currentTabPG.ajaxPut(baseUri, data,
             function success() {
-                console.log("************** Success");
+                self.log("************** Success");
                 // Replace statements in current PG and change component state.
                 currentTabPG.replaceStatements(personPG);
                 self.setState({
@@ -168,9 +168,8 @@ var FoafWindow = React.createClass({
             },
             function error(status, xhr) {
                 //TODO Restore current PG.
-                console.log("************** Error");
-                console.log(status)
-                console.log(xhr)
+                self.log("************** Error");
+                self.log(status);
             }
         )
 
@@ -190,10 +189,10 @@ var FoafWindow = React.createClass({
     },
 
     _createNewUserTabFromUrl: function(url) {
+        this.log("_createNewUserTabFromUrl ",url);
         var self = this;
         store.fetcher.fetch(url)
             .then(function(pg) {
-                self.log(pg)
                 self._createNewUserTab(pg);
             });
     },

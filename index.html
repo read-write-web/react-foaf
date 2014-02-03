@@ -95,9 +95,10 @@ View component scripts
    /**
      * @jsx React.DOM
      */
-    var appComponent =  <App />;
+    var appComponent =  <App profileURL={foafDocURL}/>;
     var mountNode = document.getElementById('container');
-
+</script>
+<script>
     window.onload = function startApplication() {
         React.renderComponent(appComponent,mountNode);
     };

@@ -387,6 +387,7 @@ $rdf.PointedGraph = function() {
         var self = this;
         var triples = this.store.statementsMatching(undefined, undefined, undefined, this.namedGraphFetchUrl);
         var store = new $rdf.IndexedFormula();
+        $rdf.fetcher(store, 100000, true); // TODO; deals with timeOut
         _.each(triples, function(stat) {
             store.add(stat.subject, stat.predicate, stat.object, self.namedGraphFetchUrl)
         });

@@ -8,10 +8,16 @@
 // Level of logs in external libs.
 //$rdf.PointedGraph.setLogLevel("warning");
 
-var foafSpec = "http://xmlns.com/foaf/spec/";
-var store = new $rdf.IndexedFormula();
-var fetcherTimeout = 10000; // TODO this doesn't work because of https://github.com/linkeddata/rdflib.js/issues/30
-$rdf.fetcher(store, fetcherTimeout, true); // this makes "store.fetcher" variable available
+
+
+function createNewRdfStore() {
+    var store = new $rdf.IndexedFormula();
+    var fetcherTimeout = 10000; // TODO this doesn't work because of https://github.com/linkeddata/rdflib.js/issues/30
+    $rdf.fetcher(store, fetcherTimeout, true); // this makes "store.fetcher" variable available
+    return store;
+}
+
+var store = createNewRdfStore();
 
 //var foafDocURL = "http://bblfish.net/people/henry/card#me";
 //var foafDocURL = "https://my-profile.eu/people/deiu/card#me";

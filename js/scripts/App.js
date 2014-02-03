@@ -6,6 +6,10 @@ var App = React.createClass({
     mixins: [mixins.WithLogger, mixins.WithLifecycleLogging],
     componentName: "App",
 
+    propTypes: {
+        profileURL: React.PropTypes.string.isRequired
+    },
+
     getInitialState: function() {
         console.log('getInitialState App')
         // the id is required because we must assign an unique react key to each window
@@ -14,7 +18,7 @@ var App = React.createClass({
             windowId : "onlyHardcodedWindow",
             windowType : "foafWindow",
             windowProps : {
-                url: foafDocURL
+                url: this.props.profileURL
             }
         }
         return {

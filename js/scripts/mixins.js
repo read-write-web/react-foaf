@@ -188,12 +188,12 @@ mixins.RdfLinkedPgMixin = {
     linkToPgLiteral: function(PG, rel) {
         function getCurrentValue() {
             // Use rel and PG to get corresponding value.
-            var currentValueList =  foafUtils.getValue(PG, mapKeyToSym[rel]);
+            var currentValueList =  foafUtils.getValue(PG, mixins.mapKeyToSym[rel]);
             return currentValueList[0];
         }
         function onRequestChange(newValue) {
             // Update the store with newValue.
-            PG.updateStore(mapKeyToSym[rel], newValue);
+            PG.updateStore(mixins.mapKeyToSym[rel], newValue);
 
             // Set new value on component.
             this.value = newValue;

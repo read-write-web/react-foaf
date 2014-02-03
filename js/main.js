@@ -3,9 +3,14 @@ require.config({
     //deps: ["main"],
 
     paths: {
-        "jquery":       "lib/jquery-2.1.0.min",
-        "react":        "lib/react-0.8.0",
-        "reactAddons":  "lib/react-with-addons-0.8.0",
+
+        /*
+        * Libs
+        * */
+
+        "jquery": "lib/jquery-2.1.0.min",
+        "react": "lib/react-0.8.0",
+        "reactAddons": "lib/react-with-addons-0.8.0",
         "JSXTransformer": "lib/JSXTransformer",
         "jsx": "jsx",
         "underscore":"lib/underscore",
@@ -15,20 +20,29 @@ require.config({
         "rxAsync": "lib/x.async",
         "q": "lib/q",
         "rdflib": "lib/rdflib",
-
         "pointedGraph": "lib/pointedGraph",
         "fetcherWithPromise": "lib/fetcherWithPromise",
         "director": "lib/director",
 
+
+        /*
+        * Utils
+        * */
+
         "pgUtils": "scripts/pgUtils",
         "foafUtils": "scripts/foafUtils",
         "httpUtils": "scripts/httpUtils",
-
-        "StampleRdfibutils": "scripts/Stample.rdfibutils",
+        "StampleRdfibutils": "scripts/Stample.rdflibutils",
 
         "mixins": "scripts/mixins",
         "routing": "scripts/routing",
         "AppConfig": "scripts/AppConfig",
+
+
+        /*
+        *    REACT Components.
+        * */
+
         "App": "scripts/App",
         "Window": "scripts/windows/Window",
         "FoafWindow": "scripts/windows/FoafWindow",
@@ -54,7 +68,14 @@ require.config({
         "PersonAddress": "scripts/person/PersonAddress",
         "PersonWebId": "scripts/person/PersonWebId",
         "PersonEditProfile": "scripts/person/PersonEditProfile",
-        "Person": "scripts/person/Person"
+        "Person": "scripts/person/Person",
+
+
+        /*
+        * CSS : Use less.
+        * */
+
+
 
     },
 
@@ -98,8 +119,9 @@ require([
     function ($, React, rdflib, Q, routing, App) {
 
         // Make these variable globals.
-        window.Q = Q;
-        //window.$rdf = $rdf;
+        window.Q = Q; //TODO: find better way to deal with Q
+
+        // Globals for imgs.
         avatar = "/assets/react-foaf/img/avatar.png";
         friendIcon = '/assets/react-foaf/img/friends_icon_yellow.png';
         closeIcon = '/assets/react-foaf/img/close_icon.png';
@@ -111,16 +133,7 @@ require([
         //$rdf.Fetcher.crossSiteProxyTemplate = "http://data.fm/proxy?uri=";
         //$rdf.Fetcher.onlyUseProxy = false;
 
-        // Level of logs in external libs.
-        //$rdf.PointedGraph.setLogLevel("warning");
-
-        window.foafSpec = "http://xmlns.com/foaf/spec/";
-
-        /*
-        store = new $rdf.IndexedFormula();
-        fetcherTimeout = 10000; // TODO this doesn't work because of https://github.com/linkeddata/rdflib.js/issues/30
-        $rdf.fetcher(store, fetcherTimeout, true); // this makes "store.fetcher" variable available
-        */
+        window.foafSpec = "http://xmlns.com/foaf/spec/"; // Do I need this?
 
         function createNewRdfStore() {
             var store = new $rdf.IndexedFormula();
@@ -130,10 +143,13 @@ require([
         }
         store = createNewRdfStore();
 
+        // Set the bootstrap URL with the initial PG pointer.
+        foafDocURL = initialPG.pointer.uri + "#i";
+
+        /// TODO: removed this.
         //foafDocURL = "http://bblfish.net/people/henry/card#me";
         //var foafDocURL = "https://my-profile.eu/people/deiu/card#me";
-        foafDocURL = "https://localhost:8443/2013/backbone#me";
-
+        //foafDocURL = "https://localhost:8443/2013/backbone#me";
         // TODO need to add hash if needed: we do not look for primary topic anymore
         //var foafDocURL = "https://my-profile.eu/people/mtita/card";// Not working
         //var foafDocURL = "http://presbrey.mit.edu/foaf";
@@ -149,6 +165,6 @@ require([
 
         // Launch the App.
         var mountNode = document.getElementById('container');
-        React.renderComponent(App(null), mountNode);
+        React.renderComponent(App({profileURL:foafDocURL}), mountNode);
 
 });
