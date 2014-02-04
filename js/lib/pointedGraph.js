@@ -317,7 +317,7 @@ $rdf.PointedGraph = function() {
 
     $rdf.PointedGraph.prototype.replaceStatements = function(pg) {
         var self = this;
-        this.store.removeMany(pg.pointer, undefined, undefined, pg.namedGraphFetchUrl);
+        this.store.removeMany(undefined, undefined, undefined, pg.namedGraphFetchUrl);
         _.each(pg.store.statements, function(stat) {
             self.store.add(stat.subject, stat.predicate, stat.object, pg.namedGraphFetchUrl)
         });
