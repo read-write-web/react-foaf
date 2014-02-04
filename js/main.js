@@ -144,7 +144,7 @@ require([
         store = createNewRdfStore();
 
         // Set the bootstrap URL with the initial PG pointer.
-        foafDocURL = initialPG.pointer.uri + "#i";
+        foafDocURL = initialPG.pointer.uri;
 
         /// TODO: removed this.
         //foafDocURL = "http://bblfish.net/people/henry/card#me";
