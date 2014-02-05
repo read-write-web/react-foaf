@@ -19,8 +19,8 @@ require.config({
         "rx": "lib/rx",
         "rxAsync": "lib/x.async",
         "q": "lib/q",
-        "rdflib": "lib/rdflib/rdflib",
-        "rdflib-pg-extension": "lib/rdflib/rdflib-pg-extension",
+        "rdflib": "lib/rdflib/rdflib-stample-0.1.0",
+        "rdflib-pg-extension": "lib/rdflib/rdflib-stample-pg-extension-0.1.0",
         "director": "lib/director",
 
 
@@ -64,7 +64,7 @@ require.config({
         "PersonAddress": "scripts/person/PersonAddress",
         "PersonWebId": "scripts/person/PersonWebId",
         "PersonEditProfile": "scripts/person/PersonEditProfile",
-        "Person": "scripts/person/Person",
+        "Person": "scripts/person/Person"
 
 
         /*
@@ -81,8 +81,8 @@ require.config({
         },
 
         "rdflib-pg-extension": {
-            "deps": ["rdflib"],
-            "exports":"rdflib-pg-extension"
+            "deps": ["rdflib","q","underscore"],
+            "exports":"$rdf.PG"
         },
 
         "foafUtils": {
@@ -127,13 +127,11 @@ require([
 
         window.foafSpec = "http://xmlns.com/foaf/spec/"; // Do I need this?
 
-        function createNewRdfStore() {
-            var store = new $rdf.IndexedFormula();
-            var fetcherTimeout = 4000;
-            $rdf.fetcher(store, fetcherTimeout, true); // this makes "store.fetcher" variable available
-            return store;
-        }
-        store = createNewRdfStore();
+
+        var fetcherTimeout = 4000;
+
+        // TODO fix global variable issue :(
+        store = rdflibPg.createNewStore(fetcherTimeout);
 
         // Set the bootstrap URL with the initial PG pointer.
         // TODO bad !!!
