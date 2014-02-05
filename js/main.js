@@ -19,7 +19,7 @@ require.config({
         "rx": "lib/rx",
         "rxAsync": "lib/x.async",
         "q": "lib/q",
-        "rdflib": "lib/rdflib",
+        "rdflib": "lib/rdflib-stample",
         "pointedGraph": "lib/pointedGraph",
         "fetcherWithPromise": "lib/fetcherWithPromise",
         "director": "lib/director",
@@ -36,7 +36,6 @@ require.config({
 
         "mixins": "scripts/mixins",
         "routing": "scripts/routing",
-        "AppConfig": "scripts/AppConfig",
 
 
         /*
@@ -128,16 +127,15 @@ require([
         webIdIcon = 'img/webid.png';
 
         // proxy
-        //$rdf.Fetcher.crossSiteProxyTemplate = "http://localhost:9000/srv/cors?url=";
-        //$rdf.Fetcher.homeServer = "http://localhost:9000/";
-        //$rdf.Fetcher.crossSiteProxyTemplate = "http://data.fm/proxy?uri=";
-        //$rdf.Fetcher.onlyUseProxy = false;
+        $rdf.Fetcher.fetcherWithPromiseCrossSiteProxyTemplate = "http://localhost:9000/srv/cors?url=";
+        //$rdf.Fetcher.fetcherWithPromiseCrossSiteProxyTemplate = "http://data.fm/proxy?uri=";
+        //$rdf.Fetcher.homeServer = "http://localhost:9000/"
 
         window.foafSpec = "http://xmlns.com/foaf/spec/"; // Do I need this?
 
         function createNewRdfStore() {
             var store = new $rdf.IndexedFormula();
-            var fetcherTimeout = 10000; // TODO this doesn't work because of https://github.com/linkeddata/rdflib.js/issues/30
+            var fetcherTimeout = 4000;
             $rdf.fetcher(store, fetcherTimeout, true); // this makes "store.fetcher" variable available
             return store;
         }

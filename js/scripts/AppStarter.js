@@ -1,4 +1,4 @@
-App = {
+AppStarter = {
     initialize : function(pg) {
         // Initial PG is in globals.
         initialPG = pg;
@@ -25,6 +25,5 @@ App = {
             loadRequireJS({ "data-main": obj["data-main"], "src": obj.requirejs });
         }
 
-
-}
+    }
 }

@@ -1,17 +1,24 @@
 
 
+/*
+TODO:
+this proxification code is kind of duplicate of RDFLib's "crossSiteProxyTemplate" code.
+How can we make this code be integrated in rdflib nicely?
+*/
+
 
 /**
  * Permits to know in which conditions we are using a CORS proxy (if one is configured)
  * @param uri
  */
 $rdf.Fetcher.prototype.requiresProxy = function(url) {
-    var isCorsProxyConfigured = $rdf.Fetcher.crossSiteProxyTemplate;
+    var isCorsProxyConfigured = $rdf.Fetcher.fetcherWithPromiseCrossSiteProxyTemplate;
     if ( !isCorsProxyConfigured ) {
         return false;
-    } else {
+    }
+    else {
         // /!\ this may not work with the original version of RDFLib
-        var isUriAlreadyProxified = (url.indexOf($rdf.Fetcher.crossSiteProxyTemplate) == 0);
+        var isUriAlreadyProxified = (url.indexOf($rdf.Fetcher.fetcherWithPromiseCrossSiteProxyTemplate) == 0);
         var isHomeServerUri = (url.indexOf($rdf.Fetcher.homeServer) == 0)
         if ( isUriAlreadyProxified || isHomeServerUri ) {
             return false;
@@ -21,6 +28,22 @@ $rdf.Fetcher.prototype.requiresProxy = function(url) {
     }
 }
 
+
+/**
+ * permits to proxify the URI
+ * @param uri
+ * @returns {string}
+ */
+$rdf.Fetcher.prototype.proxify = function(uri) {
+    if ( uri && uri.indexOf('#') != -1 ) {
+        throw new Error("Tit is forbiden to proxify an uri with a fragment:"+uri);
+    }
+    if ( uri && uri.indexOf($rdf.Fetcher.fetcherWithPromiseCrossSiteProxyTemplate) == 0 ) {
+        throw new Error("You are trying to proxify an URL that seems to already been proxified!"+uri);
+    }
+    return $rdf.Fetcher.fetcherWithPromiseCrossSiteProxyTemplate + encodeURIComponent(uri);
+};
+
 /**
  * Permits to proxify an url if RDFLib is configured to be used with a CORS Proxy
  * @param url
@@ -28,7 +51,7 @@ $rdf.Fetcher.prototype.requiresProxy = function(url) {
  */
 $rdf.Fetcher.prototype.proxifyIfNeeded = function(url) {
     if ( this.requiresProxy(url) ) {
-        return $rdf.Fetcher.crossSiteProxy(url);
+        return this.proxify(url);
     } else {
         return url;
     }
@@ -37,7 +60,7 @@ $rdf.Fetcher.prototype.proxifyIfNeeded = function(url) {
 $rdf.Fetcher.prototype.proxifySymbolIfNeeded = function(symbol) {
     Preconditions.checkArgument( $rdf.Stmpl.isSymbolNode(symbol),"This is not a symbol!"+symbol);
     var url = $rdf.Stmpl.symbolNodeToUrl(symbol);
-    var proxifiedUrl = this.proxifyIfNeeded(url)
+    var proxifiedUrl = this.proxifyIfNeeded(url);
     return $rdf.sym(proxifiedUrl);
 }
 
@@ -46,15 +69,12 @@ $rdf.Fetcher.prototype.proxifySymbolIfNeeded = function(symbol) {
 
 
 
-
-var hardcodedFetcherTimeout = 5000; // in millies, temporary hardcoded
-
 /**
- * return the Promise of a graph fro a given url
- * @param {String} uri to fetch as string (!) (Not a $rdf.sym()). The URI may contain a fragment because it results in a pointedGraph
- * @param {String} referringTerm the url as string (!) referring to the the requested url (Not a $rdf.sym())
+ * Return the Promise of a pointed graph for a given url
+ * @param {String} uri to fetch as string. The URI may contain a fragment because it results in a pointedGraph
+ * @param {String} referringTerm the uri as string. Referring to the requested url
  * @param {boolean} force, force fetching of resource even if already in store
- * @return {Promise}  of a pointedGraph
+ * @return {Promise} of a pointedGraph
  */
 $rdf.Fetcher.prototype.fetch = function(uri, referringTerm, force) {
     var self = this;
@@ -99,9 +119,9 @@ $rdf.Fetcher.prototype.fetch = function(uri, referringTerm, force) {
             }
             return true; // continue
         });
-        self.addCallback('fail', function fetchFailureCallback(uriFetched, statusString, statusCode) {
+        self.addCallback('fail', function fetchFailureCallback(uriFetched, statusString, xhr) {
             if ( docUriToFetch == uriFetched ) {
-                deferred.reject(new Error("Async fetch failure [uri="+uri+"][statusCode="+statusCode+"][reason="+statusString+"]"));
+                deferred.reject(new Error("Async fetch failure [uri="+uri+"][statusCode="+xhr.status+"][reason="+statusString+"]"));
                 return false; // stop
             }
             return true; // continue
@@ -115,10 +135,9 @@ $rdf.Fetcher.prototype.fetch = function(uri, referringTerm, force) {
                 deferred.resolve($rdf.pointedGraph(self.store, uriSym, docUriSym, docUriToFetchSym));
             }
         }
-        // See https://github.com/stample/react-foaf/issues/8 -> RDFLib doesn't always fire the "fail" callback :(
-        // see https://github.com/linkeddata/rdflib.js/issues/30
-        return Q.timeout(deferred.promise, hardcodedFetcherTimeout, "Timeout fired after "+hardcodedFetcherTimeout+" because no response from RDFLib :( (rdflib bug)");
-    } else {
+        return deferred.promise;
+    }
+    else {
         throw new Error("Unknown and unhandled uriFetchState="+uriFetchState+" - for URI="+uri)
     }
 
