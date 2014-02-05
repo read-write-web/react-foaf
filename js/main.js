@@ -1,5 +1,5 @@
 require.config({
-    baseUrl: "/assets/react-foaf/js",
+    baseUrl: "js",
     //deps: ["main"],
 
     paths: {
@@ -122,10 +122,10 @@ require([
         window.Q = Q; //TODO: find better way to deal with Q
 
         // Globals for imgs.
-        avatar = "/assets/react-foaf/img/avatar.png";
-        friendIcon = '/assets/react-foaf/img/friends_icon_yellow.png';
-        closeIcon = '/assets/react-foaf/img/close_icon.png';
-        webIdIcon = '/assets/react-foaf/img/webid.png';
+        avatar = "img/avatar.png";
+        friendIcon = 'img/friends_icon_yellow.png';
+        closeIcon = 'img/close_icon.png';
+        webIdIcon = 'img/webid.png';
 
         // proxy
         //$rdf.Fetcher.crossSiteProxyTemplate = "http://localhost:9000/srv/cors?url=";
@@ -144,18 +144,21 @@ require([
         store = createNewRdfStore();
 
         // Set the bootstrap URL with the initial PG pointer.
-        foafDocURL = initialPG.pointer.uri;
+        // TODO bad !!!
+        if ( window.initialPG ) {
+            foafDocURL = initialPG.pointer.uri;
+        } else {
+            foafDocURL = "http://bblfish.net/people/henry/card#me";
+            //var foafDocURL = "https://my-profile.eu/people/deiu/card#me";
+            //foafDocURL = "https://localhost:8443/2013/backbone#me";
+            // TODO need to add hash if needed: we do not look for primary topic anymore
+            //var foafDocURL = "https://my-profile.eu/people/mtita/card";// Not working
+            //var foafDocURL = "http://presbrey.mit.edu/foaf";
+            //var foafDocURL = 'https://localhost:8443/2013/backbone';
+            //var foafDocURL = "https://my-profile.eu/people/tim/card";
+            //var foafDocURL = "https://my-profile.eu/people/deiu/card";
+        }
 
-        /// TODO: removed this.
-        //foafDocURL = "http://bblfish.net/people/henry/card#me";
-        //var foafDocURL = "https://my-profile.eu/people/deiu/card#me";
-        //foafDocURL = "https://localhost:8443/2013/backbone#me";
-        // TODO need to add hash if needed: we do not look for primary topic anymore
-        //var foafDocURL = "https://my-profile.eu/people/mtita/card";// Not working
-        //var foafDocURL = "http://presbrey.mit.edu/foaf";
-        //var foafDocURL = 'https://localhost:8443/2013/backbone';
-        //var foafDocURL = "https://my-profile.eu/people/tim/card";
-        //var foafDocURL = "https://my-profile.eu/people/deiu/card";
 
         // maybe this should be injected as props???
         routeHelper = new RouteHelper();
