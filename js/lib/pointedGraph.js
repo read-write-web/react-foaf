@@ -315,6 +315,22 @@ $rdf.PointedGraph = function() {
         this.store.add(this.pointer, relUri, newValue, this.namedGraphFetchUrl);
     }
 
+    $rdf.PointedGraph.prototype.updateStoreWithRelSymPath = function(relSymPath, newValue) {
+        // Get the list of parent in the rel path.
+        var relSymPathHead = _.initial(relSymPath);
+
+        // Get the target relSym.
+        var relSymPathLast = _.last(relSymPath);
+
+        // Get all Pgs that verified the relSym in the path.
+        var pgList = pgUtils.getPgsWithArray(this, relSymPathHead);
+
+        // Update the store in the list of Pgs.
+        _.map(pgList, function(pg) {
+            pg.updateStore(relSymPathLast, newValue)
+        });
+    }
+
     $rdf.PointedGraph.prototype.replaceStatements = function(pg) {
         var self = this;
         this.store.removeMany(undefined, undefined, undefined, pg.namedGraphFetchUrl);

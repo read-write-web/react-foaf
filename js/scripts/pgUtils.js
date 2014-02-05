@@ -32,6 +32,38 @@ pgUtils.getBlankNodes = function(pg, relSym) {
 
 
 /**
+ * Get the list of pgs that follows the last relSym in the array.
+ * @param pg
+ * @param relSymArray: path of relSyms.
+ * i.e. : [relSym0, relSym1, relSym2]: relSym2 is immediate child of relSym1 which is immediate chile of relSym0
+ * @returns => List[pg]
+ */
+pgUtils.getPgsWithArray = function(pg, relSymArray) {
+    var inc = 0;
+
+    // If the path is empty return an empty list.
+    if (relSymArray.length == 0) return [];
+
+    // Tail recursive function traverse the path and get all Pgs of the last rel in relSymArray.
+    var getPgsWithArrayRec = function(pgList) {
+        if (inc == relSymArray.length - 1) {
+            return pgList;
+        }
+        else {
+            inc = inc + 1;
+            var pgRecList = _.chain(pgList)
+                .map(function(pgRec) {
+                    return pgRec.rel(relSymArray[inc])
+                }).flatten().value();
+            return getPgsWithArrayRec(pgRecList)
+        }
+    }
+
+    // Call the tail recursive function with the first rel.
+    return getPgsWithArrayRec(pg.rel(relSymArray[inc]));
+}
+
+/**
  *
  * @param pgList
  * @returns {*}

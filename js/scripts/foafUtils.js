@@ -17,6 +17,15 @@ foafUtils.getValue = function(pg) {
     return resList;
 }
 
+foafUtils.getValueWithRelSymPath = function(pg, relSymPath) {
+    var pgList = pgUtils.getPgsWithArray(pg, relSymPath);
+    var valList = _.chain(pgList)
+        .map(function(pgMap) {
+            return pgMap.pointer.value;
+        }).value();
+    return valList
+}
+
 function getValueList(pgList) {
     var args = (slice.call(arguments, 1));
     var res =  _.chain(pgList)

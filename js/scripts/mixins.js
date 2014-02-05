@@ -163,10 +163,10 @@ mixins.mapKeyToSym = {
     "foaf:mbox": FOAF("mbox"),
     "foaf:phone": FOAF("phone"),
     "foaf:homepage": FOAF("homepage"),
-    "contact:street": CONTACT("street"),
-    "contact:postalCode": CONTACT("postalCode"),
-    "contact:city": CONTACT("city"),
-    "contact:country": CONTACT("country")
+    "contact:street": [CONTACT("home"), CONTACT("address"),CONTACT("street")],
+    "contact:postalCode": [CONTACT("home"), CONTACT("address"),CONTACT("postalCode")],
+    "contact:city": [CONTACT("home"), CONTACT("address"),CONTACT("city")],
+    "contact:country": [CONTACT("home"), CONTACT("address"),CONTACT("country")]
 };
 
 
@@ -187,13 +187,26 @@ mixins.RdfLinkedPgMixin = {
 
     linkToPgLiteral: function(PG, rel) {
         function getCurrentValue() {
+            // Get the appropriate relSym to update.
+            var relSym = mixins.mapKeyToSym[rel];
+
             // Use rel and PG to get corresponding value.
-            var currentValueList =  foafUtils.getValue(PG, mixins.mapKeyToSym[rel]);
-            return currentValueList[0];
+            if (!relSym.length) {
+                return foafUtils.getValue(PG, relSym)[0];
+            } else {
+                return foafUtils.getValueWithRelSymPath(PG, relSym)[0];
+            }
         }
         function onRequestChange(newValue) {
+            // Get the appropriate relSym to update.
+            var relSym = mixins.mapKeyToSym[rel];
+
             // Update the store with newValue.
-            PG.updateStore(mixins.mapKeyToSym[rel], newValue);
+            if (!relSym.length) {
+                PG.updateStore(relSym, newValue);
+            } else {
+                PG.updateStoreWithRelSymPath(relSym, newValue);
+            }
 
             // Set new value on component.
             this.value = newValue;

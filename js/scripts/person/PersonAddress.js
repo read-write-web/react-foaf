@@ -26,12 +26,12 @@ var PersonAddress = React.createClass({
                 <div className="address">
                     <div className="title-case">Address</div>
                     <div className="content address-content">
-                {address["contact:street"]}
+                        {address["contact:street"]}
                         <br/>
-                {address["contact:postalCode"]}
-                {address["contact:city"]}
+                        {address["contact:postalCode"]}
+                        {address["contact:city"]}
                         <br/>
-                {address["contact:country"]}
+                        {address["contact:country"]}
                         <br/>
                     </div>
                 </div>
@@ -64,6 +64,9 @@ var PersonAddress = React.createClass({
         return viewTree;
     },
 
+    /*
+     *  Start our own functions here.
+     * */
     _handleSubmit: function(e) {
         e.preventDefault();
         this.props.submitEdition(this.props.personPG);

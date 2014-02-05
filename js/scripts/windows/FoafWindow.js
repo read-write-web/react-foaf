@@ -159,7 +159,7 @@ var FoafWindow = React.createClass({
 
     _handleClickChangeModeEdit: function(bool) {
         this.log("_handleClickChangeModeEdit")
-        this.log(bool)
+
         // Create a deep copy of the current PG is needed.
         var personPGCopy = (bool)? this.state.personPG.deepCopyOfGraph():undefined;
 
@@ -186,7 +186,7 @@ var FoafWindow = React.createClass({
                 });
             },
             function error(status, xhr) {
-                //TODO Restore current PG.
+                //TODO Restore current PG ?.
                 self.log("************** Error");
                 self.log(status);
             }

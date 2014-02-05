@@ -39,8 +39,7 @@ var PersonMoreInfo = React.createClass({
                         <li className="float-left">
                             <PersonAddress
                             modeEdit={this.props.modeEdit}
-                            personPG={this.props.personPG}
-                            address={this.props.address}/>
+                            personPG={this.props.personPG}/>
                         </li>
                         <li className="float-left">
                             <div className="website">
