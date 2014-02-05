@@ -5,8 +5,8 @@ AppStarter = {
 
         // Load main.js.
         loadFiles({
-            "data-main": "js/main",
-            "requirejs": "js/lib/require.js"
+            "data-main": "/assets/react-foaf/js/main",
+            "requirejs": "/assets/react-foaf/js/lib/require.js"
         });
 
         // Function to load requireJS main.js
