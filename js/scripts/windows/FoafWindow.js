@@ -36,7 +36,9 @@ var FoafWindow = React.createClass({
     getInitialState: function() {
         return {
             personPG: undefined,
+            personPGDeepCopy: undefined,
             filterText: '',
+            modeEdit: false,
             tabs: [], // unordered
             activeTabs: [] // first element is the displayed one: it's a stack
         };
@@ -125,7 +127,11 @@ var FoafWindow = React.createClass({
                 this.debug("Active tabs have been found, will display tab:",currentTab);
                 var minimizeCurrentTab = this._minimizeTab.bind(this,currentTab);
                 var closeCurrentTab = this._closeTab.bind(this,currentTab);
-                var content = <Person personPG={currentTab.personPG} submitEdition={this._submitEdition} onContactSelected={this._loadOrMaximizeUserProfileFromUrl}/>
+                if (!this.state.modeEdit) {
+                    var content = <Person personPG={currentTab.personPG} modeEdit={this.state.modeEdit} submitEdition={this._submitEdition} onContactSelected={this._loadOrMaximizeUserProfileFromUrl} handleClickChangeModeEdit={this._handleClickChangeModeEdit}/>
+                } else {
+                    var content = <Person personPG={this.state.personPGDeepCopy} modeEdit={this.state.modeEdit} submitEdition={this._submitEdition} onContactSelected={this._loadOrMaximizeUserProfileFromUrl} handleClickChangeModeEdit={this._handleClickChangeModeEdit}/>
+                }
                 contentSpace = <ContentSpace onMinimize={minimizeCurrentTab} onClose={closeCurrentTab} isDefaultTab={this._isDefaultTab}>{content}</ContentSpace>;
             }
 
@@ -149,6 +155,19 @@ var FoafWindow = React.createClass({
                 </div>;
             return foafBoxTree;
         }
+    },
+
+    _handleClickChangeModeEdit: function(bool) {
+        this.log("_handleClickChangeModeEdit")
+        this.log(bool)
+        // Create a deep copy of the current PG is needed.
+        var personPGCopy = (bool)? this.state.personPG.deepCopyOfGraph():undefined;
+
+        // Render component with new state.
+        this.setState({
+            modeEdit:bool,
+            personPGDeepCopy:personPGCopy
+        });
     },
 
     _submitEdition: function(personPG){

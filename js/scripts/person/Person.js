@@ -23,9 +23,7 @@ define(['react', 'mixins',
 
     getInitialState: function() {
         return {
-            modeEdit:false,
-            editText:"Edit",
-            personPGCopy: undefined
+            editText:"Edit"
         }
     },
 
@@ -47,30 +45,23 @@ define(['react', 'mixins',
         }
         else {
             this.debug("Rendering person");
-            var personPG;
-            if (!this.state.modeEdit) {
-                personPG = this.props.personPG;
-            }
-            else {
-                personPG = this.props.personPG.deepCopyOfGraph()
-            }
 
             return (
                 <div id="profile" className="clearfix center">
-                    <div className="edit-profile" onClick={this._handleClickEdit}>{this.state.editText}</div>
+                    <div className="edit-profile" onClick={this._handleClickEditButton}>{this.state.editText}</div>
                     <Pix src={this._getUserImg()}/>
                     <PersonBasicInfo
-                        personPG={personPG}
-                        modeEdit={this.state.modeEdit}
+                        personPG={this.props.personPG}
+                        modeEdit={this.props.modeEdit}
                         submitEdition={this._submitEdition}/>
-                    <PersonNotifications personPG={personPG}/>
-                    <PersonMessage personPG={personPG}/>
+                    <PersonNotifications personPG={this.props.personPG}/>
+                    <PersonMessage personPG={this.props.personPG}/>
                     <PersonMoreInfo
-                        personPG={personPG}
-                        modeEdit={this.state.modeEdit}
+                        personPG={this.props.personPG}
+                        modeEdit={this.props.modeEdit}
                         submitEdition={this._submitEdition}/>
-                    <PersonWebId personPG={personPG}/>
-                    <PersonContacts personPG={personPG} onContactSelected={this.props.onContactSelected}/>
+                    <PersonWebId personPG={this.props.personPG}/>
+                    <PersonContacts personPG={this.props.personPG} onContactSelected={this.props.onContactSelected}/>
                 </div>
                 );
         }
@@ -80,37 +71,39 @@ define(['react', 'mixins',
         return this.props.personPG
     },
 
-    _handleClickEdit: function(e) {
-        this.log('_handleClickEdit');
+    _handleClickEditButton: function(e) {
+        e.preventDefault();
 
-        if (this.state.modeEdit) {
-            this._submitEdition();
+        if (this.props.modeEdit) {
+            // Submit changes from user edit.
+            this._submitEdition(this.props.personPG);
         }
         else {
-            this.setState({
-                modeEdit:true,
-                editText:"save"
-            });
+            // Change state of parent and current component to reflect edit mode.
+            this._updateEditMode(true, "save");
         }
     },
 
     _submitEdition: function(personPG) {
-        this.log('***************************************************');
-        this.log('***************************************************');
-        this.log('***************************************************');
-        this.log('_submitEdition');
-        console.log(personPG);
         // Submit changes.
         this.props.submitEdition(personPG);
 
-        // Cancel Edit mode.
-        this.setState({
-            modeEdit:false,
-            editText:"edit"
-        });
+        // Change state of parent and current component to reflect edit mode.
+        this._updateEditMode(false, "edit");
 
         // And return false.
         return false;
+    },
+
+    _updateEditMode: function(bool, textOnButton) {
+        // Change edit mode on the parent.
+        this.props.handleClickChangeModeEdit(bool);
+
+        // Change text on edit button.
+        this.setState({
+            editText:textOnButton
+        });
+
     },
 
     _getUserImg: function() {
