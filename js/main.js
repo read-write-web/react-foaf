@@ -19,9 +19,8 @@ require.config({
         "rx": "lib/rx",
         "rxAsync": "lib/x.async",
         "q": "lib/q",
-        "rdflib": "lib/rdflib-stample",
-        "pointedGraph": "lib/pointedGraph",
-        "fetcherWithPromise": "lib/fetcherWithPromise",
+        "rdflib": "lib/rdflib/rdflib",
+        "rdflib-pg-extension": "lib/rdflib/rdflib-pg-extension",
         "director": "lib/director",
 
 
@@ -29,10 +28,8 @@ require.config({
         * Utils
         * */
 
-        "pgUtils": "scripts/pgUtils",
         "foafUtils": "scripts/foafUtils",
         "httpUtils": "scripts/httpUtils",
-        "StampleRdfibutils": "scripts/Stample.rdflibutils",
 
         "mixins": "scripts/mixins",
         "routing": "scripts/routing",
@@ -83,17 +80,13 @@ require.config({
             exports: "JSXTransformer"
         },
 
-        "fetcherWithPromise": {
-            "deps": ["q"],
-            "exports":"fetcherWithPromise"
+        "rdflib-pg-extension": {
+            "deps": ["rdflib"],
+            "exports":"rdflib-pg-extension"
         },
 
         "foafUtils": {
             "exports":"foafUtils"
-        },
-
-        "pgUtils": {
-            "exports":"pgUtils"
         },
 
         "httpUtils": {
@@ -112,10 +105,11 @@ require([
     "jquery",
     "react",
     "rdflib",
+    "rdflib-pg-extension",
     "q",
     "routing",
     "jsx!App"],
-    function ($, React, rdflib, Q, routing, App) {
+    function ($, React, rdflib, rdflibPg, Q, routing, App) {
 
         // Make these variable globals.
         window.Q = Q; //TODO: find better way to deal with Q

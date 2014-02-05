@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 
-define(['react', 'mixins', 'pgUtils', 'foafUtils', 'jsx!Pix'], function (React, mixins, pgUtils, foafUtils, Pix) {
+define(['react', 'mixins', 'foafUtils', 'jsx!Pix'], function (React, mixins, foafUtils, Pix) {
 
 var MainSearchBox = React.createClass({
     mixins: [mixins.WithLogger, mixins.WithLifecycleLogging],
