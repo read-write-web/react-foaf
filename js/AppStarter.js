@@ -10,8 +10,8 @@ AppStarter = {
         // The app should never have to use an absolute path!
         // The app shouldn't need to know the hardcoded URL on which it is deployed!!!
         this.loadRequireJS(
-            "/assets/apps/react-foaf/js/main",
-            "/assets/apps/react-foaf/js/lib/require.js",
+            "/assets/react-foaf/js/main",
+            "/assets/react-foaf/js/lib/require.js",
             undefined
         )
     },
