@@ -2,13 +2,20 @@ require.config({
     //baseUrl: "js",
     //deps: ["main"],
 
+    map: {
+        "*": {
+            // doesn't work well if declared with "paths"
+            "less": "lib/require/require-less-0.1.1/less"
+        }
+    },
+
     paths: {
 
         /*
          * RequireJS Plugins
          */
-        "jsx": "lib/require/jsx",
-        "JSXTransformer": "lib/require/JSXTransformer",
+        "jsx": "lib/require/require-jsx/jsx",
+        "JSXTransformer": "lib/require/require-jsx/JSXTransformer",
 
 
         /*
@@ -110,6 +117,7 @@ require(
         "q",
         "routing",
         "jsx!App",
+        "less!../css/base.less"
     ],
     function ($, React, rdflib, rdflibPg, Q, routing, App) {
         // Make these variable globals.
