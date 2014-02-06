@@ -1,4 +1,4 @@
-define(['lib/JSXTransformer'], function (JSXTransformer) {
+define(['JSXTransformer'], function (JSXTransformer) {
     'use strict';
 
     var fs, getXhr,

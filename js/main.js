@@ -5,13 +5,18 @@ require.config({
     paths: {
 
         /*
+         * RequireJS Plugins
+         */
+        "jsx": "lib/require/jsx",
+        "JSXTransformer": "lib/require/JSXTransformer",
+
+
+        /*
          * Libs
          */
         "jquery": "lib/jquery-2.1.0.min",
         "react": "lib/react-0.8.0",
         "reactAddons": "lib/react-with-addons-0.8.0",
-        "JSXTransformer": "lib/JSXTransformer",
-        "jsx": "jsx",
         "underscore":"lib/underscore",
         "lodash": "lib/lodash.underscore",
         "rx": "lib/rx",
