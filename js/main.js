@@ -15,7 +15,6 @@ require.config({
         "jsx": "jsx",
         "underscore":"lib/underscore",
         "lodash": "lib/lodash.underscore",
-        "preconditions": "lib/preconditions",
         "rx": "lib/rx",
         "rxAsync": "lib/x.async",
         "q": "lib/q",
@@ -33,6 +32,7 @@ require.config({
 
         "mixins": "scripts/mixins",
         "routing": "scripts/routing",
+        "PGReact": "scripts/PGReact",
 
 
         /*
@@ -121,6 +121,7 @@ require([
         webIdIcon = 'img/webid.png';
 
         // proxy
+        $rdf.Fetcher.fetcherWithPromiseCrossSiteProxyTemplate = "https://www.stample.io/srv/cors?url=";
         //$rdf.Fetcher.fetcherWithPromiseCrossSiteProxyTemplate = "http://localhost:9000/srv/cors?url=";
         //$rdf.Fetcher.fetcherWithPromiseCrossSiteProxyTemplate = "http://data.fm/proxy?uri=";
         //$rdf.Fetcher.homeServer = "http://localhost:9000/"

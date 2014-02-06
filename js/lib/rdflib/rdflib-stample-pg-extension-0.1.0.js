@@ -178,7 +178,7 @@ $rdf.pointedGraph = function(store, pointer, namedGraphUrl) {
 $rdf.PointedGraph = function() {
     $rdf.PointedGraph = function(store, pointer, namedGraphUrl){
         // TODO assert the  pointer is a node
-        Preconditions.checkArgument( $rdf.PG.Utils.isFragmentlessSymbol(namedGraphUrl),"The namedGraphUrl should be a fragmentless symbol! -> "+namedGraphUrl);
+        $rdf.PG.Utils.checkArgument( $rdf.PG.Utils.isFragmentlessSymbol(namedGraphUrl),"The namedGraphUrl should be a fragmentless symbol! -> "+namedGraphUrl);
         this.store = store;
         this.pointer = pointer;
         this.namedGraphUrl = namedGraphUrl;
@@ -269,7 +269,7 @@ $rdf.PointedGraph = function() {
      * @returns {[PointedGraph]} of PointedGraphs with the same graph name in the same store
      */
     $rdf.PointedGraph.prototype.rel = function (rel) {
-        Preconditions.checkArgument( $rdf.PG.Utils.isSymbolNode(rel) , "The argument should be a symbol:"+rel);
+        $rdf.PG.Utils.checkArgument( $rdf.PG.Utils.isSymbolNode(rel) , "The argument should be a symbol:"+rel);
         var self = this;
         var resList = this.getCurrentDocumentTriplesMatching(this.pointer, rel, undefined, false);
         return _.map(resList, function (triple) {
@@ -283,7 +283,7 @@ $rdf.PointedGraph = function() {
      * @returns {[PointedGraph]} of PointedGraphs with the same graph name in the same store
      */
     $rdf.PointedGraph.prototype.rev = function (rel) {
-        Preconditions.checkArgument( $rdf.PG.Utils.isSymbolNode(rel) , "The argument should be a symbol:"+rel);
+        $rdf.PG.Utils.checkArgument( $rdf.PG.Utils.isSymbolNode(rel) , "The argument should be a symbol:"+rel);
         var self = this;
         var resList = this.getCurrentDocumentTriplesMatching(undefined, rel, this.pointer, false);
         return _.map(resList, function (triple) {
@@ -397,7 +397,7 @@ $rdf.PointedGraph = function() {
      * @returns {Promise[PointedGraph]}
      */
     $rdf.PointedGraph.prototype.jumpFetchRemote = function() {
-        Preconditions.checkArgument( this.isRemotePointer(),"You are not supposed to jumpFetch if you already have all the data locally. Pointer="+this.pointer);
+        $rdf.PG.Utils.checkArgument( this.isRemotePointer(),"You are not supposed to jumpFetch if you already have all the data locally. Pointer="+this.pointer);
         var pointerUrl = this.getSymbolPointerUrl();
         var referrerUrl = $rdf.PG.Utils.symbolNodeToUrl(this.namedGraphUrl);
         var force = false;
@@ -517,30 +517,6 @@ $rdf.PointedGraph = function() {
     }
     $rdf.PointedGraph.prototype.toString = function() {
         return this.printSummary();
-    }
-
-
-    // TODO not sure it's a good idea neither if it's well implemented
-    // TODO this file should not contain anything related to ReactJS lib...
-    /**
-     * Return a string key for the current pointer.
-     * This is useful for React to be able to associate a key to each relation to avoid recreating dom nodes
-     * Note that the key value must be unique or React can't handle this
-     * @returns
-     */
-    $rdf.PointedGraph.prototype.getPointerKeyForReact = function() {
-        if ( this.isBlankNodePointer() ) {
-            return "BNode-"+this.pointer.id; // TODO not sure it's a good idea (?)
-        }
-        else if ( this.isSymbolPointer() ) {
-            return this.pointer.value;
-        }
-        else if ( this.isLiteralPointer() ) {
-            return this.pointer.value;
-        }
-        else {
-            throw new Error("Unexpected pointed type:"+this.pointer);
-        }
     }
 
     /**
@@ -669,7 +645,7 @@ $rdf.PointedGraph = function() {
      * This means that the current pointer exists in the local graph as a subject in at least one triple.
      */
     $rdf.PointedGraph.prototype.hasRels = function() {
-        return this.getCurrentDocumentTriplesMatching(this.pointer, undefined, object, onlyOne);
+        return this.getCurrentDocumentTriplesMatching(this.pointer, undefined, undefined, true).length > 0;
     }
 
     /**
@@ -677,7 +653,7 @@ $rdf.PointedGraph = function() {
      * This means that the current pointer exists in the local graph as an object in at least one triple.
      */
     $rdf.PointedGraph.prototype.hasRevs = function() {
-        return this.getCurrentDocumentTriplesMatching(undefined, rel, object, onlyOne);
+        return this.getCurrentDocumentTriplesMatching(undefined, undefined, this.pointer, true).length > 0;
     }
 
 
@@ -748,7 +724,7 @@ $rdf.Fetcher.prototype.proxifyIfNeeded = function(url) {
 }
 
 $rdf.Fetcher.prototype.proxifySymbolIfNeeded = function(symbol) {
-    Preconditions.checkArgument( $rdf.PG.Utils.isSymbolNode(symbol),"This is not a symbol!"+symbol);
+    $rdf.PG.Utils.checkArgument( $rdf.PG.Utils.isSymbolNode(symbol),"This is not a symbol!"+symbol);
     var url = $rdf.PG.Utils.symbolNodeToUrl(symbol);
     var proxifiedUrl = this.proxifyIfNeeded(url);
     return $rdf.sym(proxifiedUrl);

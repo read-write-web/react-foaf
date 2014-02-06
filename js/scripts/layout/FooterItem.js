@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 
-define(['react', 'mixins', 'reactAddons', 'jsx!Pix'], function (React, mixins, ReactWithAddons, Pix) {
+define(['react', 'mixins', 'reactAddons', 'jsx!Pix','PGReact'], function (React, mixins, ReactWithAddons, Pix,PGReact) {
 
 var Footer = React.createClass({
     mixins: [mixins.WithLogger, mixins.WithLifecycleLogging],
@@ -24,7 +24,7 @@ var Footer = React.createClass({
             var active = _.contains(activeTabs,tab);
             var minimized = _.contains(minimizedTabs,tab);
             var current = (currentTab === tab);
-            return <FooterItem key={tab.personPG.getPointerKeyForReact()} imgSrc={img} onFooterItemClick={onClick} isActiveTab={active} isMinimizedTab={minimized} isCurrentTab={current} />;
+            return <FooterItem key={PGReact.getPointerKeyForReact(tab.personPG)} imgSrc={img} onFooterItemClick={onClick} isActiveTab={active} isMinimizedTab={minimized} isCurrentTab={current} />;
         });
 
         var globalCloseItemArray = [];

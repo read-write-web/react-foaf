@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 define(['react', 'mixins',
-    'jsx!PersonContactOnProfile'], function (React, mixins, PersonContactOnProfile) {
+    'jsx!PersonContactOnProfile','PGReact'], function (React, mixins, PersonContactOnProfile,PGReact) {
 
 var PersonContactOnProfileJumpWrapper = React.createClass({
     mixins: [mixins.WithLogger, mixins.WithLifecycleLoggingLite, mixins.WithEmptyInitialState],
@@ -33,7 +33,7 @@ var PersonContactOnProfileJumpWrapper = React.createClass({
     render: function() {
         return (
             <PersonContactOnProfile
-            key={this.props.personPG.getPointerKeyForReact()}
+            key={PGReact.getPointerKeyForReact(this.props.personPG)}
             onPersonContactClick={this.props.onPersonContactClick}
             onAddContactClick={this.props.onAddContactClick}
             personPG={this.props.personPG}

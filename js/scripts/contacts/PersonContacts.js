@@ -2,8 +2,9 @@
 
 define(['react', 'mixins', 'reactAddons',
         'jsx!PersonContactOnProfileJumpWrapper',
-        'jsx!SearchBox'
-     ], function (React, mixins, ReactWithAddons, PersonContactOnProfileJumpWrapper, SearchBox) {
+        'jsx!SearchBox',
+        'PGReact'
+     ], function (React, mixins, ReactWithAddons, PersonContactOnProfileJumpWrapper, SearchBox,PGReact) {
 
 var PersonContacts = React.createClass({
     mixins: [mixins.WithLogger, mixins.WithLifecycleLoggingLite],
@@ -52,7 +53,7 @@ var PersonContacts = React.createClass({
                     }
                 }
                 return (<PersonContactOnProfileJumpWrapper
-                            key={contactPG.getPointerKeyForReact()}
+                            key={PGReact.getPointerKeyForReact(contactPG)}
                             onPersonContactClick={onContactClick}
                             onAddContactClick={self.props.onAddContactClick}
                             personPG={contactPG}
