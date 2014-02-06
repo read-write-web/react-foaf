@@ -98,10 +98,10 @@ var PersonContacts = React.createClass({
         // Upload the dropped item.
         if (dataTransfer && dataTransfer.types.length) {
             this.props.uploadDroppedItems(dataTransfer);
-        } else {
-            // Hide overlay for dropping in.
-            this.props.removeOverlay();
         }
+        
+        // Hide overlay for dropping in.
+        this.props.removeOverlay();
     }
 });
 

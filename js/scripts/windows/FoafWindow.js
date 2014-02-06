@@ -220,6 +220,7 @@ var FoafWindow = React.createClass({
     },
 
     _removeOverlay: function() {
+        console.log('_removeOverlay')
         this.setState({
             showOverlay:false
         });
