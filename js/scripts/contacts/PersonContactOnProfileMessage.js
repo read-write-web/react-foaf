@@ -26,8 +26,8 @@ var PersonContactOnProfileMessage = React.createClass({
     _handleClick: function(e) {
         e.preventDefault();
         e.stopPropagation();
-        console.log(this.props.personPG);
-        this.props.onAddContactClick(this.props.personPG);
+        console.log(this.props.personPG); // TODO : don't understand why PG here is a tab of PGs?
+        this.props.onAddContact(this.props.personPG[0].pointer.value);
     }
 });
 

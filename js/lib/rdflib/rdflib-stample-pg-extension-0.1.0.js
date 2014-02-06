@@ -485,6 +485,11 @@ $rdf.PointedGraph = function() {
         this.store.add(pointer, rel, object, why);
     }
 
+    $rdf.PointedGraph.prototype.isStatementExist = function(pointer, rel, object, why) {
+        var stats = this.store.statementsMatching(pointer, rel, object, why);
+        return (stats.length == 0)? false : true;
+    }
+
     $rdf.PointedGraph.prototype.ajaxPut = function (baseUri, data, success, error, done) {
         $.ajax({
             type: "PUT",

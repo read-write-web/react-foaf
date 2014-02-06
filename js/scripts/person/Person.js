@@ -64,7 +64,7 @@ define(['react', 'mixins',
                     <PersonContacts
                         personPG={this.props.personPG}
                         onContactSelected={this.props.onContactSelected}
-                        onAddContactClick={this.props.onAddContactClick}
+                        onAddContact={this.props.onAddContact}
                     />
                 </div>
                 );

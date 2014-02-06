@@ -77,7 +77,7 @@ var PersonContactOnProfile = React.createClass({
                 <PersonContactOnProfilePix personPG={graphList} />
                 <PersonContactOnProfileBasicInfo personPGs={graphList} />
                 <PersonContactOnProfileNotifications personPGs={graphList} getNotifications={this.getNotifications}/>
-                <PersonContactOnProfileMessage personPG={graphList} onAddContactClick={this.props.onAddContactClick}/>
+                <PersonContactOnProfileMessage personPG={graphList} onAddContact={this.props.onAddContact}/>
             </li>
             );
     },

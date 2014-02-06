@@ -29,6 +29,11 @@ var PersonContacts = React.createClass({
              'hide': this.props.toolsBarVisible
         });
 
+        var layerClass = ReactWithAddons.addons.classSet({
+            'dropLayer': true,
+            'hideVisibility': (this.props.showOverlay)?false:true
+        });
+
         if (!this.props.personPG) return (
             <div id="contacts" className="clearfix">
                 <div class={titleClass}>Contacts</div>
@@ -55,13 +60,14 @@ var PersonContacts = React.createClass({
                 return (<PersonContactOnProfileJumpWrapper
                             key={PGReact.getPointerKeyForReact(contactPG)}
                             onPersonContactClick={onContactClick}
-                            onAddContactClick={self.props.onAddContactClick}
+                            onAddContact={self.props.onAddContact}
                             personPG={contactPG}
                             filterText={self.state.filterText}/>)
             }).value();
 
         return (
             <div id="contacts" className="clearfix">
+                <div className={layerClass} onDrop={this._handleDrop}></div>
                 <div className={titleClass}>
                     <div className="title center-text title-case">{this._getUsername()}'s contacts</div>
                     <SearchBox onUserInput={this._inputInSearchBox}/>
@@ -83,6 +89,19 @@ var PersonContacts = React.createClass({
         this.setState({
             filterText:filterText
         })
+    },
+
+    _handleDrop: function(e) {
+        e.preventDefault();
+        var dataTransfer = e.nativeEvent.dataTransfer;
+
+        // Upload the dropped item.
+        if (dataTransfer && dataTransfer.types.length) {
+            this.props.uploadDroppedItems(dataTransfer);
+        } else {
+            // Hide overlay for dropping in.
+            this.props.removeOverlay();
+        }
     }
 });
 

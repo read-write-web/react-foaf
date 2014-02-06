@@ -30,10 +30,27 @@ var FoafWindow = React.createClass({
             personPG: undefined,
             personPGDeepCopy: undefined,
             filterText: '',
+            showOverlay:true,
             modeEdit: false,
             tabs: [], // unordered
             activeTabs: [] // first element is the displayed one: it's a stack
         };
+    },
+
+    componentWillMount: function() {
+        var self = this;
+        $("body").bind({
+            "dragenter dragover dragexit dragleave drop": function(e) {
+                // Cancel default.
+                e.preventDefault();
+            },
+            "dragenter": function(e) {
+                // Show overlay for dropping in.
+                self.setState({
+                    showOverlay:true
+                })
+            }
+        });
     },
 
     componentDidMount: function() {
@@ -113,9 +130,12 @@ var FoafWindow = React.createClass({
                 this.debug("No active tab, will display PersonContacts");
                 var content = <PersonContacts
                                 toolsBarVisible='true'
+                                showOverlay={this.state.showOverlay}
                                 personPG={this.state.personPG}
+                                removeOverlay={this._removeOverlay}
+                                uploadDroppedItems={this._uploadDroppedItems}
                                 onContactSelected={this._loadOrMaximizeUserProfileFromUrl}
-                                onAddContactClick={this._addContact}
+                                onAddContact={this._addContact}
                                 />;
                 contentSpace = <ContentSpace
                                 clazz="space center"
@@ -133,7 +153,7 @@ var FoafWindow = React.createClass({
                                     modeEdit={this.state.modeEdit}
                                     submitEdition={this._submitEdition}
                                     onContactSelected={this._loadOrMaximizeUserProfileFromUrl}
-                                    onAddContactClick={this._addContact}
+                                    onAddContact={this._addContact}
                                     handleClickChangeModeEdit={this._handleClickChangeModeEdit}/>
                 } else {
                     var content = <Person
@@ -185,32 +205,62 @@ var FoafWindow = React.createClass({
         });
     },
 
-    _addContact: function(contactPG) {
+    _uploadDroppedItems: function(dataTransfer) {
+        console.log('_uploadDroppedItems')
+        var r = _.chain(dataTransfer.types)
+            .filter(function(type) {
+                return type == 'text/uri-list'})
+            .map(function(type) {
+                return dataTransfer.getData(type)
+            }).value();
+
+        // TODO : The Uri is is a WEBID, is it a valid URi???
+        // Add user as contact.
+        if (r.length != 0) this._addContact(r);
+    },
+
+    _removeOverlay: function() {
+        this.setState({
+            showOverlay:false
+        });
+    },
+
+    _addContact: function(contactUri) {
         var self = this;
         var currentUserPG = this.state.personPG;
-        var contactPgFirst = contactPG[0];
         var baseUri = this.state.personPG.pointer.value;
+        var contactUriSym = $rdf.sym(contactUri);
+
+        // If contactUri is the current user, cancel.
+        if (contactUri == currentUserPG.pointer.value) return;
+
+        // If contactUri is already in the current user contact lists, cancel.
+        var existCheck = currentUserPG.isStatementExist(currentUserPG.pointer, FOAF('knows'), contactUriSym, currentUserPG.namedGraphFetchUrl);
+        if (existCheck) return;
 
         // Create a deep copy of the current PG and update it with new contact.
         var personPGCopy = this.state.personPG.deepCopyOfGraph();
-        personPGCopy.addNewStatement(currentUserPG.pointer, FOAF('knows'), contactPgFirst.pointer, currentUserPG.namedGraphFetchUrl);
-        var data = new $rdf.Serializer(personPGCopy.store).toN3(personPGCopy.store);
+        personPGCopy.addNewStatement(currentUserPG.pointer, FOAF('knows'), contactUriSym, currentUserPG.namedGraphFetchUrl);
+        var dataToSend = new $rdf.Serializer(personPGCopy.store).toN3(personPGCopy.store);
 
         // PUT the changes to the server.
-        currentUserPG.ajaxPut(baseUri, data,
+        currentUserPG.ajaxPut(baseUri, dataToSend,
             function success() {
                 self.log("************** Success");
-
                 // If success, update the current store.
                 currentUserPG.replaceStatements(personPGCopy);
                 self.setState({
-                    personPG: currentUserPG
+                    personPG: currentUserPG,
+                    showOverlay:false
                 });
             },
             function error(status, xhr) {
                 //TODO Restore current PG ?.
                 self.log("************** Error");
                 self.log(status);
+                self.setState({
+                    showOverlay:false
+                });
             }
         )
     },
