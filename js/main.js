@@ -5,9 +5,8 @@ require.config({
     paths: {
 
         /*
-        * Libs
-        * */
-
+         * Libs
+         */
         "jquery": "lib/jquery-2.1.0.min",
         "react": "lib/react-0.8.0",
         "reactAddons": "lib/react-with-addons-0.8.0",
@@ -24,9 +23,8 @@ require.config({
 
 
         /*
-        * Utils
-        * */
-
+         * Utils
+         */
         "foafUtils": "scripts/foafUtils",
         "httpUtils": "scripts/httpUtils",
 
@@ -36,9 +34,8 @@ require.config({
 
 
         /*
-        *    REACT Components.
-        * */
-
+         *    REACT Components.
+         */
         "App": "scripts/App",
         "Window": "scripts/windows/Window",
         "FoafWindow": "scripts/windows/FoafWindow",
@@ -68,10 +65,8 @@ require.config({
 
 
         /*
-        * CSS : Use less.
-        * */
-
-
+         * CSS : Use less.
+         */
 
     },
 
@@ -94,31 +89,33 @@ require.config({
         }
 
         /*
-        "reactAddons": {
-            "exports":"React.addons"
-        }*/
+         "reactAddons": {
+         "exports":"React.addons"
+         }*/
 
     }
 });
 
-require([
-    "jquery",
-    "react",
-    "rdflib",
-    "rdflib-pg-extension",
-    "q",
-    "routing",
-    "jsx!App"],
+require(
+    [
+        "jquery",
+        "react",
+        "rdflib",
+        "rdflib-pg-extension",
+        "q",
+        "routing",
+        "jsx!App",
+    ],
     function ($, React, rdflib, rdflibPg, Q, routing, App) {
-
         // Make these variable globals.
         window.Q = Q; //TODO: find better way to deal with Q
 
-        // Globals for imgs.
-        avatar = "img/avatar.png";
-        friendIcon = 'img/friends_icon_yellow.png';
-        closeIcon = 'img/close_icon.png';
-        webIdIcon = 'img/webid.png';
+
+        // TODO remove these global image paths !!!
+        avatar = require.toUrl("../img/avatar.png");
+        friendIcon = require.toUrl("../img/friends_icon_yellow.png");
+        closeIcon = require.toUrl("../img/close_icon.png");
+        webIdIcon = require.toUrl("../img/webid.png");
 
         // proxy
         //$rdf.Fetcher.fetcherWithPromiseCrossSiteProxyTemplate = "https://www.stample.io/srv/cors?url=";
@@ -151,14 +148,11 @@ require([
         }
 
 
-        // maybe this should be injected as props???
+        // TODO maybe this should be injected as props???
         routeHelper = new RouteHelper();
-
-        // ???
-        Q.longStackSupport = true;
 
         // Launch the App.
         var mountNode = document.getElementById('container');
         React.renderComponent(App({profileURL:foafDocURL}), mountNode);
 
-});
+    });
