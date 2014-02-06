@@ -54,6 +54,7 @@ var PersonContacts = React.createClass({
                 return (<PersonContactOnProfileJumpWrapper
                             key={contactPG.getPointerKeyForReact()}
                             onPersonContactClick={onContactClick}
+                            onAddContactClick={self.props.onAddContactClick}
                             personPG={contactPG}
                             filterText={self.state.filterText}/>)
             }).value();

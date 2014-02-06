@@ -113,8 +113,16 @@ var FoafWindow = React.createClass({
             this._updateRouteToCurrentState();
             if ( !currentTab ) {
                 this.debug("No active tab, will display PersonContacts");
-                var content = <PersonContacts toolsBarVisible='true' personPG={this.state.personPG} onContactSelected={this._loadOrMaximizeUserProfileFromUrl}/>;
-                contentSpace = <ContentSpace clazz="space center" isDefaultTab={this._isDefaultTab}>{content}</ContentSpace>;
+                var content = <PersonContacts
+                                toolsBarVisible='true'
+                                personPG={this.state.personPG}
+                                onContactSelected={this._loadOrMaximizeUserProfileFromUrl}
+                                onAddContactClick={this._addContact}
+                                />;
+                contentSpace = <ContentSpace
+                                clazz="space center"
+                                isDefaultTab={this._isDefaultTab}>{content}
+                                </ContentSpace>;
             }
             else {
                 //var currentTab = this._getCurrentTab()
@@ -122,11 +130,26 @@ var FoafWindow = React.createClass({
                 var minimizeCurrentTab = this._minimizeTab.bind(this,currentTab);
                 var closeCurrentTab = this._closeTab.bind(this,currentTab);
                 if (!this.state.modeEdit) {
-                    var content = <Person personPG={currentTab.personPG} modeEdit={this.state.modeEdit} submitEdition={this._submitEdition} onContactSelected={this._loadOrMaximizeUserProfileFromUrl} handleClickChangeModeEdit={this._handleClickChangeModeEdit}/>
+                    var content = <Person
+                                    personPG={currentTab.personPG}
+                                    modeEdit={this.state.modeEdit}
+                                    submitEdition={this._submitEdition}
+                                    onContactSelected={this._loadOrMaximizeUserProfileFromUrl}
+                                    onAddContactClick={this._addContact}
+                                    handleClickChangeModeEdit={this._handleClickChangeModeEdit}/>
                 } else {
-                    var content = <Person personPG={this.state.personPGDeepCopy} modeEdit={this.state.modeEdit} submitEdition={this._submitEdition} onContactSelected={this._loadOrMaximizeUserProfileFromUrl} handleClickChangeModeEdit={this._handleClickChangeModeEdit}/>
+                    var content = <Person
+                                    personPG={this.state.personPGDeepCopy}
+                                    modeEdit={this.state.modeEdit}
+                                    submitEdition={this._submitEdition}
+                                    onContactSelected={this._loadOrMaximizeUserProfileFromUrl}
+                                    handleClickChangeModeEdit={this._handleClickChangeModeEdit}/>
                 }
-                contentSpace = <ContentSpace onMinimize={minimizeCurrentTab} onClose={closeCurrentTab} isDefaultTab={this._isDefaultTab}>{content}</ContentSpace>;
+                contentSpace = <ContentSpace
+                                onMinimize={minimizeCurrentTab}
+                                onClose={closeCurrentTab}
+                                isDefaultTab={this._isDefaultTab}>{content}
+                                </ContentSpace>;
             }
 
             var foafBoxTree =
@@ -162,6 +185,36 @@ var FoafWindow = React.createClass({
             modeEdit:bool,
             personPGDeepCopy:personPGCopy
         });
+    },
+
+    _addContact: function(contactPG) {
+        var self = this;
+        var currentUserPG = this.state.personPG;
+        var contactPgFirst = contactPG[0];
+        var baseUri = this.state.personPG.pointer.value;
+
+        // Create a deep copy of the current PG and update it with new contact.
+        var personPGCopy = this.state.personPG.deepCopyOfGraph();
+        personPGCopy.addNewStatement(currentUserPG.pointer, FOAF('knows'), contactPgFirst.pointer, currentUserPG.namedGraphFetchUrl);
+        var data = new $rdf.Serializer(personPGCopy.store).toN3(personPGCopy.store);
+
+        // PUT the changes to the server.
+        currentUserPG.ajaxPut(baseUri, data,
+            function success() {
+                self.log("************** Success");
+
+                // If success, update the current store.
+                currentUserPG.replaceStatements(personPGCopy);
+                self.setState({
+                    personPG: currentUserPG
+                });
+            },
+            function error(status, xhr) {
+                //TODO Restore current PG ?.
+                self.log("************** Error");
+                self.log(status);
+            }
+        )
     },
 
     _submitEdition: function(personPG){

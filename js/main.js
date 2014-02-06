@@ -121,7 +121,7 @@ require([
         webIdIcon = 'img/webid.png';
 
         // proxy
-        $rdf.Fetcher.fetcherWithPromiseCrossSiteProxyTemplate = "http://localhost:9000/srv/cors?url=";
+        //$rdf.Fetcher.fetcherWithPromiseCrossSiteProxyTemplate = "http://localhost:9000/srv/cors?url=";
         //$rdf.Fetcher.fetcherWithPromiseCrossSiteProxyTemplate = "http://data.fm/proxy?uri=";
         //$rdf.Fetcher.homeServer = "http://localhost:9000/"
 
@@ -144,7 +144,7 @@ require([
             // TODO need to add hash if needed: we do not look for primary topic anymore
             //var foafDocURL = "https://my-profile.eu/people/mtita/card";// Not working
             //var foafDocURL = "http://presbrey.mit.edu/foaf";
-            //var foafDocURL = 'https://localhost:8443/2013/backbone';
+            //var foafDocURL = 'https://ameliemelo3.localhost:8443/card';
             //var foafDocURL = "https://my-profile.eu/people/tim/card";
             //var foafDocURL = "https://my-profile.eu/people/deiu/card";
         }

@@ -55,13 +55,17 @@ define(['react', 'mixins',
                         modeEdit={this.props.modeEdit}
                         submitEdition={this._submitEdition}/>
                     <PersonNotifications personPG={this.props.personPG}/>
-                    <PersonMessage personPG={this.props.personPG}/>
+                    <PersonMessage personPG={this.props.personPG} />
                     <PersonMoreInfo
                         personPG={this.props.personPG}
                         modeEdit={this.props.modeEdit}
                         submitEdition={this._submitEdition}/>
                     <PersonWebId personPG={this.props.personPG}/>
-                    <PersonContacts personPG={this.props.personPG} onContactSelected={this.props.onContactSelected}/>
+                    <PersonContacts
+                        personPG={this.props.personPG}
+                        onContactSelected={this.props.onContactSelected}
+                        onAddContactClick={this.props.onAddContactClick}
+                    />
                 </div>
                 );
         }

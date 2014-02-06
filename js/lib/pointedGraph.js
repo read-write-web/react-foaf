@@ -246,8 +246,6 @@ $rdf.PointedGraph = function() {
         return this.store.fetcher.fetch(pointerUrl, referrerUrl, force);
     }
 
-
-
     // relUri => List[Symbol]
     $rdf.PointedGraph.prototype.getSymbol = function() {
         var rels = _.flatten(arguments); // TODO: WTF WHY DO WE NEED TO FLATTEN!!!
@@ -339,6 +337,10 @@ $rdf.PointedGraph = function() {
         });
     }
 
+    $rdf.PointedGraph.prototype.addNewStatement = function(pointer, rel, object, why) {
+        this.store.add(pointer, rel, object, why);
+    }
+
     $rdf.PointedGraph.prototype.ajaxPut = function (baseUri, data, success, error, done) {
         $.ajax({
             type: "PUT",
@@ -358,7 +360,6 @@ $rdf.PointedGraph = function() {
                 if (done) done()
             });
     }
-
 
     $rdf.PointedGraph.prototype.print = function() {
         return this.printSummary() + " = { "+this.printContent() + "}"

@@ -27,7 +27,7 @@ var PersonContactOnProfile = React.createClass({
     },
 
 
-    handleClick: function(e) {
+    _handleClick: function(e) {
         // TODO maybe not appropriate? we may be able to click on a namednode before it has been jumped?
         if ( this.props.jumpedPersonPG ) {
             this.props.onPersonContactClick();
@@ -58,7 +58,6 @@ var PersonContactOnProfile = React.createClass({
         return graphs;
     },
 
-
     render: function() {
         var graphList = this.getGraphList();
 
@@ -73,12 +72,12 @@ var PersonContactOnProfile = React.createClass({
 
         // Return.
         return (
-            <li className={liClasses} onClick={this.handleClick}>
+            <li className={liClasses} onClick={this._handleClick}>
                 <div className="loader"></div>
                 <PersonContactOnProfilePix personPG={graphList} />
                 <PersonContactOnProfileBasicInfo personPGs={graphList} />
                 <PersonContactOnProfileNotifications personPGs={graphList} getNotifications={this.getNotifications}/>
-                <PersonContactOnProfileMessage personPG={graphList}/>
+                <PersonContactOnProfileMessage personPG={graphList} onAddContactClick={this.props.onAddContactClick}/>
             </li>
             );
     },
