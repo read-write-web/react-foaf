@@ -30,7 +30,7 @@ var FoafWindow = React.createClass({
             personPG: undefined,
             personPGDeepCopy: undefined,
             filterText: '',
-            showOverlay:true,
+            showOverlay:false,
             modeEdit: false,
             tabs: [], // unordered
             activeTabs: [] // first element is the displayed one: it's a stack
