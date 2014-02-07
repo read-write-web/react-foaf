@@ -78,7 +78,6 @@ define(['react', 'mixins', 'reactAddons'], function (React, mixins, ReactWithAdd
 
         // Change state to hide overlay.
         this.setState({showOverlay:false});
-        //this.props.removeOverlay();
     }
 });
 
