@@ -4,33 +4,35 @@ AppStarter = {
     /**
      * Initialize the application
      *  // TODO this pg attr is library dependent, should rather be an url or an RDF document body serialized
-     * @param pg the initial pointed graph
+     * @param pointedGraph the initial pointed graph
      * @param currentScriptUrl: required to resolve relative paths of other JS files to load
      */
-    initialize : function(pg,currentScriptUrl) {
-        console.debug("Initializing with PG=",pg);
-        var baseUrl = this.getBaseUrl(currentScriptUrl);
-        console.debug("Will use baseUrl=",baseUrl);
+    initialize : function(pointedGraph,currentScriptUrl) {
+        var self = this
+        console.debug("Initializing with PG=",pointedGraph);
+        var appBaseUrl = this.getAppBaseUrl(currentScriptUrl);
+        console.debug("Will use appBaseUrl=",appBaseUrl);
 
-
-        // TODO do not use global initialPG variable but inject it in the require app
-        window.initialPG = pg;
-
-
-        this.loadRequireJS(
-            baseUrl+"/js/main",
-            baseUrl+"/js/lib/require/require.js",
-            undefined
-        )
-
+        var requireJsUrl = appBaseUrl+"/js/lib/require/require.js"
+        this.loadScript(requireJsUrl,function() {
+            self.startRequire(appBaseUrl,pointedGraph);
+        })
     },
 
-    loadRequireJS: function(dataMain,requireLib,callback) {
-        var script = document.createElement('script');
-        script.setAttribute("data-main", dataMain);
-        script.src = requireLib;
-        document.body.appendChild(script);
-        if(callback) callback();
+    /**
+     * Triggers the dynamic loading of a new JS file
+     * @param scriptSrc
+     * @param callback
+     */
+    loadScript: function(scriptSrc, callback) {
+        var oHead = document.getElementsByTagName('head')[0];
+        var oScript = document.createElement('script');
+        oScript.type = 'text/javascript';
+        oScript.src = scriptSrc;
+        // Then bind the event to the callback function.
+        oScript.onreadystatechange = callback;   // IE 6 & 7
+        oScript.onload = callback;
+        oHead.appendChild(oScript);
     },
 
     /**
@@ -40,7 +42,7 @@ AppStarter = {
      * @param scriptUrl
      * @return baseUrl (doesn't end with a / )
      */
-    getBaseUrl: function(currentScriptUrl) {
+    getAppBaseUrl: function(currentScriptUrl) {
         if ( currentScriptUrl && currentScriptUrl.indexOf(".js") != -1 && currentScriptUrl.indexOf("/") != -1 ) {
             var scriptFolder = currentScriptUrl.substr( 0 , currentScriptUrl.lastIndexOf("/") );
             return scriptFolder;
@@ -50,6 +52,191 @@ AppStarter = {
                 "It is required to start the app with AppStarter.initialize(pg,currentScriptUrl)." +
                 "Note currentScriptUrl should at least contain one / so you can use ./AppStarter.js but not AppStarter.js");
         }
+    },
+
+    /**
+     * Start require
+     * @param appBaseUrl
+     * @param pg
+     */
+    startRequire: function(appBaseUrl, pointedGraph) {
+
+        require.config({
+            baseUrl: appBaseUrl,
+
+            map: {
+                "*": {
+                    // doesn't work well if declared with "paths"
+                    "less": "js/lib/require/require-less-0.1.1/less"
+                }
+            },
+
+            paths: {
+
+                /*
+                 * RequireJS Plugins
+                 */
+                "jsx": "js/lib/require/require-jsx/jsx",
+                "JSXTransformer": "js/lib/require/require-jsx/JSXTransformer",
+
+
+                /*
+                 * Libs
+                 */
+                "jquery": "js/lib/jquery-2.1.0.min",
+                "react": "js/lib/react-0.8.0",
+                "reactAddons": "js/lib/react-with-addons-0.8.0",
+                "underscore":"js/lib/underscore",
+                "lodash": "js/lib/lodash.underscore",
+                "rx": "js/lib/rx",
+                "rxAsync": "js/lib/rx.async",
+                "q": "js/lib/q",
+                "rdflib": "js/lib/rdflib/rdflib-stample-0.1.0",
+                "rdflib-pg-extension": "js/lib/rdflib/rdflib-stample-pg-extension-0.1.0",
+                "director": "js/lib/director",
+
+
+                /*
+                 * Utils
+                 */
+                "foafUtils": "js/scripts/foafUtils",
+                "httpUtils": "js/scripts/httpUtils",
+
+                "mixins": "js/scripts/mixins",
+                "routing": "js/scripts/routing",
+                "PGReact": "js/scripts/PGReact",
+
+
+                /*
+                 *    REACT Components.
+                 */
+                "App": "js/scripts/App",
+                "Window": "js/scripts/windows/Window",
+                "FoafWindow": "js/scripts/windows/FoafWindow",
+                "MainSearchBox": "js/scripts/layout/MainSearchBox",
+                "ContentSpace": "js/scripts/layout/ContentSpace",
+                "FooterItem": "js/scripts/layout/FooterItem",
+
+                "Pix": "js/scripts/common/Pix",
+                "PersonContactOnProfileBasicInfo": "js/scripts/contacts/PersonContactOnProfileBasicInfo",
+                "PersonContactOnProfileMoreInfo": "js/scripts/contacts/PersonContactOnProfileMoreInfo",
+                "PersonContactOnProfileNotifications": "js/scripts/contacts/PersonContactOnProfileNotifications",
+                "PersonContactOnProfileMessage": "js/scripts/contacts/PersonContactOnProfileMessage",
+                "PersonContactOnProfilePix": "js/scripts/contacts/PersonContactOnProfilePix",
+                "PersonContactOnProfile": "js/scripts/contacts/PersonContactOnProfile",
+                "PersonContactOnProfileJumpWrapper": "js/scripts/contacts/PersonContactOnProfileJumpWrapper",
+                "PersonContacts": "js/scripts/contacts/PersonContacts",
+                "SearchBox": "js/scripts/contacts/SearchBox",
+
+                "PersonBasicInfo": "js/scripts/person/PersonBasicInfo",
+                "PersonNotifications": "js/scripts/person/PersonNotifications",
+                "PersonMessage": "js/scripts/person/PersonMessage",
+                "PersonMoreInfo": "js/scripts/person/PersonMoreInfo",
+                "PersonAddress": "js/scripts/person/PersonAddress",
+                "PersonWebId": "js/scripts/person/PersonWebId",
+                "PersonEditProfile": "js/scripts/person/PersonEditProfile",
+                "Person": "js/scripts/person/Person"
+
+
+                /*
+                 * CSS : Use less.
+                 */
+
+            },
+
+            shim: {
+                JSXTransformer: {
+                    exports: "JSXTransformer"
+                },
+
+                "rdflib-pg-extension": {
+                    "deps": ["rdflib","q","underscore"],
+                    "exports":"$rdf.PG"
+                },
+
+                "foafUtils": {
+                    "exports":"foafUtils"
+                },
+
+                "httpUtils": {
+                    "exports":"httpUtils"
+                }
+
+                /*
+                 "reactAddons": {
+                 "exports":"React.addons"
+                 }*/
+
+            }
+        });
+
+        require(
+            [
+                "jquery",
+                "react",
+                "rdflib",
+                "rdflib-pg-extension",
+                "q",
+                "rx",
+                "rxAsync",
+                "routing",
+                "jsx!App",
+                "less!css/base.less"
+            ],
+            function ($, React, rdflib, rdflibPg, Q, rx, rxAsync, routing, App, baseLess) {
+                // Make these variable globals.
+                window.Q = Q; //TODO: find better way to deal with Q
+
+
+                // TODO remove these global image paths !!!
+                avatar = require.toUrl("img/avatar.png");
+                friendIcon = require.toUrl("img/friends_icon_yellow.png");
+                closeIcon = require.toUrl("img/close_icon.png");
+                webIdIcon = require.toUrl("img/webid.png");
+
+                // proxy
+                //$rdf.Fetcher.fetcherWithPromiseCrossSiteProxyTemplate = "https://www.stample.io/srv/cors?url=";
+                //$rdf.Fetcher.fetcherWithPromiseCrossSiteProxyTemplate = "http://localhost:9000/srv/cors?url=";
+                //$rdf.Fetcher.fetcherWithPromiseCrossSiteProxyTemplate = "http://data.fm/proxy?uri=";
+                //$rdf.Fetcher.homeServer = "http://localhost:9000/"
+
+                window.foafSpec = "http://xmlns.com/foaf/spec/"; // Do I need this?
+
+
+                var fetcherTimeout = 4000;
+
+                // TODO fix global variable issue :(
+                store = rdflibPg.createNewStore(fetcherTimeout);
+
+
+
+                // Set the bootstrap URL with the initial PG pointer.
+                // TODO bad !!!
+                if ( pointedGraph) {
+                    foafDocURL = pointedGraph.pointer.uri;
+                } else {
+                    foafDocURL = "http://bblfish.net/people/henry/card#me";
+                    //var foafDocURL = "https://my-profile.eu/people/deiu/card#me";
+                    //foafDocURL = "https://localhost:8443/2013/backbone#me";
+                    // TODO need to add hash if needed: we do not look for primary topic anymore
+                    //var foafDocURL = "https://my-profile.eu/people/mtita/card";// Not working
+                    //var foafDocURL = "http://presbrey.mit.edu/foaf";
+                    //var foafDocURL = 'https://ameliemelo3.localhost:8443/card';
+                    //var foafDocURL = "https://my-profile.eu/people/tim/card";
+                    //var foafDocURL = "https://my-profile.eu/people/deiu/card";
+                }
+
+
+                // TODO maybe this should be injected as props???
+                routeHelper = new RouteHelper();
+
+
+                // Launch the App.
+                var mountNode = document.getElementById('container');
+                React.renderComponent(App({profileURL:foafDocURL}), mountNode);
+
+            });
     }
+
 
 }
