@@ -96,6 +96,7 @@ AppStarter = {
                 "director": "js/lib/director",
 
 
+                "rdfStore": "js/scripts/mainRdfStore",
 
                 /*
                  * Utils
@@ -171,33 +172,20 @@ AppStarter = {
             [
                 "jquery",
                 "react",
-                "rdflib",
-                "rdflib-pg-extension",
                 "q",
-                "rx",
-                "rxAsync",
+                "rdfStore",
                 "routing",
                 "jsx!App",
                 "less!css/base.less"
             ],
-            function ($, React, rdflib, rdflibPg, Q, rx, rxAsync, routing, App, baseLess) {
+            function ($, React, Q, rdfStore, routing, App, baseLess) {
                 console.error("App=",App);
                 // Make these variable globals.
                 window.Q = Q; //TODO: find better way to deal with Q
 
 
-                var fetcherTimeout = 4000;
-
                 // TODO fix global variable issue :(
-                store = rdflibPg.createNewStore(fetcherTimeout);
-
-                // proxy
-                //$rdf.Fetcher.fetcherWithPromiseCrossSiteProxyTemplate = "https://www.stample.io/srv/cors?url=";
-                //$rdf.Fetcher.fetcherWithPromiseCrossSiteProxyTemplate = "http://localhost:9000/srv/cors?url=";
-                //$rdf.Fetcher.fetcherWithPromiseCrossSiteProxyTemplate = "http://data.fm/proxy?uri=";
-                //$rdf.Fetcher.homeServer = "http://localhost:9000/"
-
-                window.foafSpec = "http://xmlns.com/foaf/spec/"; // Do I need this?
+                store = rdfStore;
 
 
                 // Set the bootstrap URL with the initial PG pointer.
