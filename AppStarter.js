@@ -185,9 +185,11 @@ AppStarter = {
 
                 // Set the bootstrap URL with the initial PG pointer.
                 // TODO bad !!!
+                var foafDocURL;
                 if ( pointedGraph) {
                     foafDocURL = pointedGraph.pointer.uri;
-                } else {
+                }
+                else {
                     foafDocURL = "http://bblfish.net/people/henry/card#me";
                     //var foafDocURL = "https://my-profile.eu/people/deiu/card#me";
                     //foafDocURL = "https://localhost:8443/2013/backbone#me";
