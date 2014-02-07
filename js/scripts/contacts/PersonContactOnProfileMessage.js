@@ -6,11 +6,13 @@ var PersonContactOnProfileMessage = React.createClass({
     render: function() {
         var message = this.getMessage();
 
+        //
+
         return (
             <div className="moreInfo">
                 <div className="lastInteraction">Last message from {name}: <span>{message.lastMessageDate}</span></div>
                 <div className="message">{message.lastMessage}</div>
-                <div className="addAsFriend" onClick={this._handleClick}><a href="#">Add as contact</a></div>
+                <div className="addAsContact" onClick={this._handleClick}><a href="#">Add as contact</a></div>
                 <div className="nextStep"><a href="#">Write back</a></div>
             </div>
             );
