@@ -1957,9 +1957,7 @@ var requirejs, require, define;
                     src = mainScript.split('/');
                     mainScript = src.pop();
                     subPath = src.length ? src.join('/')  + '/' : './';
-
                     cfg.baseUrl = subPath;
-                    console.debug("cfg.baseUrl=",cfg.baseUrl);
                 }
 
                 //Strip off any trailing .js since mainScript is now
