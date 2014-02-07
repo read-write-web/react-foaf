@@ -108,6 +108,20 @@ foafUtils.getImg = function (pgList, options) {
     return getValueList(pgList, FOAF("logo"), FOAF("img"), FOAF("depiction"));
 };
 
+foafUtils.checkImgURL = function(url) {
+    if (url.indexOf("file:", 0) !== -1) return false;
+    if (url.match(/\.(jpeg|jpg|gif|png)$/) != null) return true
+    return false;
+}
+
+foafUtils.getFirstValidImg = function(pgList) {
+    var imgUrlList = foafUtils.getImg(pgList);
+    var imgUrlListCheck = _.chain(imgUrlList)
+        .filter(foafUtils.checkImgURL) // TODO is this really necessary???
+        .value();
+    return _.first(imgUrlListCheck);
+}
+
 foafUtils.getThumbnail = function (pgList) {
     return getValueList(pgList, FOAF("thumbnail"));
 };

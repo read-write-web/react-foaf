@@ -96,11 +96,11 @@ AppStarter = {
                 "director": "js/lib/director",
 
 
+
                 /*
                  * Utils
                  */
                 "foafUtils": "js/scripts/foafUtils",
-                "httpUtils": "js/scripts/httpUtils",
 
                 "mixins": "js/scripts/mixins",
                 "routing": "js/scripts/routing",
@@ -135,12 +135,13 @@ AppStarter = {
                 "PersonAddress": "js/scripts/person/PersonAddress",
                 "PersonWebId": "js/scripts/person/PersonWebId",
                 "PersonEditProfile": "js/scripts/person/PersonEditProfile",
-                "Person": "js/scripts/person/Person"
+                "Person": "js/scripts/person/Person",
 
 
                 /*
-                 * CSS : Use less.
+                 * Static assets
                  */
+                "appImages": "js/scripts/appImages"
 
             },
 
@@ -150,16 +151,12 @@ AppStarter = {
                 },
 
                 "rdflib-pg-extension": {
-                    "deps": ["rdflib","q","underscore"],
+                    "deps": ["rdflib","q","underscore","rx","rxAsync"],
                     "exports":"$rdf.PG"
                 },
 
                 "foafUtils": {
                     "exports":"foafUtils"
-                },
-
-                "httpUtils": {
-                    "exports":"httpUtils"
                 }
 
                 /*
@@ -184,15 +181,15 @@ AppStarter = {
                 "less!css/base.less"
             ],
             function ($, React, rdflib, rdflibPg, Q, rx, rxAsync, routing, App, baseLess) {
+                console.error("App=",App);
                 // Make these variable globals.
                 window.Q = Q; //TODO: find better way to deal with Q
 
 
-                // TODO remove these global image paths !!!
-                avatar = require.toUrl("img/avatar.png");
-                friendIcon = require.toUrl("img/friends_icon_yellow.png");
-                closeIcon = require.toUrl("img/close_icon.png");
-                webIdIcon = require.toUrl("img/webid.png");
+                var fetcherTimeout = 4000;
+
+                // TODO fix global variable issue :(
+                store = rdflibPg.createNewStore(fetcherTimeout);
 
                 // proxy
                 //$rdf.Fetcher.fetcherWithPromiseCrossSiteProxyTemplate = "https://www.stample.io/srv/cors?url=";
@@ -201,13 +198,6 @@ AppStarter = {
                 //$rdf.Fetcher.homeServer = "http://localhost:9000/"
 
                 window.foafSpec = "http://xmlns.com/foaf/spec/"; // Do I need this?
-
-
-                var fetcherTimeout = 4000;
-
-                // TODO fix global variable issue :(
-                store = rdflibPg.createNewStore(fetcherTimeout);
-
 
 
                 // Set the bootstrap URL with the initial PG pointer.
