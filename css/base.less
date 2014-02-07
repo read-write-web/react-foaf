@@ -160,6 +160,69 @@ textarea:focus {
   outline: none;
 }
 
+/* ------------------------------- */
+/* CONTAINER */
+
+#container {
+  width: 100%;
+  position: absolute !important;
+}
+
+.app {
+  margin: 0 auto;
+}
+
+
+/* ------------------------------- */
+/* DROP OVERLAY */
+
+.dropOverlay {
+  height: 100%;
+  width: 100%;
+  margin: 0 auto;
+  position: absolute;
+  top: 0;
+  display: block;
+  z-index: 99;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  color:white;
+}
+
+.dropOverlayInner {
+  height: 100%;
+  width: 100%;
+  margin: 0 auto;
+  position: absolute;
+  top: 0;
+  display: block;
+  z-index: 99;
+  background: none black;
+  opacity: 0.5;
+  border: 3px solid red;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  color:white;
+}
+
+.dropOverlay > .dropText {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 300px;
+  height: 25px;
+  line-height: 25px;
+  margin: auto;
+  text-align: center;
+  z-index: 100;
+  border-radius: 10px;
+  background: #b80b5b;
+  color: white;
+  text-transform: uppercase;
+  font-weight: bold;
+}
 
 /* ------------------------------- */
 /* SEARCH */
@@ -259,7 +322,7 @@ textarea:focus {
 .loader {
   display: none;
   position: absolute;
-  z-index: 1000000000;
+  z-index:1000000;
   top: 50%;
   left: 50%;
   margin-top: -19px;
@@ -454,3 +517,5 @@ ul {
   }
 
 }
+
+

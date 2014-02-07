@@ -41,16 +41,11 @@ var FoafWindow = React.createClass({
 
     componentWillMount: function() {
         var self = this;
-        $("body").bind({
-            "dragenter dragover dragexit dragleave drop": function(e) {
-                // Cancel default.
+
+        // Cancel drag and drop event default behavior on the body.
+        $("body").bind({"dragenter dragover dragexit dragleave drop":
+            function (e) {
                 e.preventDefault();
-            },
-            "dragenter": function(e) {
-                // Show overlay for dropping in.
-                self.setState({
-                    showOverlay:true
-                })
             }
         });
     },
@@ -62,7 +57,6 @@ var FoafWindow = React.createClass({
     _isInitialized: function() {
         return this.state.personPG
     },
-
 
     _isDefaultTab: function() {
         var currentTab = this._getCurrentTab();
@@ -117,10 +111,10 @@ var FoafWindow = React.createClass({
         }
     },
 
-
     render: function () {
         var self = this;
         this.log("render FoafWindow",this.state,this.props);
+
         if ( !this._isInitialized() ) {
             return <div>{'LOADING'}</div>;
         }
@@ -132,16 +126,14 @@ var FoafWindow = React.createClass({
                 this.debug("No active tab, will display PersonContacts");
                 var content = <PersonContacts
                                 toolsBarVisible='true'
-                                showOverlay={this.state.showOverlay}
                                 personPG={this.state.personPG}
-                                removeOverlay={this._removeOverlay}
-                                uploadDroppedItems={this._uploadDroppedItems}
                                 onContactSelected={this._loadOrMaximizeUserProfileFromUrl}
                                 onAddContact={this._addContact}
                                 />;
                 contentSpace = <ContentSpace
                                 clazz="space center"
-                                isDefaultTab={this._isDefaultTab}>{content}
+                                isDefaultTab={this._isDefaultTab}
+                                uploadDroppedItems={this._uploadDroppedItems}>{content}
                                 </ContentSpace>;
             }
             else {
@@ -168,34 +160,37 @@ var FoafWindow = React.createClass({
                 contentSpace = <ContentSpace
                                 onMinimize={minimizeCurrentTab}
                                 onClose={closeCurrentTab}
-                                isDefaultTab={this._isDefaultTab}>{content}
+                                isDefaultTab={this._isDefaultTab}
+                                uploadDroppedItems={this._uploadDroppedItems}>{content}
                                 </ContentSpace>;
             }
 
             var foafBoxTree =
                 <div className="PersonalProfileDocument">
                     <MainSearchBox
-                    personPG={this.state.personPG}
-                    filterText={this.state.filterText}
-                    onUserInput={this._inputInSearchBox}
-                    loadCurrentUserProfileFromUrl={this._loadOrMaximizeUserProfileFromUrl}
+                        personPG={this.state.personPG}
+                        filterText={this.state.filterText}
+                        onUserInput={this._inputInSearchBox}
+                        loadCurrentUserProfileFromUrl={this._loadOrMaximizeUserProfileFromUrl}
                     />
                     <div id="actionNeeded">Action needed</div>
-                    <div className="tabs">{contentSpace}</div>
+                    <div className="tabs">
+                        {contentSpace}
+                    </div>
                     <Footer
-                    activeTabs={this.state.activeTabs}
-                    tabs={this.state.tabs}
-                    onTabClicked={this._toggleTab}
-                    minimizeAllTabs={this._minimizeAllTabs}
-                    closeAllTabs={this._closeAllTabs}
+                        activeTabs={this.state.activeTabs}
+                        tabs={this.state.tabs}
+                        onTabClicked={this._toggleTab}
+                        minimizeAllTabs={this._minimizeAllTabs}
+                        closeAllTabs={this._closeAllTabs}
                     />
                 </div>;
             return foafBoxTree;
-        }
+        } //onDrop={this._handleDrop}
     },
 
     _handleClickChangeModeEdit: function(bool) {
-        this.log("_handleClickChangeModeEdit")
+        this.log("_handleClickChangeModeEdit");
 
         // Create a deep copy of the current PG is needed.
         var personPGCopy = (bool)? this.state.personPG.deepCopyOfGraph():undefined;
@@ -219,13 +214,6 @@ var FoafWindow = React.createClass({
         // Add user as contact.
         this.log('_uploadDroppedItems : ' + r);
         if (r.length != 0) this._addContact(r[0]);
-    },
-
-    _removeOverlay: function() {
-        this.log('_removeOverlay');
-        this.setState({
-            showOverlay:false
-        });
     },
 
     _addContact: function(contactUri) {
