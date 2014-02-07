@@ -8,18 +8,19 @@
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
 
-    <script src="js/lib/jquery-2.1.0.min.js"></script>
-    <script src="js/lib/underscore.js"></script>
-    <script src="js/lib/lodash.underscore.js"></script>
-    <script src="js/lib/underscore.string.js"></script>
-    <script src="js/lib/rx.js"></script>
-    <script src="js/lib/rx.async.js"></script>
-    <script data-main="js/main" src="js/lib/require.js"></script>
-
+    <script src="js/AppStarter.js"></script>
 
 </head>
 
 <body>
+
+<script>
+
+    var pg = undefined; // TODO?
+    var starterScriptUrl = "./AppStarter.js"
+    AppStarter.initialize(pg, starterScriptUrl);
+
+</script>
 
 <div id="container">
     <!-- Application Renders Here-->

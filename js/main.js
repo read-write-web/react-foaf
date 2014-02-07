@@ -27,7 +27,7 @@ require.config({
         "underscore":"lib/underscore",
         "lodash": "lib/lodash.underscore",
         "rx": "lib/rx",
-        "rxAsync": "lib/x.async",
+        "rxAsync": "lib/rx.async",
         "q": "lib/q",
         "rdflib": "lib/rdflib/rdflib-stample-0.1.0",
         "rdflib-pg-extension": "lib/rdflib/rdflib-stample-pg-extension-0.1.0",
@@ -115,11 +115,13 @@ require(
         "rdflib",
         "rdflib-pg-extension",
         "q",
+        "rx",
+        "rxAsync",
         "routing",
         "jsx!App",
         "less!../css/base.less"
     ],
-    function ($, React, rdflib, rdflibPg, Q, routing, App) {
+    function ($, React, rdflib, rdflibPg, Q, rx, rxAsync, routing, App, baseLess) {
         // Make these variable globals.
         window.Q = Q; //TODO: find better way to deal with Q
 
