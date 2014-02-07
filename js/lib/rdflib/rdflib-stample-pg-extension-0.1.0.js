@@ -516,6 +516,11 @@ $rdf.PointedGraph = function() {
         this.store.add(pointer, rel, object, why);
     }
 
+    $rdf.PointedGraph.prototype.removeStatement = function(pointer, rel, object, why) {
+        var st = $rdf.st(pointer, rel, object, why);
+        this.store.remove(st);
+    }
+
     $rdf.PointedGraph.prototype.isStatementExist = function(pointer, rel, object, why) {
         var stats = this.store.statementsMatching(pointer, rel, object, why);
         return (stats.length == 0)? false : true;

@@ -53,20 +53,22 @@ define(['react', 'mixins',
                             <div className="edit-profile" onClick={this._handleClickEditButton}>{this.state.editText}</div>
                             <Pix src={this._getUserImg()}/>
                             <PersonBasicInfo
-                            personPG={this.props.personPG}
-                            modeEdit={this.props.modeEdit}
-                            submitEdition={this._submitEdition}/>
+                                personPG={this.props.personPG}
+                                modeEdit={this.props.modeEdit}
+                                submitEdition={this._submitEdition}/>
                             <PersonNotifications personPG={this.props.personPG}/>
                             <PersonMessage personPG={this.props.personPG} />
                             <PersonMoreInfo
-                            personPG={this.props.personPG}
-                            modeEdit={this.props.modeEdit}
-                            submitEdition={this._submitEdition}/>
+                                personPG={this.props.personPG}
+                                modeEdit={this.props.modeEdit}
+                                submitEdition={this._submitEdition}/>
                             <PersonWebId personPG={this.props.personPG}/>
                             <PersonContacts
-                            personPG={this.props.personPG}
-                            onContactSelected={this.props.onContactSelected}
-                            onAddContact={this.props.onAddContact}
+                                personPG={this.props.personPG}
+                                currentUserPG={this.props.currentUserPG}
+                                onContactSelected={this.props.onContactSelected}
+                                onAddContact={this.props.onAddContact}
+                                onRemoveContact={this.props.onRemoveContact}
                             />
                         </div>
                         );

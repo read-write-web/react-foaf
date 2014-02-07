@@ -56,7 +56,9 @@ var PersonContacts = React.createClass({
                             key={PGReact.getPointerKeyForReact(contactPG)}
                             onPersonContactClick={onContactClick}
                             onAddContact={self.props.onAddContact}
+                            onRemoveContact={self.props.onRemoveContact}
                             personPG={contactPG}
+                            currentUserPG={self.props.currentUserPG}
                             filterText={self.state.filterText}/>)
             }).value();
 

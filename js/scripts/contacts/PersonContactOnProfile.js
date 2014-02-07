@@ -60,7 +60,6 @@ var PersonContactOnProfile = React.createClass({
 
     render: function() {
         var graphList = this.getGraphList();
-
         var liClasses = ReactWithAddons.addons.classSet({
             'contact': true,
             'clearfix': true,
@@ -77,7 +76,11 @@ var PersonContactOnProfile = React.createClass({
                 <PersonContactOnProfilePix personPG={graphList} />
                 <PersonContactOnProfileBasicInfo personPGs={graphList} />
                 <PersonContactOnProfileNotifications personPGs={graphList} getNotifications={this.getNotifications}/>
-                <PersonContactOnProfileMessage personPG={graphList} onAddContact={this.props.onAddContact}/>
+                <PersonContactOnProfileMessage
+                    personPG={graphList}
+                    currentUserPG={this.props.currentUserPG}
+                    onAddContact={this.props.onAddContact}
+                    onRemoveContact={this.props.onRemoveContact}/>
             </li>
             );
     },

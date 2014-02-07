@@ -127,8 +127,10 @@ var FoafWindow = React.createClass({
                 var content = <PersonContacts
                                 toolsBarVisible='true'
                                 personPG={this.state.personPG}
+                                currentUserPG={this.state.personPG}
                                 onContactSelected={this._loadOrMaximizeUserProfileFromUrl}
                                 onAddContact={this._addContact}
+                                onRemoveContact={this._removeContact}
                                 />;
                 contentSpace = <ContentSpace
                                 clazz="space center"
@@ -144,10 +146,12 @@ var FoafWindow = React.createClass({
                 if (!this.state.modeEdit) {
                     var content = <Person
                                     personPG={currentTab.personPG}
+                                    currentUserPG={this.state.personPG}
                                     modeEdit={this.state.modeEdit}
                                     submitEdition={this._submitEdition}
                                     onContactSelected={this._loadOrMaximizeUserProfileFromUrl}
                                     onAddContact={this._addContact}
+                                    onRemoveContact={this._removeContact}
                                     handleClickChangeModeEdit={this._handleClickChangeModeEdit}/>
                 } else {
                     var content = <Person
@@ -256,6 +260,16 @@ var FoafWindow = React.createClass({
                 });
             }
         )
+    },
+
+    _removeContact: function(contactUri) {
+        var self = this;
+        var currentUserPG = this.state.personPG;
+        var baseUri = this.state.personPG.pointer.value;
+        var contactUriSym = $rdf.sym(contactUri);
+        this.log("_removeContact : " + contactUri);
+        return;
+
     },
 
     _submitEdition: function(personPG){
