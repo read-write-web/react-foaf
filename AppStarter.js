@@ -205,8 +205,11 @@ AppStarter = {
 
 
                 // Launch the App.
+                var mainComponent = App({
+                    profileURL:foafDocURL
+                });
                 var mountNode = document.getElementById('container');
-                React.renderComponent(App({profileURL:foafDocURL}), mountNode);
+                React.renderComponent(mainComponent,mountNode);
 
             });
     }
