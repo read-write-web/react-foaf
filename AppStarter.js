@@ -96,7 +96,7 @@ AppStarter = {
                 "director": "js/lib/director",
 
 
-                "rdfStore": "js/scripts/mainRdfStore",
+                "globalRdfStore": "js/scripts/globalRdfStore",
 
                 /*
                  * Utils
@@ -173,19 +173,14 @@ AppStarter = {
                 "jquery",
                 "react",
                 "q",
-                "rdfStore",
+                "globalRdfStore",
                 "routing",
                 "jsx!App",
                 "less!css/base.less"
             ],
-            function ($, React, Q, rdfStore, routing, App, baseLess) {
-                console.error("App=",App);
+            function ($, React, Q, globalRdfStore, routing, App, baseLess) {
                 // Make these variable globals.
                 window.Q = Q; //TODO: find better way to deal with Q
-
-
-                // TODO fix global variable issue :(
-                store = rdfStore;
 
 
                 // Set the bootstrap URL with the initial PG pointer.

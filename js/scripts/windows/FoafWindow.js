@@ -5,6 +5,7 @@ define([
     'mixins',
     'q',
     'director',
+    'globalRdfStore',
     'jsx!ContentSpace',
     'jsx!MainSearchBox',
     'jsx!Person',
@@ -14,6 +15,7 @@ define([
              mixins,
              Q,
              director,
+             globalRdfStore,
              ContentSpace,
              MainSearchBox,
              Person,
@@ -87,7 +89,7 @@ var FoafWindow = React.createClass({
     _initState: function(profileURL,openContactProfileURL) {
         var self = this;
         var lastAction = (openContactProfileURL ? this._loadOrMaximizeUserProfileFromUrl.bind(this,openContactProfileURL) : undefined);
-        store.fetcher.fetch(profileURL)
+        globalRdfStore.fetcher.fetch(profileURL)
             .then(function (pg) {
                 self.setState({
                     personPG: pg
@@ -308,7 +310,7 @@ var FoafWindow = React.createClass({
     _createNewUserTabFromUrl: function(url) {
         this.log("_createNewUserTabFromUrl ",url);
         var self = this;
-        store.fetcher.fetch(url)
+        globalRdfStore.fetcher.fetch(url)
             .then(function(pg) {
                 self._createNewUserTab(pg);
             });
