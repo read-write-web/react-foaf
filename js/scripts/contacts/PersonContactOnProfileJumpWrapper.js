@@ -13,7 +13,6 @@ var PersonContactOnProfileJumpWrapper = React.createClass({
         filterText: React.PropTypes.string.isRequired
     },
 
-
     componentDidMount: function() {
         var self = this;
         this.props.personPG.jumpAsync()

@@ -206,7 +206,6 @@ var FoafWindow = React.createClass({
     },
 
     _uploadDroppedItems: function(dataTransfer) {
-        console.log('_uploadDroppedItems')
         var r = _.chain(dataTransfer.types)
             .filter(function(type) {
                 return type == 'text/uri-list'})
@@ -216,11 +215,12 @@ var FoafWindow = React.createClass({
 
         // TODO : The Uri is is a WEBID, is it a valid URi???
         // Add user as contact.
-        if (r.length != 0) this._addContact(r);
+        this.log('_uploadDroppedItems : ' + r);
+        if (r.length != 0) this._addContact(r[0]);
     },
 
     _removeOverlay: function() {
-        console.log('_removeOverlay')
+        this.log('_removeOverlay');
         this.setState({
             showOverlay:false
         });
@@ -238,6 +238,8 @@ var FoafWindow = React.createClass({
         // If contactUri is already in the current user contact lists, cancel.
         var existCheck = currentUserPG.isStatementExist(currentUserPG.pointer, FOAF('knows'), contactUriSym, currentUserPG.namedGraphFetchUrl);
         if (existCheck) return;
+
+        this.log("_addContact : " + contactUri);
 
         // Create a deep copy of the current PG and update it with new contact.
         var personPGCopy = this.state.personPG.deepCopyOfGraph();
