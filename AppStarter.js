@@ -91,10 +91,13 @@ AppStarter = {
                 "rx": "js/lib/rx",
                 "rxAsync": "js/lib/rx.async",
                 "q": "js/lib/q",
-                "rdflib": "js/lib/rdflib/rdflib-stample-0.1.0",
-                "rdflib-pg-extension": "js/lib/rdflib/rdflib-stample-pg-extension-0.1.0",
                 "director": "js/lib/director",
 
+                // For now we use the link of github js to be able to stay up to date with the rdflib-stample-pg-extension -->
+                "rdflib": "https://rawgithub.com/stample/rdflib-pg-extension/master/releases/0.1.0/rdflib-stample-0.1.0",
+                "rdflib-pg-extension": "https://rawgithub.com/stample/rdflib-pg-extension/master/releases/0.1.0/rdflib-stample-pg-extension-0.1.0",
+                //"rdflib": "js/lib/rdflib/rdflib-stample-0.1.0",
+                //"rdflib-pg-extension": "js/lib/rdflib/rdflib-stample-pg-extension-0.1.0",
 
                 "globalRdfStore": "js/scripts/globalRdfStore",
 
@@ -190,9 +193,9 @@ AppStarter = {
                     foafDocURL = pointedGraph.pointer.uri;
                 }
                 else {
-                    //foafDocURL = "http://bblfish.net/people/henry/card#me";
+                    foafDocURL = "http://bblfish.net/people/henry/card#me";
                     //var foafDocURL = "https://my-profile.eu/people/deiu/card#me";
-                    foafDocURL = "https://localhost:8443/2013/backboneFriend1#me";
+                    //foafDocURL = "https://localhost:8443/2013/backboneFriend1#me";
                     // TODO need to add hash if needed: we do not look for primary topic anymore
                     //var foafDocURL = "https://my-profile.eu/people/mtita/card";// Not working
                     //var foafDocURL = "http://presbrey.mit.edu/foaf";

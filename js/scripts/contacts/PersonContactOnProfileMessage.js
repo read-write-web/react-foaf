@@ -51,7 +51,7 @@ var PersonContactOnProfileMessage = React.createClass({
         var res = _.chain(this.props.personPG)// TODO: why is it a list of PGs.
             .map(function(contactPG) {return contactPG.pointer;})
             .map(function (contactPGPointer) {
-                return currentUserPG.isStatementExist(currentUserPG.pointer, FOAF('knows'), contactPGPointer, currentUserPG.namedGraphFetchUrl);
+                return currentUserPG.hasPointerTripleMatching( FOAF('knows'), contactPGPointer);
             })
             .reduce(function(base, bool) { return base || bool}, false)
             .value()

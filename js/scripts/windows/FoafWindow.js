@@ -229,7 +229,7 @@ var FoafWindow = React.createClass({
 
     _isContactWithCurrentUser: function(contactUriSym) {
         var currentUserPG = this.state.personPG;
-        if (currentUserPG.isStatementExist(currentUserPG.pointer, FOAF('knows'), contactUriSym, currentUserPG.namedGraphFetchUrl)) return;
+        return currentUserPG.hasPointerTripleMatching( FOAF('knows'), contactUriSym);
     },
 
     _addContact: function(contactUriSym) {
