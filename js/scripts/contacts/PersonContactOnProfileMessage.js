@@ -46,11 +46,14 @@ var PersonContactOnProfileMessage = React.createClass({
     // Check if the current contact is already contact of the current user.
     _isContactWithCurrentUser: function() {
         var currentUserPG = this.props.currentUserPG;
-        var contactUri = this.props.personPG[0].pointer.value;
-        var contactPointer = this.props.personPG[0].pointer;
-        
-        // If contactUri is already in the current user contact lists, return true.
-        return currentUserPG.isStatementExist(currentUserPG.pointer, FOAF('knows'), contactPointer, currentUserPG.namedGraphFetchUrl);
+        var res = _.chain(this.props.personPG)// TODO: why is it a list of PGs.
+            .map(function(contactPG) {return contactPG.pointer;})
+            .map(function (contactPGPointer) {
+                return currentUserPG.isStatementExist(currentUserPG.pointer, FOAF('knows'), contactPGPointer, currentUserPG.namedGraphFetchUrl);
+            })
+            .reduce(function(base, bool) { return base || bool}, false)
+            .value()
+        return res;
     }
 });
 
