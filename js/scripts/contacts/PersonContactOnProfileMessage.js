@@ -47,10 +47,10 @@ var PersonContactOnProfileMessage = React.createClass({
     _isContactWithCurrentUser: function() {
         var currentUserPG = this.props.currentUserPG;
         var contactUri = this.props.personPG[0].pointer.value;
-        var contactUriSym = $rdf.sym(contactUri);
-
+        var contactPointer = this.props.personPG[0].pointer;
+        
         // If contactUri is already in the current user contact lists, return true.
-        return currentUserPG.isStatementExist(currentUserPG.pointer, FOAF('knows'), contactUriSym, currentUserPG.namedGraphFetchUrl);
+        return currentUserPG.isStatementExist(currentUserPG.pointer, FOAF('knows'), contactPointer, currentUserPG.namedGraphFetchUrl);
     }
 });
 

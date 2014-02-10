@@ -222,7 +222,7 @@ var FoafWindow = React.createClass({
     _addContact: function(contactUri) {
         var self = this;
         var currentUserPG = this.state.personPG;
-        var baseUri = this.state.personPG.pointer.value;
+        var currentUserUri = this.state.personPG.pointer.value;
         var contactUriSym = $rdf.sym(contactUri);
 
         // If contactUri is the current user, cancel.
@@ -240,7 +240,7 @@ var FoafWindow = React.createClass({
         var dataToSend = new $rdf.Serializer(personPGCopy.store).toN3(personPGCopy.store);
 
         // PUT the changes to the server.
-        currentUserPG.ajaxPut(baseUri, dataToSend,
+        currentUserPG.ajaxPut(currentUserUri, dataToSend,
             function success() {
                 self.log("************** Success");
                 // If success, update the current store.
@@ -263,7 +263,7 @@ var FoafWindow = React.createClass({
     _removeContact: function(contactUri) {
         var self = this;
         var currentUserPG = this.state.personPG;
-        var baseUri = this.state.personPG.pointer.value;
+        var currentUserUri = this.state.personPG.pointer.value;
         var contactUriSym = $rdf.sym(contactUri);
         this.log("_removeContact : " + contactUri);
 
@@ -276,7 +276,7 @@ var FoafWindow = React.createClass({
         var dataToSend = new $rdf.Serializer(personPGCopy.store).toN3(personPGCopy.store);
 
         // PUT the changes to the server.
-        currentUserPG.ajaxPut(baseUri, dataToSend,
+        currentUserPG.ajaxPut(currentUserUri, dataToSend,
             function success() {
                 self.log("************** Success");
                 // If success, update the current store.
@@ -301,9 +301,9 @@ var FoafWindow = React.createClass({
         var self = this;
         var currentTab = this._getCurrentTab();
         var currentTabPG = currentTab.personPG;
-        var baseUri = currentTab.personPG.pointer.value;
+        var currentTabUri = currentTab.personPG.pointer.value;
         var data = new $rdf.Serializer(personPG.store).toN3(personPG.store);
-        currentTabPG.ajaxPut(baseUri, data,
+        currentTabPG.ajaxPut(currentTabUri, data,
             function success() {
                 self.log("************** Success");
                 // Replace statements in current PG and change component state.

@@ -523,6 +523,14 @@ $rdf.PointedGraph = function() {
 
     $rdf.PointedGraph.prototype.isStatementExist = function(pointer, rel, object, why) {
         var stats = this.store.statementsMatching(pointer, rel, object, why);
+        console.log("*************************")
+        console.log("*************************")
+        console.log("*************************")
+        console.log("*************************")
+        console.log("*************************")
+        console.log("*************************")
+        console.log(object)
+        if ($rdf.PG.Utils.isBlankNode(object)) console.log('BLANK NODE BLANK NODE BLANK NODE BLANK NODE')
         return (stats.length == 0)? false : true;
     }
 
