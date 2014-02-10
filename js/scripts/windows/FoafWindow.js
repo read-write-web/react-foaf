@@ -222,6 +222,16 @@ var FoafWindow = React.createClass({
         };
     },
 
+    _isCurrentUser: function(contactUriSym) {
+        var currentUserPG = this.state.personPG;
+        return (contactUriSym.value == currentUserPG.pointer.value);
+    },
+
+    _isContactWithCurrentUser: function(contactUriSym) {
+        var currentUserPG = this.state.personPG;
+        if (currentUserPG.isStatementExist(currentUserPG.pointer, FOAF('knows'), contactUriSym, currentUserPG.namedGraphFetchUrl)) return;
+    },
+
     _addContact: function(contactUriSym) {
         var self = this;
         var currentUserPG = this.state.personPG;
@@ -230,10 +240,10 @@ var FoafWindow = React.createClass({
         this.log(contactUriSym);
 
         // If contactUri is the current user, cancel.
-        if (contactUriSym.value == currentUserPG.pointer.value) return;
+        if (this._isCurrentUser(contactUriSym)) return;
 
         // If contactUri is already in the current user contact lists, cancel.
-        if (currentUserPG.isStatementExist(currentUserPG.pointer, FOAF('knows'), contactUriSym, currentUserPG.namedGraphFetchUrl)) return;
+        if (this._isContactWithCurrentUser()) return;
 
         // Create a deep copy of the current PG and update it with new contact.
         var personPGCopy = this.state.personPG.deepCopyOfGraph();
@@ -269,7 +279,7 @@ var FoafWindow = React.createClass({
         this.log(contactUriSym);
 
         // If contactUri is the current user, cancel.
-        if (contactUriSym.value == currentUserPG.pointer.value) return;
+        if (this._isCurrentUser(contactUriSym)) return;
 
         // Create a deep copy of the current PG and update it with new contact.
         var personPGCopy = this.state.personPG.deepCopyOfGraph();
