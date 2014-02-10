@@ -190,9 +190,9 @@ AppStarter = {
                     foafDocURL = pointedGraph.pointer.uri;
                 }
                 else {
-                    foafDocURL = "http://bblfish.net/people/henry/card#me";
+                    //foafDocURL = "http://bblfish.net/people/henry/card#me";
                     //var foafDocURL = "https://my-profile.eu/people/deiu/card#me";
-                    //foafDocURL = "https://localhost:8443/2013/backboneFriend4#me";
+                    foafDocURL = "https://localhost:8443/2013/backboneFriend1#me";
                     // TODO need to add hash if needed: we do not look for primary topic anymore
                     //var foafDocURL = "https://my-profile.eu/people/mtita/card";// Not working
                     //var foafDocURL = "http://presbrey.mit.edu/foaf";

@@ -216,23 +216,24 @@ var FoafWindow = React.createClass({
         // TODO : The Uri is is a WEBID, is it a valid URi???
         // Add user as contact.
         this.log('_uploadDroppedItems : ' + r);
-        if (r.length != 0) this._addContact(r[0]);
+        if (r.length != 0) {
+            var uriSym = new $rdf.sym(r[0]);
+            this._addContact(uriSym);
+        };
     },
 
-    _addContact: function(contactUri) {
+    _addContact: function(contactUriSym) {
         var self = this;
         var currentUserPG = this.state.personPG;
         var currentUserUri = this.state.personPG.pointer.value;
-        var contactUriSym = $rdf.sym(contactUri);
+        this.log("_addContact ");
+        this.log(contactUriSym);
 
         // If contactUri is the current user, cancel.
-        if (contactUri == currentUserPG.pointer.value) return;
+        if (contactUriSym.value == currentUserPG.pointer.value) return;
 
         // If contactUri is already in the current user contact lists, cancel.
-        var existCheck = currentUserPG.isStatementExist(currentUserPG.pointer, FOAF('knows'), contactUriSym, currentUserPG.namedGraphFetchUrl);
-        if (existCheck) return;
-
-        this.log("_addContact : " + contactUri);
+        if (currentUserPG.isStatementExist(currentUserPG.pointer, FOAF('knows'), contactUriSym, currentUserPG.namedGraphFetchUrl)) return;
 
         // Create a deep copy of the current PG and update it with new contact.
         var personPGCopy = this.state.personPG.deepCopyOfGraph();
@@ -260,15 +261,15 @@ var FoafWindow = React.createClass({
         )
     },
 
-    _removeContact: function(contactUri) {
+    _removeContact: function(contactUriSym) {
         var self = this;
         var currentUserPG = this.state.personPG;
         var currentUserUri = this.state.personPG.pointer.value;
-        var contactUriSym = $rdf.sym(contactUri);
-        this.log("_removeContact : " + contactUri);
+        this.log("_removeContact : ");
+        this.log(contactUriSym);
 
         // If contactUri is the current user, cancel.
-        if (contactUri == currentUserPG.pointer.value) return;
+        if (contactUriSym.value == currentUserPG.pointer.value) return;
 
         // Create a deep copy of the current PG and update it with new contact.
         var personPGCopy = this.state.personPG.deepCopyOfGraph();

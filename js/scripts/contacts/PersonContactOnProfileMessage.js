@@ -34,8 +34,10 @@ var PersonContactOnProfileMessage = React.createClass({
     _handleClick: function(e) {
         e.preventDefault();
         e.stopPropagation();
-        var contactUri = this.props.personPG[0].pointer.value;
-        (!this._isContactWithCurrentUser())? this.props.onAddContact(contactUri):this.props.onRemoveContact(contactUri);
+        var contactPointer = this.props.personPG[0].pointer;
+        if (!this._isContactWithCurrentUser())
+            this.props.onAddContact(contactPointer)
+        else this.props.onRemoveContact(contactPointer);
     },
 
     // Set appropriate text to display contact.
