@@ -1,12 +1,12 @@
 /** @jsx React.DOM */
 
-define(['react', 'mixins', 'reactAddons', 'foafUtils',
+define(['react', 'mixins', 'reactAddons', 'foafUtils', 'PGUtils',
         'jsx!PersonContactOnProfilePix',
         'jsx!PersonContactOnProfileBasicInfo',
         'jsx!PersonContactOnProfileNotifications',
         'jsx!PersonContactOnProfileMessage'
 
-], function (React, mixins, ReactWithAddons, foafUtils,
+], function (React, mixins, ReactWithAddons, foafUtils, PGUtils,
              PersonContactOnProfilePix,
              PersonContactOnProfileBasicInfo,
              PersonContactOnProfileNotifications,

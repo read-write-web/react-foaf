@@ -205,7 +205,7 @@ mixins.RdfLinkedPgMixin = {
             if (!relSym.length) {
                 PG.updateStore(relSym, newValue);
             } else {
-                PG.updateStoreWithRelSymPath(relSym, newValue);
+                PGUtils.updateStoreWithRelSymPath(PG, relSym, newValue);
             }
 
             // Set new value on component.

@@ -5,6 +5,8 @@ define([
     'mixins',
     'q',
     'director',
+    'foafUtils',
+    'PGUtils',
     'globalRdfStore',
     'jsx!ContentSpace',
     'jsx!MainSearchBox',
@@ -15,6 +17,8 @@ define([
              mixins,
              Q,
              director,
+             foafUtils,
+             PGUtils,
              globalRdfStore,
              ContentSpace,
              MainSearchBox,
@@ -154,6 +158,7 @@ var FoafWindow = React.createClass({
                                     handleClickChangeModeEdit={this._handleClickChangeModeEdit}/>
                 } else {
                     var content = <Person
+                                    currentUserPG={this.state.personPG}
                                     personPG={this.state.personPGDeepCopy}
                                     modeEdit={this.state.modeEdit}
                                     submitEdition={this._submitEdition}
@@ -229,7 +234,7 @@ var FoafWindow = React.createClass({
 
     _isContactWithCurrentUser: function(contactUriSym) {
         var currentUserPG = this.state.personPG;
-        return currentUserPG.hasPointerTripleMatching( FOAF('knows'), contactUriSym);
+        return currentUserPG.hasPointerTripleMatching( FOAF('knows'), contactUriSym); // TODO: not working ?!!!
     },
 
     _addContact: function(contactUriSym) {
@@ -243,11 +248,11 @@ var FoafWindow = React.createClass({
         if (this._isCurrentUser(contactUriSym)) return;
 
         // If contactUri is already in the current user contact lists, cancel.
-        if (this._isContactWithCurrentUser()) return;
+        //if (this._isContactWithCurrentUser()) return;
 
         // Create a deep copy of the current PG and update it with new contact.
         var personPGCopy = this.state.personPG.deepCopyOfGraph();
-        personPGCopy.addNewStatement(currentUserPG.pointer, FOAF('knows'), contactUriSym, currentUserPG.namedGraphFetchUrl);
+        PGUtils.addRel(personPGCopy, FOAF('knows'), contactUriSym);
         var dataToSend = new $rdf.Serializer(personPGCopy.store).toN3(personPGCopy.store);
 
         // PUT the changes to the server.
@@ -283,7 +288,7 @@ var FoafWindow = React.createClass({
 
         // Create a deep copy of the current PG and update it with new contact.
         var personPGCopy = this.state.personPG.deepCopyOfGraph();
-        personPGCopy.removeStatement(currentUserPG.pointer, FOAF('knows'), contactUriSym, currentUserPG.namedGraphFetchUrl);
+        PGUtils.removeRel(personPGCopy, FOAF('knows'), contactUriSym);
         var dataToSend = new $rdf.Serializer(personPGCopy.store).toN3(personPGCopy.store);
 
         // PUT the changes to the server.

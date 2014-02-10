@@ -18,7 +18,7 @@ foafUtils.getValue = function(pg) {
 }
 
 foafUtils.getValueWithRelSymPath = function(pg, relSymPath) {
-    var pgList = $rdf.PG.Utils.getPgsWithRelSymPath(pg, relSymPath);
+    var pgList = PGUtils.getPgsWithRelSymPath(pg, relSymPath);
     var valList = _.chain(pgList)
         .map(function(pgMap) {
             return pgMap.pointer.value;
