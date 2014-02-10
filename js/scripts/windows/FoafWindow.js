@@ -32,7 +32,6 @@ var FoafWindow = React.createClass({
             personPG: undefined,
             personPGDeepCopy: undefined,
             filterText: '',
-            showOverlay:false,
             modeEdit: false,
             tabs: [], // unordered
             activeTabs: [] // first element is the displayed one: it's a stack
@@ -247,16 +246,15 @@ var FoafWindow = React.createClass({
                 // If success, update the current store.
                 currentUserPG.replaceStatements(personPGCopy);
                 self.setState({
-                    personPG: currentUserPG,
-                    showOverlay:false
+                    personPG: currentUserPG
                 });
             },
             function error(status, xhr) {
                 //TODO Restore current PG ?.
-                self.log("************** Error");
-                self.log(status);
+                self.log("************** Error : " + status);
+                // If error, restore old store.
                 self.setState({
-                    showOverlay:false
+                    personPG: currentUserPG
                 });
             }
         )
@@ -268,8 +266,35 @@ var FoafWindow = React.createClass({
         var baseUri = this.state.personPG.pointer.value;
         var contactUriSym = $rdf.sym(contactUri);
         this.log("_removeContact : " + contactUri);
-        return;
 
+        // If contactUri is the current user, cancel.
+        if (contactUri == currentUserPG.pointer.value) return;
+
+        // Create a deep copy of the current PG and update it with new contact.
+        var personPGCopy = this.state.personPG.deepCopyOfGraph();
+        personPGCopy.removeStatement(currentUserPG.pointer, FOAF('knows'), contactUriSym, currentUserPG.namedGraphFetchUrl);
+        var dataToSend = new $rdf.Serializer(personPGCopy.store).toN3(personPGCopy.store);
+
+        // PUT the changes to the server.
+        currentUserPG.ajaxPut(baseUri, dataToSend,
+            function success() {
+                self.log("************** Success");
+                // If success, update the current store.
+                currentUserPG.replaceStatements(personPGCopy);
+                self.setState({
+                    personPG: currentUserPG
+                });
+            },
+            function error(status, xhr) {
+                //TODO Restore current PG ?.
+                self.log("************** Error");
+                self.log(status);
+                // If error, restore old store.
+                self.setState({
+                    personPG: currentUserPG
+                });
+            }
+        )
     },
 
     _submitEdition: function(personPG){
