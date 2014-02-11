@@ -155,9 +155,10 @@ function RDFS(key) { return $rdf.sym("http://www.w3.org/2000/01/rdf-schema#"+key
 
 mixins.mapKeyToSym = {
     "foaf:name": FOAF("name"),
+    "foaf:nick": FOAF("nick"),
     "foaf:givenName": FOAF("givenName"),
     "foaf:givenname": FOAF("givenname"),
-    "foaf:familyName": FOAF("familyName"),
+    "foaf:familyName": FOAF("family_name"),
     "foaf:firstName": FOAF("firstName"),
     "foaf:workplaceHomepage": FOAF("workplaceHomepage"),
     "foaf:mbox": FOAF("mbox"),

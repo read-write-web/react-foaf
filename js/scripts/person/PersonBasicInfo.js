@@ -25,9 +25,9 @@ var PersonBasicInfo = React.createClass({
         if (!this.props.modeEdit) {
             viewTree =
             <div className="basic">
-                <div className="name title-case">{info["foaf:name"]}</div>
-                <div className="surname title-case">{info["foaf:givenname"]}</div>
-                <div className="company">{info["foaf:workplaceHomepage"]}</div>
+                <div className="name title-case" title={info["foaf:name"]}>{info["foaf:name"]}</div>
+                <div className="surname title-case" title={info["foaf:givenname"]}>{info["foaf:givenname"]}</div>
+                <div className="company" title={info["foaf:workplaceHomepage"]}>{info["foaf:workplaceHomepage"]}</div>
             </div>
         }
         else {
@@ -64,19 +64,29 @@ var PersonBasicInfo = React.createClass({
     },
 
     _getBasicInfo: function() {
+        var noValue="...";
         var personPG = this.props.personPG;
         var nameList=foafUtils.getName([personPG]);
+        var nickList=foafUtils.getNick([personPG]);
         var givenNameList=foafUtils.getGivenName([personPG]);
         var familyNameList=foafUtils.getFamilyName([personPG]);
         var firstNameList=foafUtils.getFirstName([personPG]);
         var workplaceHomepageList = foafUtils.getworkplaceHomepage([personPG]);
 
+        var name = (nameList && nameList.length>0)? nameList[0]:noValue;
+        var nick = (nickList && nickList.length>0)? nickList[0]:noValue;
+        var givenName = (givenNameList && givenNameList.length>0)? givenNameList[0]:noValue;
+        var familyName = (familyNameList && familyNameList.length>0)? familyNameList[0]:noValue;
+        var firstName = (firstNameList && firstNameList.length>0)? firstNameList[0]:noValue;
+        var workPlace = (workplaceHomepageList && workplaceHomepageList.length>0)? workplaceHomepageList[0]:noValue;
+
         return {
-            "foaf:name": nameList[0],
-            "foaf:givenname": givenNameList[0],
-            "foaf:lastname": familyNameList[0],
-            "foaf:firstname": firstNameList[0],
-            "foaf:workplaceHomepage": workplaceHomepageList[0]
+            "foaf:name": name,
+            "foaf:nick": nick,
+            "foaf:givenname": givenName,
+            "foaf:lastname": familyName,
+            "foaf:firstname": firstName,
+            "foaf:workplaceHomepage": workPlace
         }
     }
 });

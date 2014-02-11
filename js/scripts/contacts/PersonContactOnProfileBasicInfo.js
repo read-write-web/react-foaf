@@ -20,12 +20,14 @@ var PersonContactOnProfileBasicInfo = React.createClass({
     _getBasicInfo: function() {
         var noValue = "...";
         var nameList=foafUtils.getName(this.props.personPGs);
+        var nickList=foafUtils.getNick(this.props.personPGs);
         var givenNameList=foafUtils.getGivenName(this.props.personPGs);
         var familyNameList=foafUtils.getFamilyName(this.props.personPGs);
         var firstNameList=foafUtils.getFirstName(this.props.personPGs);
         var workPlaceList = foafUtils.getworkplaceHomepage(this.props.personPGs);
 
         var name = (nameList && nameList.length>0)? nameList[0]:noValue;
+        var nick = (nickList && nickList.length>0)? nickList[0]:noValue;
         var givenName = (givenNameList && givenNameList.length>0)? givenNameList[0]:noValue;
         var familyName = (familyNameList && familyNameList.length>0)? familyNameList[0]:noValue;
         var firstName = (firstNameList && firstNameList.length>0)? firstNameList[0]:noValue;
@@ -33,6 +35,7 @@ var PersonContactOnProfileBasicInfo = React.createClass({
 
         return names = {
             name: name,
+            nick: nick,
             givenname: givenName,
             lastname:familyName,
             firstname:firstName,

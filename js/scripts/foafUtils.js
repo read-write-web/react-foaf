@@ -76,6 +76,10 @@ foafUtils.getName = function(pgList, options) {
     return getValueList(pgList, FOAF("name"));
 };
 
+foafUtils.getNick = function(pgList, options) {
+    return getValueList(pgList, FOAF("nick"));
+};
+
 foafUtils.getGivenName = function(pgList, options) {
     return getValueList(pgList, FOAF("givenName"), FOAF("givenname"));
 };
