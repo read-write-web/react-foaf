@@ -27,7 +27,7 @@ var PersonBasicInfo = React.createClass({
             <div className="basic">
                 <div className="name title-case" title={info["foaf:name"]}>{info["foaf:name"]}</div>
                 <div className="surname title-case" title={info["foaf:givenname"]}>{info["foaf:givenname"]}</div>
-                <div className="company" title={info["foaf:workplaceHomepage"]}>{info["foaf:workplaceHomepage"]}</div>
+                <div className="company"  title={info["foaf:workplaceHomepage"]}>{info["foaf:workplaceHomepage"]}</div>
             </div>
         }
         else {
@@ -35,17 +35,17 @@ var PersonBasicInfo = React.createClass({
             <div className="basic">
                 <div className="name title-case">
                     <form onSubmit={this._handleSubmit}>
-                        <input type="text" valueLink={this.linkToPgLiteral(personPG, 'foaf:name')} />
+                        <input type="text" placeholder="Enter name"  valueLink={this.linkToPgLiteral(personPG, 'foaf:name')} />
                     </form>
                 </div>
                 <div className="surname title-case">
                     <form onSubmit={this._handleSubmit}>
-                        <input type="text" valueLink={this.linkToPgLiteral(personPG, 'foaf:givenname')} />
+                        <input type="text" placeholder="Enter givenname" valueLink={this.linkToPgLiteral(personPG, 'foaf:givenname')} />
                     </form>
                 </div>
                 <div className="company">
                     <form onSubmit={this._handleSubmit}>
-                        <input type="text" valueLink={this.linkToPgLiteral(personPG, 'foaf:workplaceHomepage')} />
+                        <input type="text" placeholder="Enter company website" valueLink={this.linkToPgLiteral(personPG, 'foaf:workplaceHomepage')} />
                     </form>
                 </div>
             </div>

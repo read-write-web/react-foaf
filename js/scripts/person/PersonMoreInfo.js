@@ -64,6 +64,7 @@ var PersonMoreInfo = React.createClass({
                                 <div className="content email-content">
                                     <form onSubmit={this._handleSubmit}>
                                         <input type="text"
+                                        placeholder="Enter email"
                                         valueLink={this.linkToPgLiteral(personPG, 'foaf:mbox')} />
                                     </form>
                                 </div>
@@ -73,6 +74,7 @@ var PersonMoreInfo = React.createClass({
                                 <div className="content email-content">
                                     <form onSubmit={this._handleSubmit}>
                                         <input type="text"
+                                        placeholder="Enter phone"
                                         valueLink={this.linkToPgLiteral(personPG, 'foaf:phone')} />
                                     </form>
                                 </div>
@@ -90,6 +92,7 @@ var PersonMoreInfo = React.createClass({
                                 <div className="content website-content">
                                     <form onSubmit={this._handleSubmit}>
                                         <input type="text"
+                                        placeholder="Enter homepage"
                                         valueLink={this.linkToPgLiteral(personPG, 'foaf:homepage')} />
                                     </form>
                                 </div>

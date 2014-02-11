@@ -42,18 +42,18 @@ var PersonAddress = React.createClass({
                     <div className="title-case">Address</div>
                     <div className="content address-content">
                         <form onSubmit={this._handleSubmit}>
-                            <input type="text" valueLink={this.linkToPgLiteral(personPG, 'contact:street')}/>
+                            <input type="text" placeholder="Enter street" valueLink={this.linkToPgLiteral(personPG, 'contact:street')}/>
                         </form>
                         <br/>
                         <form onSubmit={this._handleSubmit}>
-                            <input type="text" valueLink={this.linkToPgLiteral(personPG, 'contact:postalCode')}/>
+                            <input type="text" placeholder="Enter postalcode" valueLink={this.linkToPgLiteral(personPG, 'contact:postalCode')}/>
                         </form>
                         <form onSubmit={this._handleSubmit}>
-                            <input type="text" valueLink={this.linkToPgLiteral(personPG, 'contact:city')}/>
+                            <input type="text"  placeholder="Enter city" valueLink={this.linkToPgLiteral(personPG, 'contact:city')}/>
                         </form>
                         <br/>
                         <form onSubmit={this._handleSubmit}>
-                            <input type="text" valueLink={this.linkToPgLiteral(personPG, 'contact:country')}/>
+                            <input type="text"  placeholder="Enter country" valueLink={this.linkToPgLiteral(personPG, 'contact:country')}/>
                         </form>
                         <br/>
                     </div>
