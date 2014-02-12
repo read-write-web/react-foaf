@@ -11,14 +11,14 @@ function RDFS(name) { return $rdf.sym("http://www.w3.org/2000/01/rdf-schema#"+na
 * Local Utils.
 * */
 foafUtils.getValue = function(pg) {
-    var args = (slice.call(arguments, 1));
+    var args = (Array.prototype.slice.call(arguments, 1));
     var resList = pg.getLiteral(args);
     if (resList.length == 0) resList = pg.getSymbol(args);
     return resList;
 }
 
 foafUtils.getValueFirst = function(pg) {
-    var args = (slice.call(arguments, 1));
+    var args = (Array.prototype.slice.call(arguments, 1));
     var resList = pg.getLiteral(args);
     if (resList.length == 0) resList = pg.getSymbol(args);
     return resList[0];
@@ -43,7 +43,7 @@ foafUtils.getValueWithRelSymPathFirst = function(pg, relSymPath) {
 }
 
 function getValueList(pgList) {
-    var args = (slice.call(arguments, 1));
+    var args = (Array.prototype.slice.call(arguments, 1));
     var res =  _.chain(pgList)
         .map(function (pg) {
             var r = pg.getLiteral(args);
@@ -54,14 +54,14 @@ function getValueList(pgList) {
 }
 
 foafUtils.getValueFirst = function(pg) {
-    var args = (slice.call(arguments, 1));
+    var args = (Array.prototype.slice.call(arguments, 1));
     var resList = pg.getLiteral(args);
     if (resList.length == 0) resList = pg.getSymbol(args);
     return resList[0];
 }
 
 function getLiteralInList(pgList) {
-    var args = (slice.call(arguments, 1));
+    var args = (Array.prototype.slice.call(arguments, 1));
     var res =  _.chain(pgList)
         .map(function (pg) {
             return pg.getLiteral(args);
@@ -71,7 +71,7 @@ function getLiteralInList(pgList) {
 }
 
 function getSymbolInList(pgList) {
-    var args = (slice.call(arguments, 1));
+    var args = (Array.prototype.slice.call(arguments, 1));
     var res =  _.chain(pgList)
         .map(function (pg) {
             return pg.getSymbol(args);
@@ -81,7 +81,7 @@ function getSymbolInList(pgList) {
 }
 
 function getLiteralInListFirst(pgList) {
-    var args = (slice.call(arguments, 1));
+    var args = (Array.prototype.slice.call(arguments, 1));
     var res =  _.chain(pgList)
         .map(function (pg) {
             return pg.getLiteral(args);
@@ -91,7 +91,7 @@ function getLiteralInListFirst(pgList) {
 }
 
 function getSymbolInListFirst(pgList) {
-    var args = (slice.call(arguments, 1));
+    var args = (Array.prototype.slice.call(arguments, 1));
     var res =  _.chain(pgList)
         .map(function (pg) {
             return pg.getSymbol(args);
