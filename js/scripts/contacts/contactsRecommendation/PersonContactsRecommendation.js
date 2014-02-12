@@ -28,13 +28,16 @@ define(['react', 'mixins', 'reactAddons', 'notify',
                 'hide': this.props.toolsBarVisible
             });
 
-            if (!this.props.personPG) return (
-                <div id="contacts" className="clearfix">
-                    <div class={titleClass}>Contacts</div>
-                    <ul className="clearfix span3"></ul>
-                </div>
-                );
+            //this._printPotentialFriendNames(this.props.personPG);
 
+            //if (!this.props.personPG)
+                return (
+                    <div id="contacts" className="clearfix">
+                        <div class={titleClass}>Contacts</div>
+                        <ul className="clearfix span3"></ul>
+                    </div>
+                );
+            /*
             var foafs =
                 _.chain(this.props.personPG.rel(FOAF("knows")))
                     .map(function (contactPG) {
@@ -63,12 +66,56 @@ define(['react', 'mixins', 'reactAddons', 'notify',
                     <div class="title center-text title-case">People you may know</div>
                     <div className={titleClass}>
                         <div className="title center-text title-case">{this._getUsername()}'s contacts</div>
-                        <SearchBox onUserInput={this._inputInSearchBox}/>
                     </div>
                     <ul className="clearfix span3">{ foafs }</ul>
                 </div>
                 );
+                */
         },
+
+        _printPotentialFriendNames: function (personPg) {
+            console.log("here")
+            console.log(personPg)
+            var personDoesntKnowHimFilter = function (himPg) {
+                var personKnowHim = personPg.hasPointerTripleMatching(FOAF("knows"), himPg.pointer);
+                return !personKnowHim;
+            };
+            console.log("here")
+            var heKnowsPersonFilter = function (hePg) {
+                return hePg.hasPointerTripleMatching(FOAF("knows"), personPg.pointer);
+            };
+            console.log("here")
+            var potentialFriendStream = personPg.followPath([FOAF("knows"), FOAF("knows")])
+                .filter($rdf.PG.Filters.isSymbolPointer)
+                .distinct(function (pg) {
+                    console.log("here")
+                    console.log(pg)
+                    return $rdf.PG.Transformers.symbolPointerToValue(pg);
+                })
+                .filter(personDoesntKnowHimFilter)
+                .filter(heKnowsPersonFilter);
+            console.log(potentialFriendStream)
+            var potentialFriendNameStream = potentialFriendStream.flatMap(function (potentialFriendPg) {
+                return potentialFriendPg.followPath([FOAF("name")]).take(1);
+            });
+
+            this._handleNameStream(potentialFriendNameStream);
+        },
+
+        _handleNameStream: function(nameStream) {
+            nameStream.subscribe(
+            function(namePg) {
+                var friendFriendName = namePg.pointer.toString();
+                $("#friendList").append("<li>"+friendFriendName+" ("+namePg.getCurrentDocumentUrl()+")</li>")
+            },
+            function(error) {
+                console.error("Unexpected end of stream",error, error.stack);
+            },
+            function() {
+                $("#end").html(" -> End");
+            }
+        );
+    },
 
         _getUsername: function() {
             var userName = foafUtils.getName([this.props.personPG]);

@@ -65,5 +65,42 @@
 
       .contact :extend(.contact-base all) {}
     }
+
+    > #contactsRecommendation {
+      width: @mainWidth;
+      margin: 0 auto;
+
+      .title {
+        background: #3fabd3;
+        padding: 7px 10px;
+        margin: 30px auto 20px;
+        color: #ffffff;
+      }
+
+      a, a:visited {
+        color: @lightGrey;
+      }
+
+      ul {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      li {
+        .basic {
+          width: 50%;
+          height: 92px;
+          overflow: hidden;
+        }
+
+        img {
+          width: 100%;
+          height: auto;
+        }
+      }
+
+      .contact :extend(.contact-base all) {}
+    }
   }
 }

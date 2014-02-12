@@ -158,6 +158,7 @@ var FoafWindow = React.createClass({
                                 isDefaultTab={this._isDefaultTab}
                                 uploadDroppedItems={this._uploadDroppedItems}>
                                 {content1}
+                                {content2}
                                 </ContentSpace>;
             }
             else {
@@ -267,7 +268,10 @@ var FoafWindow = React.createClass({
         if (this._isCurrentUser(contactUriSym)) return;
 
         // If contactUri is already in the current user contact lists, cancel.
-        //if (this._isContactWithCurrentUser()) return;
+        if (this._isContactWithCurrentUser(contactUriSym)) {
+            notify("warning", "Already in your contact list");
+            return;
+        };
 
         // Create a deep copy of the current PG and update it with new contact.
         var personPGCopy = this.state.personPG.deepCopyOfGraph();

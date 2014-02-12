@@ -739,7 +739,7 @@ $rdf.PointedGraph = function() {
      * @returns {$rdf.PointedGraph}
      */
     $rdf.PointedGraph.prototype.withPointer = function(newPointer) {
-        return new $rdf.PointedGraph(this.store, newPointer, this.namedGraphUrl, this.namedGraphFetchUrl);
+        return new $rdf.PointedGraph(this.store, newPointer, this.namedGraphUrl, this.namedGraphFetchUrl, this.jumpHistory);
     }
 
     /**
