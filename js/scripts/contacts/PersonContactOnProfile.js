@@ -22,7 +22,8 @@ var PersonContactOnProfile = React.createClass({
         personPG: React.PropTypes.instanceOf($rdf.PointedGraph).isRequired,
         filterText: React.PropTypes.string.isRequired,
         // Optional:
-        jumpedPersonPG: React.PropTypes.instanceOf($rdf.PointedGraph)
+        jumpedPersonPG: React.PropTypes.instanceOf($rdf.PointedGraph),
+        seeAlsoPersonPGList: React.PropTypes.array.isRequired // this array is required but can be empty
         // jumpError: optional and undefined type
     },
 
@@ -88,6 +89,7 @@ var PersonContactOnProfile = React.createClass({
         var graphs = [this.props.personPG];
         if ( this.props.jumpedPersonPG ) {
             graphs.unshift(this.props.jumpedPersonPG);
+            graphs.push.apply(graphs,this.props.seeAlsoPersonPGList);
         }
         return graphs;
     },

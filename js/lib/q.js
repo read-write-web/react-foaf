@@ -987,7 +987,7 @@ function displayUnhandledReasons() {
         window.console
     ) {
         array_map(unhandledReasons,function(reason) {
-            console.warn("[Q] Unhandled rejection reason:",reason);
+            console.warn("[Q] Unhandled rejection reason:",reason,reason.stack);
         })
 
     }
@@ -998,7 +998,7 @@ function displayUnhandledReasons() {
 function logUnhandledReasons() {
     for (var i = 0; i < unhandledReasons.length; i++) {
         var reason = unhandledReasons[i];
-        console.warn("Unhandled rejection reason:", reason);
+        console.warn("Unhandled rejection reason:", reason,reason.stack);
     }
 }
 
