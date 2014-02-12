@@ -34,6 +34,7 @@ var PersonContactOnProfile = React.createClass({
             'float-left': true,
             'loading': this._isNotJumpedYet(),
             'error': this._isJumpError(),
+            'noWebId': this._isNotSymbolPointer(),
             'filtered-user' : !this._displayUser(graphList)
         });
 
@@ -73,6 +74,12 @@ var PersonContactOnProfile = React.createClass({
 
     _isNotJumpedYet: function() {
         return !this.props.jumpedPersonPG && !this._isJumpError();
+    },
+
+    _isNotSymbolPointer: function() {
+        if (this.props.jumpedPersonPG) {
+            return !this.props.jumpedPersonPG.isSymbolPointer()
+        }
     },
 
     _getGraphList: function() {
