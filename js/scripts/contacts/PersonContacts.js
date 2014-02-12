@@ -1,10 +1,10 @@
 /** @jsx React.DOM */
 
-define(['react', 'mixins', 'reactAddons',
+define(['react', 'mixins', 'reactAddons', 'notify',
         'jsx!PersonContactOnProfileJumpWrapper',
         'jsx!SearchBox',
         'PGReact'
-     ], function (React, mixins, ReactWithAddons, PersonContactOnProfileJumpWrapper, SearchBox,PGReact) {
+     ], function (React, mixins, ReactWithAddons, notify, PersonContactOnProfileJumpWrapper, SearchBox,PGReact) {
 
 var PersonContacts = React.createClass({
     mixins: [mixins.WithLogger, mixins.WithLifecycleLoggingLite],
@@ -43,7 +43,8 @@ var PersonContacts = React.createClass({
                             self.props.onContactSelected(contactPG.getSymbolPointerUrl())
                         } else {
                             // TODO maybe we can click on a bnode or literal???
-                            alert("Can only click on a Symbol pointer, not Bnode/Literal")
+                            notify("error", "Can only click on a Symbol pointer, not Bnode/Literal.");
+                            //alert("Can only click on a Symbol pointer, not Bnode/Literal")
                         }
                     }
 

@@ -1,12 +1,12 @@
 /** @jsx React.DOM */
 
-define(['react', 'mixins', 'reactAddons', 'foafUtils', 'PGUtils',
+define(['react', 'mixins', 'reactAddons', 'foafUtils', 'PGUtils', 'notify',
         'jsx!PersonContactOnProfilePix',
         'jsx!PersonContactOnProfileBasicInfo',
         'jsx!PersonContactOnProfileNotifications',
         'jsx!PersonContactOnProfileMessage'
 
-], function (React, mixins, ReactWithAddons, foafUtils, PGUtils,
+], function (React, mixins, ReactWithAddons, foafUtils, PGUtils, notify,
              PersonContactOnProfilePix,
              PersonContactOnProfileBasicInfo,
              PersonContactOnProfileNotifications,
@@ -60,10 +60,11 @@ var PersonContactOnProfile = React.createClass({
             this.props.onPersonContactClick();
         }
         else if ( this.props.jumpError ) {
-            alert("Error during jump, can't click on this graph:\n"+JSON.stringify(this.props.jumpError));
+            notify("error", "Error during jump, can't click on this graph.");
+            //alert("Error during jump, can't click on this graph:\n"+JSON.stringify(this.props.jumpError));
         }
         else {
-            alert("Graph not jumped");
+            notify("error", "Graph not jumped.");
         }
         return true;
     },

@@ -92,6 +92,9 @@ AppStarter = {
                 "rxAsync": "js/lib/rx.async",
                 "q": "js/lib/q",
                 "director": "js/lib/director",
+                "noty": "js/lib//notifications/jquery-noty",
+                "notyLayout": "js/lib/notifications/layouts/topcenter",
+                "notyTheme": "js/lib/notifications/themes/default",
 
                 // For now we use the link of github js to be able to stay up to date with the rdflib-stample-pg-extension -->
                 "rdflib": "https://rawgithub.com/stample/rdflib-pg-extension/master/releases/0.1.0/rdflib-stample-0.1.0",
@@ -106,6 +109,7 @@ AppStarter = {
                  */
                 "foafUtils": "js/scripts/foafUtils",
                 "PGUtils": "js/scripts/PGUtils",
+                "notify": "js/scripts/notify",
 
                 "mixins": "js/scripts/mixins",
                 "routing": "js/scripts/routing",
@@ -155,6 +159,14 @@ AppStarter = {
                     exports: "JSXTransformer"
                 },
 
+                "notyLayout": ["jquery", "noty"],
+                "notyTheme": ["jquery", "noty"],
+
+                "noty": {
+                    "deps": ["jquery"],
+                    "exports": "noty"
+                },
+
                 "rdflib-pg-extension": {
                     "deps": ["rdflib","q","underscore","rx","rxAsync"],
                     "exports":"$rdf.PG"
@@ -179,9 +191,13 @@ AppStarter = {
                 "globalRdfStore",
                 "routing",
                 "jsx!App",
-                "less!css/base.less"
+                "less!css/base.less",
+                "notify",
+                "noty",
+                "notyLayout",
+                "notyTheme"
             ],
-            function ($, React, Q, globalRdfStore, routing, App, baseLess) {
+            function ($, React, Q, globalRdfStore, routing, App, baseLess, notify) {
                 // Make these variable globals.
                 window.Q = Q; //TODO: find better way to deal with Q
 
@@ -189,21 +205,21 @@ AppStarter = {
                 // Set the bootstrap URL with the initial PG pointer.
                 // TODO bad !!!
                 var foafDocURL;
-                if ( pointedGraph) {
+                if (pointedGraph) {
                     foafDocURL = pointedGraph.pointer.uri;
                 }
                 else {
                     //foafDocURL = "http://bblfish.net/people/henry/card#me";
-                    foafDocURL = "https://my-profile.eu/people/deiu/card#me";
+                    //foafDocURL = "https://my-profile.eu/people/deiu/card#me";
+                    //foafDocURL = "http://www-public.it-sudparis.eu/~berger_o/foaf.rdf";
                     // TODO need to add hash if needed: we do not look for primary topic anymore
                     //var foafDocURL = "https://my-profile.eu/people/mtita/card";// Not working
                     //var foafDocURL = "http://presbrey.mit.edu/foaf";
                     //var foafDocURL = 'https://ameliemelo3.localhost:8443/card';
                     //var foafDocURL = "https://my-profile.eu/people/tim/card";
-                    //foafDocURL = "https://localhost:8443/2013/backboneFriend1#me";
+                    foafDocURL = "https://localhost:8443/2013/backboneFriend1#me";
                     //foafDocURL = 'https://localhost:8443/2013/testWoAddress';
                 }
-
 
                 // TODO maybe this should be injected as props???
                 routeHelper = new RouteHelper();

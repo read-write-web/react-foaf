@@ -7,6 +7,7 @@ define([
     'director',
     'foafUtils',
     'PGUtils',
+    'notify',
     'globalRdfStore',
     'jsx!ContentSpace',
     'jsx!MainSearchBox',
@@ -19,6 +20,7 @@ define([
              director,
              foafUtils,
              PGUtils,
+             notify,
              globalRdfStore,
              ContentSpace,
              MainSearchBox,
@@ -258,17 +260,19 @@ var FoafWindow = React.createClass({
         // PUT the changes to the server.
         currentUserPG.ajaxPut(currentUserUri, dataToSend,
             function success() {
-                self.log("************** Success");
+                notify("success", "New contact saved.");
                 // If success, update the current store.
+                //TODO Restore current PG.
                 currentUserPG.replaceStatements(personPGCopy);
                 self.setState({
                     personPG: currentUserPG
                 });
             },
             function error(status, xhr) {
-                //TODO Restore current PG ?.
-                self.log("************** Error : " + status);
+                notify("error", "Failed to save new contact. Try again later!");
+
                 // If error, restore old store.
+                //TODO Restore current PG ?.
                 self.setState({
                     personPG: currentUserPG
                 });
@@ -294,6 +298,7 @@ var FoafWindow = React.createClass({
         // PUT the changes to the server.
         currentUserPG.ajaxPut(currentUserUri, dataToSend,
             function success() {
+                notify("success", "Contact removed.");
                 self.log("************** Success");
                 // If success, update the current store.
                 currentUserPG.replaceStatements(personPGCopy);
@@ -302,6 +307,7 @@ var FoafWindow = React.createClass({
                 });
             },
             function error(status, xhr) {
+                notify("error", "Failed to remove new contact. Try again later!");
                 //TODO Restore current PG ?.
                 self.log("************** Error");
                 self.log(status);
@@ -322,6 +328,7 @@ var FoafWindow = React.createClass({
         currentTabPG.ajaxPut(currentTabUri, data,
             function success() {
                 self.log("************** Success");
+                notify("success", "New information saved.");
                 // Replace statements in current PG and change component state.
                 currentTabPG.replaceStatements(personPG);
                 self.setState({
@@ -329,6 +336,7 @@ var FoafWindow = React.createClass({
                 });
             },
             function error(status, xhr) {
+                notify("error", "Failed to save information. Try again!");
                 //TODO Restore current PG ?.
                 self.log("************** Error");
                 self.log(status);
