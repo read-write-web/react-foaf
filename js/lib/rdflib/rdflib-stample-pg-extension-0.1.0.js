@@ -16,6 +16,8 @@ $rdf.PG = {
     }
 }
 
+
+
 $rdf.PG.Utils = {
 
     /**
@@ -95,52 +97,21 @@ $rdf.PG.Utils = {
     },
 
     getLiteralNodes: function(pg, relSym) {
-        return _.chain(getNodes(pg,relSym))
+        return _.chain($rdf.PG.Utils.getNodes(pg,relSym))
             .filter($rdf.PG.Utils.isLiteralNode)
             .value();
     },
     getSymbolNodes: function(pg, relSym) {
-        return _.chain(getNodes(pg,relSym))
+        return _.chain($rdf.PG.Utils.getNodes(pg,relSym))
             .filter($rdf.PG.Utils.isSymbolNode)
             .value();
     },
     getBlankNodes: function(pg, relSym) {
-        return _.chain(getNodes(pg,relSym))
+        return _.chain($rdf.PG.Utils.getNodes(pg,relSym))
             .filter($rdf.PG.Utils.isBlankNode)
             .value();
     },
 
-
-    /**
-     * Get the list of pgs that follows the last relSym in the array.
-     * @param pg
-     * @param relSymArray: path of relSyms.
-     * i.e. : [relSym0, relSym1, relSym2]: relSym2 is immediate child of relSym1 which is immediate chile of relSym0
-     * @returns => List[pg]
-     */
-    getPgsWithRelSymPath: function(pg, relSymAPath) {
-        var inc = 0;
-
-        // If the path is empty return an empty list.
-        if (relSymAPath.length == 0) return [];
-
-        // Tail recursive function traverse the path and get all Pgs of the last rel in relSymArray.
-        var getPgsWithRelSymPathRec = function(pgList) {
-            if (inc == relSymAPath.length - 1) {
-                return pgList;
-            } else {
-                inc = inc + 1;
-                var pgRecList = _.chain(pgList)
-                    .map(function(pgRec) {
-                        return pgRec.rel(relSymAPath[inc])
-                    }).flatten().value();
-                return getPgsWithRelSymPathRec(pgRecList)
-            }
-        }
-
-        // Call the tail recursive function with the first rel.
-        return getPgsWithRelSymPathRec(pg.rel(relSymAPath[inc]));
-    },
 
     /**
      *
@@ -156,6 +127,56 @@ $rdf.PG.Utils = {
             .flatten()
             .value();
         return res;
+    }
+
+}
+
+$rdf.PG.Utils.Rx = {
+
+    /**
+     * Permits to create an RxJs observable based on a list of promises
+     * @param promiseList the list of promise you want to convert as an RxJs Observable
+     * @param subject the type of Rx Subject you want to use (default to ReplaySubject)
+     * @param onError, an optional callback for handling errors
+     * @return {*}
+     */
+    promiseListToObservable: function(promiseList, subject, onError) {
+        if ( promiseList.length == 0 ) {
+            return Rx.Observable.empty();
+        }
+        // Default to ReplaySubject
+        var subject = subject || new Rx.ReplaySubject();
+        // Default to non-blocking error logging
+        var onError = onError || function(error) {
+            console.debug("Promise error catched in promiseListToObservable: ",error);
+            // true means the stream won't continue.
+            return false;
+        };
+        var i = 0;
+        promiseList.map(function(promise) {
+            promise.then(
+                function (promiseValue) {
+                    subject.onNext(promiseValue);
+                    i++;
+                    if ( i == promiseList.length ) {
+                        subject.onCompleted();
+                    }
+                },
+                function (error) {
+                    var doStop = onError(error);
+                    if ( doStop ) {
+                        subject.onError(error);
+                    }
+                    else {
+                        i++;
+                        if ( i == promiseList.length ) {
+                            subject.onCompleted();
+                        }
+                    }
+                }
+            )
+        });
+        return subject.asObservable();
     }
 
 }
@@ -179,7 +200,18 @@ $rdf.PG.Transformers = {
     },
     symbolPointerToValue: function(pg) {
         return $rdf.PG.Utils.symbolNodeToUrl(pg.pointer);
+    },
+
+    tripleToSubject: function(triple) {
+        return triple.subject;
+    },
+    tripleToPredicate: function(triple) {
+        return triple.predicate;
+    },
+    tripleToObject: function(triple) {
+        return triple.object;
     }
+
 }
 
 
@@ -207,7 +239,7 @@ $rdf.pointedGraph = function(store, pointer, namedGraphUrl) {
 
 
 $rdf.PointedGraph = function() {
-    $rdf.PointedGraph = function(store, pointer, namedGraphUrl){
+    $rdf.PointedGraph = function(store, pointer, namedGraphUrl) {
         // TODO assert the  pointer is a node
         $rdf.PG.Utils.checkArgument( $rdf.PG.Utils.isFragmentlessSymbol(namedGraphUrl),"The namedGraphUrl should be a fragmentless symbol! -> "+namedGraphUrl);
         this.store = store;
@@ -308,6 +340,12 @@ $rdf.PointedGraph = function() {
         });
     }
 
+    $rdf.PointedGraph.prototype.relFirst = function(relUri) {
+        var l = this.rel(relUri);
+        if (l.length > 0) return l[0];
+    }
+
+
     /**
      * This is the reverse of "rel": this permits to know which PG in the current graph/document points to the given pointer
      * @param  {$rdf.sym} rel the relation to this node
@@ -322,11 +360,16 @@ $rdf.PointedGraph = function() {
         });
     }
 
+    $rdf.PointedGraph.prototype.revFirst = function(relUri) {
+        var l = this.rev(relUri);
+        if (l.length > 0) return l[0];
+    }
+
     /**
      * Same as "rel" but follow mmultiple predicates/rels
      * @returns {*}
      */
-        // Array[relUri] => Array[Pgs]
+        // Array[relUri] => Array[Pgs] TODO to rework
     $rdf.PointedGraph.prototype.rels = function() {
         var self = this;
         var pgList = _.chain(arguments)
@@ -338,30 +381,50 @@ $rdf.PointedGraph = function() {
         return pgList;
     }
 
-
     /**
      * This permits to follow a relation in the local graph and then jump asynchronously.
      * This produces a stream of pointed graphs in the form of an RxJs Observable
      * @param Observable[PointedGraph]
+     * @param onJumpError
      */
     $rdf.PointedGraph.prototype.jumpRelObservable = function(relUri) {
-        var self = this;
-        var pgList = self.rel(relUri);
-        return Rx.Observable.create(function observerFunction(observer) {
-            pgList.map(function(pg) {
-                pg.jumpAsync().then(
-                    function (jumpedPG) {
-                        observer.onNext(jumpedPG);
-                    },
-                    function (jumpError) {
-                        // TODO how to handle this correctly? should we send errors with onNext????
-                        // can't call onError here because it stops the Observable to work on the first error :(
-                        // observer.onError(jumpError);
-                        console.warn("jumpRelObservable jumpAsync error",jumpError);
-                    }
-                )
-            });
+        var pgList = this.rel(relUri);
+        var pgPromiseList = pgList.map(function(pg) {
+            return pg.jumpAsync();
         });
+        return $rdf.PG.Utils.Rx.promiseListToObservable(pgPromiseList);
+    }
+
+    /**
+     * Just an alias for jumpRelPathObservable
+     * @param relPath
+     * @param onJumpErrorCallback
+     * @return {*}
+     */
+    $rdf.PointedGraph.prototype.followPath = function(relPath) {
+        return this.jumpRelPathObservable(relPath);
+    }
+
+    /**
+     * Permits to follow a relation/predicate path, jumping from one document to another when it's needed
+     * @param relPath
+     * @param onJumpErrorCallback optional callback to handle jump errors, because they are not emitted in the stream
+     * @return {*}
+     */
+    $rdf.PointedGraph.prototype.jumpRelPathObservable = function(relPath) {
+        $rdf.PG.Utils.checkArgument(relPath && relPath.length > 0,"No relation to follow! "+relPath);
+        var head = relPath[0];
+        var tail = relPath.slice(1);
+        var headStream = this.jumpRelObservable(head);
+        if ( _.isEmpty(tail) ) {
+            return headStream;
+        }
+        else {
+            return headStream.flatMap(function(pg) {
+                var tailStream = pg.jumpRelPathObservable(tail);
+                return tailStream;
+            })
+        }
     }
 
     /**
@@ -461,41 +524,28 @@ $rdf.PointedGraph = function() {
         return literalValueList;
     }
 
-    $rdf.PointedGraph.prototype.relFirst = function(relUri) {
-        var l = this.rel(relUri);
-        if (l.length > 0) return l[0];
-    }
-
     // Interaction with the PGs.
     $rdf.PointedGraph.prototype.delete = function(relUri, value) {
-        var query =
-            'PREFIX foaf: <http://xmlns.com/foaf/0.1/> \n' +
-                'DELETE DATA \n' +
-                '{' + "<" + this.pointer.value + ">" + relUri + ' "' + value + '"' + '. \n' + '}';
-
-
-        // Sparql request return a promise.
+        // TODO to rework? remove hardcoded namespace value
+        var query = 'PREFIX foaf: <http://xmlns.com/foaf/0.1/> \n' +
+            'DELETE DATA \n' +
+            '{' + "<" + this.pointer.value + ">" + relUri + ' "' + value + '"' + '. \n' + '}';
         return sparqlPatch(this.pointer.value, query);
     }
 
     $rdf.PointedGraph.prototype.insert = function(relUri, value) {
-        var query =
-            'PREFIX foaf: <http://xmlns.com/foaf/0.1/> \n' +
-                'INSERT DATA \n' +
-                '{' + "<" + this.pointer.value + ">" + relUri + ' "' + value + '"' + '. \n' + '}';
-
-        // Sparql request return a promise.
+        // TODO to rework? remove hardcoded namespace value?
+        var query = 'PREFIX foaf: <http://xmlns.com/foaf/0.1/> \n' +
+            'INSERT DATA \n' +
+            '{' + "<" + this.pointer.value + ">" + relUri + ' "' + value + '"' + '. \n' + '}';
         return sparqlPatch(this.pointer.value, query);
     }
 
     $rdf.PointedGraph.prototype.update = function (relUri, newValue, oldvalue) {
-        var query =
-            'DELETE DATA \n' +
-                '{' + "<" + this.pointer.value + "> " + relUri + ' "' + oldvalue + '"' + '} ;\n' +
-                'INSERT DATA \n' +
-                '{' + "<" + this.pointer.value + "> " + relUri + ' "' + newValue + '"' + '. } ';
-
-        // Sparql request return a promise.
+        var query = 'DELETE DATA \n' +
+            '{' + "<" + this.pointer.value + "> " + relUri + ' "' + oldvalue + '"' + '} ;\n' +
+            'INSERT DATA \n' +
+            '{' + "<" + this.pointer.value + "> " + relUri + ' "' + newValue + '"' + '. } ';
         return sparqlPatch(this.pointer.value, query);
     }
 
@@ -512,18 +562,12 @@ $rdf.PointedGraph = function() {
         });
     }
 
-    $rdf.PointedGraph.prototype.addNewStatement = function(pointer, rel, object, why) {
-        this.store.add(pointer, rel, object, why);
+    $rdf.PointedGraph.prototype.addRel = function(rel, object) {
+        this.store.add( this.pointer, rel, object, this.why() );
     }
 
-    $rdf.PointedGraph.prototype.removeStatement = function(pointer, rel, object, why) {
-        var st = $rdf.st(pointer, rel, object, why);
-        this.store.remove(st);
-    }
-
-    $rdf.PointedGraph.prototype.isStatementExist = function(pointer, rel, object, why) {
-        var stats = this.store.statementsMatching(pointer, rel, object, why);
-        return (stats.length == 0)? false : true;
+    $rdf.PointedGraph.prototype.removeRel = function(rel, object) {
+        this.store.removeMany( this.pointer, rel, object, this.why() );
     }
 
     $rdf.PointedGraph.prototype.ajaxPut = function (baseUri, data, success, error, done) {
@@ -566,7 +610,7 @@ $rdf.PointedGraph = function() {
      * Once the edit is validated it may be nice to merge the small temporary edited store
      * to the original big store.
      */
-    // TODO need better name
+        // TODO need better name
     $rdf.PointedGraph.prototype.deepCopyOfGraph = function() {
         var self = this;
         var triples = this.store.statementsMatching(undefined, undefined, undefined, this.namedGraphFetchUrl);
@@ -626,11 +670,17 @@ $rdf.PointedGraph = function() {
      * @returns {*}
      */
     $rdf.PointedGraph.prototype.getCurrentDocumentTriplesMatching = function (pointer,rel,object,onlyOne) {
-        // In the actual version it seems that RDFLib use the fetched url as the "why"
-        // Maybe it's because we have modified it a little bit to work better with our cors proxy.
-        // This is why we need to pass the namedGraphFetchUrl and not the namedGraphUrl
-        var why = this.namedGraphFetchUrl;
-        return this.store.statementsMatching(pointer, rel, object, why, onlyOne);
+        var why = this.why();
+        return this.store.statementsMatching(pointer, rel, object, this.why(), onlyOne);
+    }
+
+    /**
+     * In the actual version it seems that RDFLib use the fetched url as the "why"
+     * Maybe it's because we have modified it a little bit to work better with our cors proxy.
+     * This is why we need to pass the namedGraphFetchUrl and not the namedGraphUrl
+     */
+    $rdf.PointedGraph.prototype.why = function() {
+        return this.namedGraphFetchUrl;
     }
 
     /**
@@ -642,6 +692,17 @@ $rdf.PointedGraph = function() {
      */
     $rdf.PointedGraph.prototype.getPointerTriplesMatching = function(rel,object,onlyOne) {
         return this.getCurrentDocumentTriplesMatching(this.pointer, rel, object, onlyOne);
+    }
+
+    /**
+     * Permits to know if there is at least one triple in this graph that matches the pointer, predicate and object
+     * @param rel
+     * @param object
+     * @param onlyOne
+     * @return {boolean}
+     */
+    $rdf.PointedGraph.prototype.hasPointerTripleMatching = function(rel,object) {
+        return this.getPointerTriplesMatching(rel,object,true).length > 0;
     }
 
     /**
@@ -813,10 +874,7 @@ $rdf.Fetcher.prototype.fetch = function(uri, referringTerm, force) {
     // in both case we are interested in the answer
     else if ( uriFetchState == 'requested' || uriFetchState == 'unrequested' ) {
         if ( uriFetchState == 'requested') {
-            // TODO this needs to be tested and may not work well,
-            // we may not have already encountered this situation already
-            console.error("This code may not work: please tell me if it does when you test it hahaha :)");
-            console.info("A request is already being done for",docUriToFetch," -> will wait for that response");
+            console.debug("A request is already being done for",docUriToFetch," -> will wait for that response");
         }
         var deferred = Q.defer();
         self.addCallback('done', function fetchDoneCallback(uriFetched) {
@@ -835,7 +893,6 @@ $rdf.Fetcher.prototype.fetch = function(uri, referringTerm, force) {
         });
 
         if (uriFetchState == 'unrequested') {
-            // console.debug("Will try to fetch a document that has not yet been fetched;",docUri);
             var result = self.requestURI(docUriToFetch, referringTerm, force);
             if (result == null) {
                 // TODO not sure of the effect of this line. This may cause the promise to be resolved twice no?
