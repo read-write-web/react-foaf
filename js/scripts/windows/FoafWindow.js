@@ -13,6 +13,7 @@ define([
     'jsx!MainSearchBox',
     'jsx!Person',
     'jsx!PersonContacts',
+    'jsx!PersonContactsRecommendation',
     'jsx!FooterItem'
 ], function (React,
              mixins,
@@ -26,6 +27,7 @@ define([
              MainSearchBox,
              Person,
              PersonContacts,
+             PersonContactsRecommendation,
              Footer) {
 
 
@@ -129,7 +131,15 @@ var FoafWindow = React.createClass({
             this._updateRouteToCurrentState();
             if ( !currentTab ) {
                 this.debug("No active tab, will display PersonContacts");
-                var content = <PersonContacts
+                var content1 = <PersonContacts
+                                toolsBarVisible='true'
+                                personPG={this.state.personPG}
+                                currentUserPG={this.state.personPG}
+                                onContactSelected={this._loadOrMaximizeUserProfileFromUrl}
+                                onAddContact={this._addContact}
+                                onRemoveContact={this._removeContact}
+                                />;
+                var content2 = <PersonContactsRecommendation
                                 toolsBarVisible='true'
                                 personPG={this.state.personPG}
                                 currentUserPG={this.state.personPG}
@@ -140,7 +150,8 @@ var FoafWindow = React.createClass({
                 contentSpace = <ContentSpace
                                 clazz="space center"
                                 isDefaultTab={this._isDefaultTab}
-                                uploadDroppedItems={this._uploadDroppedItems}>{content}
+                                uploadDroppedItems={this._uploadDroppedItems}>
+                                {content1}
                                 </ContentSpace>;
             }
             else {

@@ -126,7 +126,20 @@ AppStarter = {
                 "ContentSpace": "js/scripts/layout/ContentSpace",
                 "FooterItem": "js/scripts/layout/FooterItem",
 
+                /* COMMON */
                 "Pix": "js/scripts/common/Pix",
+
+                /* PERSON PROFILE */
+                "PersonBasicInfo": "js/scripts/person/PersonBasicInfo",
+                "PersonNotifications": "js/scripts/person/PersonNotifications",
+                "PersonMessage": "js/scripts/person/PersonMessage",
+                "PersonMoreInfo": "js/scripts/person/PersonMoreInfo",
+                "PersonAddress": "js/scripts/person/PersonAddress",
+                "PersonWebId": "js/scripts/person/PersonWebId",
+                "PersonEditProfile": "js/scripts/person/PersonEditProfile",
+                "Person": "js/scripts/person/Person",
+
+                /* CONTACTS */
                 "PersonContactOnProfileBasicInfo": "js/scripts/contacts/PersonContactOnProfileBasicInfo",
                 "PersonContactOnProfileMoreInfo": "js/scripts/contacts/PersonContactOnProfileMoreInfo",
                 "PersonContactOnProfileNotifications": "js/scripts/contacts/PersonContactOnProfileNotifications",
@@ -137,15 +150,9 @@ AppStarter = {
                 "PersonContacts": "js/scripts/contacts/PersonContacts",
                 "SearchBox": "js/scripts/contacts/SearchBox",
 
-                "PersonBasicInfo": "js/scripts/person/PersonBasicInfo",
-                "PersonNotifications": "js/scripts/person/PersonNotifications",
-                "PersonMessage": "js/scripts/person/PersonMessage",
-                "PersonMoreInfo": "js/scripts/person/PersonMoreInfo",
-                "PersonAddress": "js/scripts/person/PersonAddress",
-                "PersonWebId": "js/scripts/person/PersonWebId",
-                "PersonEditProfile": "js/scripts/person/PersonEditProfile",
-                "Person": "js/scripts/person/Person",
 
+                /* CONTACT RECOMMENDATION */
+                "PersonContactsRecommendation": "js/scripts/contacts/contactsRecommendation/PersonContactsRecommendation",
 
                 /*
                  * Static assets
