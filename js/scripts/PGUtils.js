@@ -45,10 +45,24 @@ PGUtils.updateStoreWithRelSymPath = function(pg, relSymPath, newValue) {
     // Get all Pgs that verified the relSym in the path.
     var pgList = PGUtils.getPgsWithArray(pg, relSymPathHead);
 
-    // Update the store in the list of Pgs.
-    _.map(pgList, function(pgItem) {
-        pgItem.updateStore(relSymPathLast, newValue)
-    });
+    if (pgList.length == 0) {
+        var subject = pg.pointer;
+        var object = new $rdf.BlankNode();
+
+        // Update the store in the list of Pgs.
+        _.each(relSymPath, function(rel) {
+            pg.store.add(subject, rel, object, pg.namedGraphFetchUrl);
+
+            // Update subject and object.
+            subject = object;
+            object = new $rdf.BlankNode();
+        });
+    } else {
+        // Update the store in the list of Pgs.
+        _.map(pgList, function(pgItem) {
+            pgItem.updateStore(relSymPathLast, newValue);
+        });
+    }
 }
 
 /**
