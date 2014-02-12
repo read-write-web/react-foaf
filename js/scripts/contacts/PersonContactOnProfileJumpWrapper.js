@@ -32,15 +32,15 @@ var PersonContactOnProfileJumpWrapper = React.createClass({
     render: function() {
         return (
             <PersonContactOnProfile
-            key={PGReact.getPointerKeyForReact(this.props.personPG)}
-            onPersonContactClick={this.props.onPersonContactClick}
-            onAddContact={this.props.onAddContact}
-            onRemoveContact={this.props.onRemoveContact}
-            personPG={this.props.personPG}
-            currentUserPG={this.props.currentUserPG}
-            jumpedPersonPG={this.state.jumpedPersonPG}
-            jumpError={this.state.jumpError}
-            filterText={this.props.filterText}/>
+                key={PGReact.getPointerKeyForReact(this.props.personPG)}
+                onPersonContactClick={this.props.onPersonContactClick}
+                onAddContact={this.props.onAddContact}
+                onRemoveContact={this.props.onRemoveContact}
+                personPG={this.props.personPG}
+                currentUserPG={this.props.currentUserPG}
+                jumpedPersonPG={this.state.jumpedPersonPG}
+                jumpError={this.state.jumpError}
+                filterText={this.props.filterText}/>
             )
     }
 

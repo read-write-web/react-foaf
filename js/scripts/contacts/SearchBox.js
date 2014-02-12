@@ -31,10 +31,9 @@ var SearchBox = React.createClass({
 
     _onChange: function(e) {
         e.preventDefault();
-        this.log("user input: ",e);
         this.setState({text: e.target.value});
         this.props.onUserInput(e.target.value);
-    },
+    }
 });
 
     return SearchBox;

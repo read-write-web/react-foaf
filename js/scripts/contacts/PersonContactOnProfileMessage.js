@@ -8,8 +8,6 @@ var PersonContactOnProfileMessage = React.createClass({
 
     render: function() {
         var message = this.getMessage();
-        this.log(this.props.personPG)
-        this.log(this.props.currentUserPG)
 
         // Get appropriate text fo html divs.
         var addAsContactText = this._getAddAsContactText();

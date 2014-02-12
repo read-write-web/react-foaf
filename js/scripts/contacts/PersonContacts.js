@@ -24,7 +24,6 @@ var PersonContacts = React.createClass({
 
     render: function () {
         var self = this;
-
         var titleClass = ReactWithAddons.addons.classSet({
              'hide': this.props.toolsBarVisible
         });
@@ -36,31 +35,27 @@ var PersonContacts = React.createClass({
             </div>
             );
 
-        var foafs = _.chain(this.props.personPG.rel(FOAF("knows")))
-            // TODO this is not good because it doesn't jump: the local friend info may not even contain the name...
-            .filter(function(contactPG) {
-                var name = foafUtils.getName([contactPG]);
-                if (!name || name.length == 0) return true;
-                return name[0].toLowerCase().indexOf(self.state.filterText) !== -1
-            })
-            .map(function (contactPG) {
-                var onContactClick = function() {
-                    if ( contactPG.isSymbolPointer() ) {
-                        self.props.onContactSelected( contactPG.getSymbolPointerUrl() )
-                    } else {
-                        // TODO maybe we can click on a bnode or literal???
-                        alert("Can only click on a Symbol pointer, not Bnode/Literal")
+        var foafs =
+            _.chain(this.props.personPG.rel(FOAF("knows")))
+                .map(function (contactPG) {
+                    var onContactClick = function () {
+                        if (contactPG.isSymbolPointer()) {
+                            self.props.onContactSelected(contactPG.getSymbolPointerUrl())
+                        } else {
+                            // TODO maybe we can click on a bnode or literal???
+                            alert("Can only click on a Symbol pointer, not Bnode/Literal")
+                        }
                     }
-                }
-                return (<PersonContactOnProfileJumpWrapper
-                            key={PGReact.getPointerKeyForReact(contactPG)}
-                            onPersonContactClick={onContactClick}
-                            onAddContact={self.props.onAddContact}
-                            onRemoveContact={self.props.onRemoveContact}
-                            personPG={contactPG}
-                            currentUserPG={self.props.currentUserPG}
-                            filterText={self.state.filterText}/>)
-            }).value();
+
+                    return (<PersonContactOnProfileJumpWrapper
+                        key={PGReact.getPointerKeyForReact(contactPG)}
+                        onPersonContactClick={onContactClick}
+                        onAddContact={self.props.onAddContact}
+                        onRemoveContact={self.props.onRemoveContact}
+                        personPG={contactPG}
+                        currentUserPG={self.props.currentUserPG}
+                        filterText={self.state.filterText}/>)
+                }).value();
 
         return (
             <div id="contacts" className="clearfix">

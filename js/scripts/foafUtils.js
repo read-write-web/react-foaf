@@ -17,6 +17,13 @@ foafUtils.getValue = function(pg) {
     return resList;
 }
 
+foafUtils.getValueFirst = function(pg) {
+    var args = (slice.call(arguments, 1));
+    var resList = pg.getLiteral(args);
+    if (resList.length == 0) resList = pg.getSymbol(args);
+    return resList[0];
+}
+
 foafUtils.getValueWithRelSymPath = function(pg, relSymPath) {
     var pgList = PGUtils.getPgsWithRelSymPath(pg, relSymPath);
     var valList = _.chain(pgList)
@@ -24,6 +31,15 @@ foafUtils.getValueWithRelSymPath = function(pg, relSymPath) {
             return pgMap.pointer.value;
         }).value();
     return valList
+}
+
+foafUtils.getValueWithRelSymPathFirst = function(pg, relSymPath) {
+    var pgList = PGUtils.getPgsWithRelSymPath(pg, relSymPath);
+    var valList = _.chain(pgList)
+        .map(function(pgMap) {
+            return pgMap.pointer.value;
+        }).value();
+    return valList[0]
 }
 
 function getValueList(pgList) {
@@ -35,6 +51,53 @@ function getValueList(pgList) {
         }).flatten()
         .value();
     return res;
+}
+
+foafUtils.getValueFirst = function(pg) {
+    var args = (slice.call(arguments, 1));
+    var resList = pg.getLiteral(args);
+    if (resList.length == 0) resList = pg.getSymbol(args);
+    return resList[0];
+}
+
+function getLiteralInList(pgList) {
+    var args = (slice.call(arguments, 1));
+    var res =  _.chain(pgList)
+        .map(function (pg) {
+            return pg.getLiteral(args);
+        }).flatten()
+        .value();
+    return res;
+}
+
+function getSymbolInList(pgList) {
+    var args = (slice.call(arguments, 1));
+    var res =  _.chain(pgList)
+        .map(function (pg) {
+            return pg.getSymbol(args);
+        }).flatten()
+        .value();
+    return res;
+}
+
+function getLiteralInListFirst(pgList) {
+    var args = (slice.call(arguments, 1));
+    var res =  _.chain(pgList)
+        .map(function (pg) {
+            return pg.getLiteral(args);
+        }).flatten()
+        .value();
+    return res[0];
+}
+
+function getSymbolInListFirst(pgList) {
+    var args = (slice.call(arguments, 1));
+    var res =  _.chain(pgList)
+        .map(function (pg) {
+            return pg.getSymbol(args);
+        }).flatten()
+        .value();
+    return res[0];
 }
 
 function removeStringPrefix(string,prefix) {
