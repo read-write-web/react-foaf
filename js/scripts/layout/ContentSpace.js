@@ -13,10 +13,10 @@ define(['react', 'mixins', 'reactAddons'], function (React, mixins, ReactWithAdd
     },
 
     render:function(){
-        var ulClasses = ReactWithAddons.addons.classSet({
-            'hide': this.props.isDefaultTab(), // Hide space tools if default tab.
-            'space-tools': true,
-            'float-right': true
+        var spacebarClasses = ReactWithAddons.addons.classSet({
+            'hide': this.props.isDefaultTab(),
+             'space-bar': true,
+             'clearfix': true
         });
 
         var layerClass = ReactWithAddons.addons.classSet({
@@ -26,9 +26,9 @@ define(['react', 'mixins', 'reactAddons'], function (React, mixins, ReactWithAdd
 
         var spaceTree =
             <div className="space center" onDragEnter={this._handleDragEnter}>
-                <div className="space-bar clearfix">
-                    <div className="space-title float-left title-case">"Test Title"</div>
-                    <ul className={ulClasses}>
+                <div className={spacebarClasses}>
+                    <div className="space-title float-left title-case"></div>
+                    <ul className="space-tools float-right">
                         <li className="space-options" style={{display: "inline-block"}}>
                             <i class="fa fa-cog"></i>
                         </li>

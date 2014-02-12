@@ -217,7 +217,7 @@ AppStarter = {
                     //var foafDocURL = "http://presbrey.mit.edu/foaf";
                     //var foafDocURL = 'https://ameliemelo3.localhost:8443/card';
                     //var foafDocURL = "https://my-profile.eu/people/tim/card";
-                    foafDocURL = "https://localhost:8443/2013/backboneFriend1#me";
+                    foafDocURL = "https://localhost:8443/2013/backboneFriend3#me";
                     //foafDocURL = 'https://localhost:8443/2013/testWoAddress';
                 }
 
