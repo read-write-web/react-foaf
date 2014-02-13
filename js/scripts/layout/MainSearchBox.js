@@ -16,7 +16,7 @@ define(['react', 'mixins', 'foafUtils', 'jsx!Pix','appImages'], function (React,
                     <button type="submit" class="stample"></button>
                     <button type="submit" class="add"></button>
                     <input type="text"
-                    placeholder="Search your contacts"
+                    placeholder="What are you looking for?"
                     value={this.state.text}
                     width="100"
                     ref="url"
