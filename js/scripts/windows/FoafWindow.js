@@ -75,12 +75,18 @@ var FoafWindow = React.createClass({
         var onRouteChangeHandler = {
             onGoToHome: function() {
                 if ( !self._isInitialized() ) {
+                    self.debug("Router: Will init with going to home",self.props.url);
                     self._initState(self.props.url)
+                } else {
+                    self.debug("Router: Already initialialized: won't go to home");
                 }
             },
             onVisitProfile : function(profileURL) {
                 if ( !self._isInitialized() ) {
+                    console.debug("Router: Will init with going to profileURL=",profileURL)
                     self._initState(self.props.url,profileURL);
+                } else {
+                    self.debug("Router: Already initialialized: won't go to profileURL=",profileURL);
                 }
             }
         }
