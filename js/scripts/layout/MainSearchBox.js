@@ -13,6 +13,8 @@ define(['react', 'mixins', 'foafUtils', 'jsx!Pix','appImages'], function (React,
         render: function() {
             return (
                 <form id="search" onSubmit={this._handleSubmit}>
+                    <button type="submit" class="stample"></button>
+                    <button type="submit" class="add"></button>
                     <input type="text"
                     placeholder="Search your contacts"
                     value={this.state.text}
@@ -20,8 +22,9 @@ define(['react', 'mixins', 'foafUtils', 'jsx!Pix','appImages'], function (React,
                     ref="url"
                     onChange={this._onChange}
                     />
-                    <button type="submit"  class="fontawesome-ok"></button>
-                    <button type="submit" onClick={this._loadProfileFromUrl} class="fontawesome-ok">
+                    <button type="submit" class="apps"></button>
+                    <button type="submit" class="world" ></button>
+                    <button type="submit" class="favourites" onClick={this._loadProfileFromUrl} >
                         <Pix src={this._getUserImg()}/>
                     </button>
                 </form>

@@ -19,7 +19,7 @@ define(['react', 'mixins', 'reactAddons', 'notify',
                 var liClasses = ReactWithAddons.addons.classSet({
                     'contact': true,
                     'clearfix': true,
-                    'float-left': true,
+                    'float-left': true
                 });
 
                 // Return.

@@ -97,7 +97,6 @@ PGUtils.getPgsWithArray = function(pg, relSymArray) {
     return getPgsWithArrayRec(pg.rel(relSymArray[inc]));
 }
 
-
 PGUtils.addRel = function(pg, rel, object) {
     pg.store.add(pg.pointer, rel, object, pg.namedGraphFetchUrl );
 }

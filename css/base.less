@@ -35,6 +35,15 @@
 
 @font: 'Noto Sans', sans-serif;
 
+@font-face {
+  font-family: 'FontAwesome';
+  src: url('../fonts/fontawesome-webfont.eot');
+  src: url('../fonts/fontawesome-webfont.svg') format('svg'),
+  url('../fonts/fontawesome-webfont.woff') format('woff'),
+  url('../fonts/fontawesome-webfont.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 
 /* ------------------------------- */
 /* VARIABLES */
@@ -53,13 +62,6 @@ html {
   width: 100%;
   height: 100%;
 }
-
-/*body {
-  background: #EDEDED;
-  width: 100%;
-  height: auto;
-  font-family: @font;
-}*/
 
 body {
   /*position: fixed;
@@ -263,7 +265,7 @@ textarea:focus {
 
 #search input[type="text"] {
   height: 60px;
-  width: 680px;
+  width: 500px;
   border: 0;
   box-shadow: none;
   padding: 20px;
@@ -283,12 +285,13 @@ textarea:focus {
 #search button[type="submit"] {
   height: 60px;
   width: 60px;
+  font-family: 'FontAwesome', sans-serif;
   text-align: center;
   line-height: 60px;
   background: #333333;
   color: white;
   font-size: 30px;
-  float: right;
+  float: left;
   border: none;
   cursor: pointer;
   transition: all 0.2s;
@@ -309,14 +312,52 @@ textarea:focus {
   }
 }
 
+#search button[class=stample]::before {
+  content: "\f015";
+}
+
+#search button[class=add]::before {
+  content: "\f067";
+}
+
+#search button[class=apps]::before {
+  content: "\f00a";
+}
+
+#search button[class=world]::before {
+  content: "\f0ac";
+}
+
+#search button[class=favourites]::before {
+  content: "\f08a";
+}
+
 #search button[type="submit"]:hover {
   box-shadow: none;
   outline: none;
   background: @green;
   .twist(-5deg, 1.1);
-
 }
 
+#search button[class=stample]:hover {
+  background: @red;
+}
+
+#search button[class=add]:hover {
+  background: @green;
+}
+
+#search button[class=apps]:hover {
+  background: @blue;
+}
+
+#search button[class=world]:hover {
+  background: @red;
+}
+
+#search button[class=favourites]:hover {
+  background: @green;
+}
 
 
 
