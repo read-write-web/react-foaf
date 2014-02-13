@@ -138,27 +138,24 @@ var FoafWindow = React.createClass({
             if ( !currentTab ) {
                 this.debug("No active tab, will display PersonContacts");
                 var content1 = <PersonContacts
-                                toolsBarVisible='true'
-                                personPG={this.state.personPG}
-                                currentUserPG={this.state.personPG}
-                                onContactSelected={this._loadOrMaximizeUserProfileFromUrl}
-                                onAddContact={this._addContact}
-                                onRemoveContact={this._removeContact}
+                                    toolsBarVisible='true'
+                                    personPG={this.state.personPG}
+                                    currentUserPG={this.state.personPG}
+                                    onContactSelected={this._loadOrMaximizeUserProfileFromUrl}
+                                    onAddContact={this._addContact}
+                                    onRemoveContact={this._removeContact}
                                 />;
                 var content2 = <PersonContactsRecommendation
-                                toolsBarVisible='true'
-                                personPG={this.state.personPG}
-                                currentUserPG={this.state.personPG}
-                                onContactSelected={this._loadOrMaximizeUserProfileFromUrl}
-                                onAddContact={this._addContact}
-                                onRemoveContact={this._removeContact}
+                                    currentUserPG={this.state.personPG}
+                                    onContactSelected={this._loadOrMaximizeUserProfileFromUrl}
+                                    onAddContact={this._addContact}
                                 />;
                 contentSpace = <ContentSpace
-                                clazz="space center"
-                                isDefaultTab={this._isDefaultTab}
-                                uploadDroppedItems={this._uploadDroppedItems}>
-                                {content1}
-                                {content2}
+                                    clazz="space center"
+                                    isDefaultTab={this._isDefaultTab}
+                                    uploadDroppedItems={this._uploadDroppedItems}>
+                                    {content1}
+                                    {content2}
                                 </ContentSpace>;
             }
             else {

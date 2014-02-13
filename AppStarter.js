@@ -128,6 +128,9 @@ AppStarter = {
 
                 /* COMMON */
                 "Pix": "js/scripts/common/Pix",
+                "Name": "js/scripts/common/Name",
+                "Surname": "js/scripts/common/Surname",
+                "Company": "js/scripts/common/Company",
 
                 /* PERSON PROFILE */
                 "PersonBasicInfo": "js/scripts/person/PersonBasicInfo",
@@ -153,11 +156,14 @@ AppStarter = {
 
                 /* CONTACT RECOMMENDATION */
                 "PersonContactsRecommendation": "js/scripts/contacts/contactsRecommendation/PersonContactsRecommendation",
+                "PersonContactOnRecommendation": "js/scripts/contacts/contactsRecommendation/PersonContactOnRecommendation",
+
 
                 /*
                  * Static assets
                  */
-                "appImages": "js/scripts/appImages"
+                "appImages": "js/scripts/appImages",
+                "appDefaultValues": "js/scripts/appDefaultValues",
 
             },
 
@@ -216,7 +222,7 @@ AppStarter = {
                     foafDocURL = pointedGraph.pointer.uri;
                 }
                 else {
-                    foafDocURL = "http://bblfish.net/people/henry/card#me";
+                    //foafDocURL = "http://bblfish.net/people/henry/card#me";
                     //foafDocURL = "https://my-profile.eu/people/deiu/card#me";
                     //foafDocURL = "http://www-public.it-sudparis.eu/~berger_o/foaf.rdf";
                     // TODO need to add hash if needed: we do not look for primary topic anymore
@@ -224,7 +230,7 @@ AppStarter = {
                     //var foafDocURL = "http://presbrey.mit.edu/foaf";
                     //var foafDocURL = 'https://ameliemelo3.localhost:8443/card';
                     //var foafDocURL = "https://my-profile.eu/people/tim/card";
-                    //foafDocURL = "https://localhost:8443/2013/backboneFriend3#me";
+                    foafDocURL = "https://localhost:8443/2013/backboneFriend4#me";
                     //foafDocURL = 'https://localhost:8443/2013/testWoAddress';
                 }
 

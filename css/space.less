@@ -88,16 +88,36 @@
       }
 
       li {
-        .basic {
-          width: 50%;
-          height: 92px;
-          overflow: hidden;
+        height:110px !important;
+
+        .picture {
+          float: right !important;
+          width: 50px !important;
+          height: 50px  !important;
+
+          img {
+            width: 100%;
+            height: auto;
+          }
         }
 
-        img {
-          width: 100%;
-          height: auto;
+        .basic {
+          width: 70%;
+          height: 80px;
+          overflow: hidden;
+
+          .name {
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #000000;
+          }
         }
+
+        .addAsContact {
+          right: 10px !important;
+        }
+
+
       }
 
       .contact :extend(.contact-base all) {}

@@ -139,12 +139,22 @@ foafUtils.getName = function(pgList, options) {
     return getValueList(pgList, FOAF("name"));
 };
 
+foafUtils.getFirstValidName = function(pgList) {
+    var nameList = foafUtils.getName(pgList);
+    return _.first(nameList);
+}
+
 foafUtils.getNick = function(pgList, options) {
     return getValueList(pgList, FOAF("nick"));
 };
 
 foafUtils.getGivenName = function(pgList, options) {
     return getValueList(pgList, FOAF("givenName"), FOAF("givenname"));
+};
+
+foafUtils.getFirstValidGivenName = function(pgList, options) {
+    var givenNameList = foafUtils.getGivenName(pgList);
+    return _.first(givenNameList);
 };
 
 foafUtils.getFamilyName = function(pgList, options) {
@@ -165,6 +175,11 @@ foafUtils.getGender = function(pgList, options) {
 
 foafUtils.getworkplaceHomepage = function(pgList, options) {
     return getValueList(pgList, FOAF("workplaceHomepage"));
+};
+
+foafUtils.getFirstValidworkplaceHomepage = function(pgList, options) {
+    var workplaceList = foafUtils.getworkplaceHomepage(pgList);
+    return _.first(workplaceList);
 };
 
 foafUtils.getWorkInfoHomepage = function(pgList, options) {

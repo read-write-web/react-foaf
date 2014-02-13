@@ -10,7 +10,7 @@ define([], function() {
         closeIcon: image("close_icon.png"),
         webIdIcon: image("webid.png")
     }
-    console.debug("Static images are: ",images);
+
     return images;
 
 });
