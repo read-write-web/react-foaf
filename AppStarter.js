@@ -190,7 +190,8 @@ AppStarter = {
                 },
 
                  "PGUtils": {
-                 "exports":"PGUtils"
+                    "deps":["rdflib-pg-extension"],
+                    "exports":"PGUtils"
                  }
 
             }
