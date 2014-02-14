@@ -255,20 +255,13 @@ var FoafWindow = React.createClass({
     },
 
     _addContact: function(contactUriSym) {
+        $rdf.PG.Utils.checkState( !this._isCurrentUser(contactUriSym) , "The user can't add himself as a contact!");
+        $rdf.PG.Utils.checkState( !this._isContactWithCurrentUser(contactUriSym) , "The user can't add its contact as a contact!");
         var self = this;
         var currentUserPG = this.state.personPG;
         var currentUserUri = this.state.personPG.pointer.value;
         this.log("_addContact ");
         this.log(contactUriSym);
-
-        // If contactUri is the current user, cancel.
-        if (this._isCurrentUser(contactUriSym)) return;
-
-        // If contactUri is already in the current user contact lists, cancel.
-        if (this._isContactWithCurrentUser(contactUriSym)) {
-            notify("warning", "Already in your contact list");
-            return;
-        };
 
         // Create a deep copy of the current PG and update it with new contact.
         var personPGCopy = this.state.personPG.deepCopyOfGraph();
@@ -282,31 +275,25 @@ var FoafWindow = React.createClass({
                 // If success, update the current store.
                 //TODO Restore current PG.
                 currentUserPG.replaceStatements(personPGCopy);
-                self.setState({
-                    personPG: currentUserPG
-                });
+                self.setState({personPG: currentUserPG});
             },
             function error(status, xhr) {
                 notify("error", "Failed to save new contact. Try again later!");
 
                 // If error, restore old store.
                 //TODO Restore current PG ?.
-                self.setState({
-                    personPG: currentUserPG
-                });
+                self.setState({personPG: currentUserPG});
             }
         )
     },
 
     _removeContact: function(contactUriSym) {
+        $rdf.PG.Utils.checkState( !this._isCurrentUser(contactUriSym) , "The user can't remove himself as a contact!");
         var self = this;
         var currentUserPG = this.state.personPG;
         var currentUserUri = this.state.personPG.pointer.value;
         this.log("_removeContact : ");
         this.log(contactUriSym);
-
-        // If contactUri is the current user, cancel.
-        if (this._isCurrentUser(contactUriSym)) return;
 
         // Create a deep copy of the current PG and update it with new contact.
         var personPGCopy = this.state.personPG.deepCopyOfGraph();
@@ -320,9 +307,7 @@ var FoafWindow = React.createClass({
                 self.log("************** Success");
                 // If success, update the current store.
                 currentUserPG.replaceStatements(personPGCopy);
-                self.setState({
-                    personPG: currentUserPG
-                });
+                self.setState({personPG: currentUserPG});
             },
             function error(status, xhr) {
                 notify("error", "Failed to remove new contact. Try again later!");
@@ -330,9 +315,7 @@ var FoafWindow = React.createClass({
                 self.log("************** Error");
                 self.log(status);
                 // If error, restore old store.
-                self.setState({
-                    personPG: currentUserPG
-                });
+                self.setState({personPG: currentUserPG});
             }
         )
     },
@@ -349,15 +332,14 @@ var FoafWindow = React.createClass({
                 notify("success", "New information saved.");
                 // Replace statements in current PG and change component state.
                 currentTabPG.replaceStatements(personPG);
-                self.setState({
-                    personPG: currentTabPG
-                });
+                self.setState({personPG: currentTabPG});
             },
             function error(status, xhr) {
-                notify("error", "Failed to save information. Try again!");
+                notify("error", "Failed to save information. Try again later!");
                 //TODO Restore current PG ?.
                 self.log("************** Error");
                 self.log(status);
+                self.setState({personPG: currentTabPG});
             }
         )
 

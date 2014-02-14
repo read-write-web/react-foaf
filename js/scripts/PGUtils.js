@@ -106,3 +106,19 @@ PGUtils.removeRel = function(pg, rel, object) {
     pg.store.remove(st);
     //pg.store.removeMany(pg.pointer, rel, object, pg.namedGraphFetchUrl );
 }
+
+
+/** Extend $rdf.PG.Utils */
+
+/**
+ * Just a little helper method to verify preconditions and fail fast.
+ * See http://en.wikipedia.org/wiki/Precondition
+ * See http://en.wikipedia.org/wiki/Fail-fast
+ * @param condition
+ * @param message
+ */
+$rdf.PG.Utils.checkState = function(condition, message) {
+    if (!condition) {
+        throw Error('IllegalArgumentException: ' + (message || 'No description'));
+    }
+}
