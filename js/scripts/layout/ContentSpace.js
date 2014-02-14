@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 
-define(['react', 'mixins', 'reactAddons'], function (React, mixins, ReactWithAddons) {
+define(['react', 'mixins', 'reactAddons', 'notify'], function (React, mixins, ReactWithAddons, notify) {
 
     var ContentSpace = React.createClass({
     mixins: [mixins.WithLogger, mixins.WithLifecycleLoggingLite],
@@ -68,13 +68,23 @@ define(['react', 'mixins', 'reactAddons'], function (React, mixins, ReactWithAdd
     },
 
     _handleDrop: function(e) {
+        var self = this;
         e.preventDefault();
         var dataTransfer = e.nativeEvent.dataTransfer;
 
         // Upload the dropped item.
         if (dataTransfer && dataTransfer.types.length) {
-            this.props.uploadDroppedItems(dataTransfer);
-        }
+            this.props.uploadDroppedItems(dataTransfer,
+                function() {
+                    notify("warning", "Contact is the current user.");
+                    self.setState({showOverlay:false});
+                },
+                function() {
+                    notify("warning", "Already in your contact list.");
+                    self.setState({showOverlay:false});
+                }
+            );
+        };
 
         // Change state to hide overlay.
         this.setState({showOverlay:false});

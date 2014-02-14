@@ -24,7 +24,7 @@ define(['react', 'mixins', 'reactAddons', 'notify',
 
                 // Return.
                 return (
-                    <li className={liClasses}>
+                    <li className={liClasses} onClick={this._handleClickOnContact}>
                         <div className="loader"></div>
                         <Pix src={this._getUserImg()} className="float-right"/>
                         <div class="basic">
@@ -32,7 +32,7 @@ define(['react', 'mixins', 'reactAddons', 'notify',
                             <Surname surname={this._getUserSurname()}/>
                             <Company company={this._getUserCompany()}/>
                         </div>
-                        <div className="addAsContact" onClick={this._handleClick}><a href="#">Add as contact</a></div>
+                        <div className="addAsContact" onClick={this._handleClickAddAsContact}><a href="#">Add as contact</a></div>
                     </li>
                     );
             },
@@ -65,12 +65,28 @@ define(['react', 'mixins', 'reactAddons', 'notify',
                 return foafUtils.getFirstValidworkplaceHomepage(personPGArray) || appDefaultValues.noValue
             },
 
-            _handleClick: function(e) {
+            _handleClickOnContact: function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                // TODO maybe not appropriate? we may be able to click on a namednode before it has been jumped?
+                if ( this.props.personPG ) {
+                    this.props.onPersonContactClick();
+                }
+                else if ( this.props.jumpError ) { // Todo : add jumpError props.
+                    notify("error", "Error during jump, can't click on this graph.");
+                }
+                else {
+                    notify("error", "Graph not jumped.");
+                }
+                return true;
+            },
+
+            _handleClickAddAsContact: function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 var recommendedPGPointer = this.props.personPG.pointer;
                 this.props.onAddContact(recommendedPGPointer);
-            },
+            }
         });
 
         return PersonContactOnRecommendation;

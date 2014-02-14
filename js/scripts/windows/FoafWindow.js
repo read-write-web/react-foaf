@@ -227,7 +227,7 @@ var FoafWindow = React.createClass({
         });
     },
 
-    _uploadDroppedItems: function(dataTransfer) {
+    _uploadDroppedItems: function(dataTransfer, onUserAddHimself, onUserAddContactTwice) {
         var r = _.chain(dataTransfer.types)
             .filter(function(type) {
                 return type == 'text/uri-list'})
@@ -240,6 +240,18 @@ var FoafWindow = React.createClass({
         this.log('_uploadDroppedItems : ' + r);
         if (r.length != 0) {
             var uriSym = new $rdf.sym(r[0]);
+
+            // If contact is current user.
+            if (this._isCurrentUser(uriSym)) {
+                onUserAddHimself();
+             };
+
+            //If contactUri is already in the current user contact lists, cancel.
+            if (this._isContactWithCurrentUser(uriSym)) {
+                onUserAddContactTwice();
+            };
+
+            // Add contact.
             this._addContact(uriSym);
         };
     },
@@ -348,6 +360,11 @@ var FoafWindow = React.createClass({
     },
 
     _loadOrMaximizeUserProfileFromUrl: function(url) {
+        console.log("************************")
+        console.log("************************")
+        console.log("************************")
+        console.log("************************")
+        console.log("************************")
         this.log("_loadOrMaximizeUserProfileFromUrl ",url);
         var maybeTab = this._getTabOpenForUrl(url);
         if ( maybeTab ) {

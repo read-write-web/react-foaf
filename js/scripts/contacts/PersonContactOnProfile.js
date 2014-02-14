@@ -62,7 +62,6 @@ var PersonContactOnProfile = React.createClass({
         }
         else if ( this.props.jumpError ) {
             notify("error", "Error during jump, can't click on this graph.");
-            //alert("Error during jump, can't click on this graph:\n"+JSON.stringify(this.props.jumpError));
         }
         else {
             notify("error", "Graph not jumped.");
