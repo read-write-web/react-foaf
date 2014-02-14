@@ -6,7 +6,13 @@ define(["rdflib-pg-extension"], function(rdflibPg) {
     $rdf.Fetcher.fetcherWithPromiseCrossSiteProxyTemplate = "https://www.stample.io/srv/cors?url=";
     //$rdf.Fetcher.fetcherWithPromiseCrossSiteProxyTemplate = "http://localhost:9000/srv/cors?url=";
     //$rdf.Fetcher.fetcherWithPromiseCrossSiteProxyTemplate = "http://data.fm/proxy?uri=";
-    //$rdf.Fetcher.homeServer = "http://localhost:9000/"
+
+    var getDomainRoot = function() {
+        console.log(window.location)
+        return window.location.origin;
+    };
+    // Proxy to work on sub-domains.
+    $rdf.Fetcher.homeServer = getDomainRoot();
 
     var store = rdflibPg.createNewStore(fetcherTimeout);
     console.debug("global RdfStore created",store);

@@ -197,6 +197,7 @@ var FoafWindow = React.createClass({
                         filterText={this.state.filterText}
                         onUserInput={this._inputInSearchBox}
                         loadCurrentUserProfileFromUrl={this._loadOrMaximizeUserProfileFromUrl}
+                        loadHome={this._loadHome}
                     />
                     <div id="actionNeeded">Action needed</div>
                     <div className="tabs">
@@ -432,6 +433,10 @@ var FoafWindow = React.createClass({
         this.setState({
             activeTabs: []
         });
+    },
+
+    _loadHome: function() {
+        this._minimizeAllTabs();
     },
 
     _maximizeTab: function(tab) {

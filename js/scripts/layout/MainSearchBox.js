@@ -13,7 +13,7 @@ define(['react', 'mixins', 'foafUtils', 'jsx!Pix','appImages'], function (React,
         render: function() {
             return (
                 <form id="search" onSubmit={this._handleSubmit}>
-                    <button type="submit" class="stample"></button>
+                    <button type="submit" class="stample" onClick={this._loadHome}></button>
                     <button type="submit" class="add"></button>
                     <input type="text"
                     placeholder="What are you looking for?"
@@ -35,6 +35,10 @@ define(['react', 'mixins', 'foafUtils', 'jsx!Pix','appImages'], function (React,
         _loadProfileFromUrl: function() {
             var profileURL = this.props.personPG.getSymbolPointerUrl();
             this.props.loadCurrentUserProfileFromUrl(profileURL);
+        },
+
+        _loadHome: function() {
+            this.props.loadHome();
         },
 
         /*
