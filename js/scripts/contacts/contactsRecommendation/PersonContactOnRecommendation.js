@@ -72,9 +72,6 @@ define(['react', 'mixins', 'reactAddons', 'notify',
                 if ( this.props.personPG ) {
                     this.props.onPersonContactClick();
                 }
-                else if ( this.props.jumpError ) { // Todo : add jumpError props.
-                    notify("error", "Error during jump, can't click on this graph.");
-                }
                 else {
                     notify("error", "Graph not jumped.");
                 }

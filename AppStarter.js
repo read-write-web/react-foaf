@@ -223,8 +223,8 @@ AppStarter = {
                     foafDocURL = pointedGraph.pointer.uri;
                 }
                 else {
-                    foafDocURL = "http://bblfish.net/people/henry/card#me";
-                    //foafDocURL = "https://my-profile.eu/people/deiu/card#me";
+                    //foafDocURL = "http://bblfish.net/people/henry/card#me";
+                    foafDocURL = "https://my-profile.eu/people/deiu/card#me";
                     //foafDocURL = "http://www-public.it-sudparis.eu/~berger_o/foaf.rdf";
                     // TODO need to add hash if needed: we do not look for primary topic anymore
                     //var foafDocURL = "https://my-profile.eu/people/mtita/card";// Not working

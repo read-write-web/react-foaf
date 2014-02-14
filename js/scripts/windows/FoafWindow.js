@@ -227,7 +227,7 @@ var FoafWindow = React.createClass({
         });
     },
 
-    _uploadDroppedItems: function(dataTransfer, onUserAddHimself, onUserAddContactTwice) {
+    _uploadDroppedItems: function(dataTransfer, onUserAddHimselfCallback, onUserAddContactTwiceCallback) {
         var r = _.chain(dataTransfer.types)
             .filter(function(type) {
                 return type == 'text/uri-list'})
@@ -243,12 +243,12 @@ var FoafWindow = React.createClass({
 
             // If contact is current user.
             if (this._isCurrentUser(uriSym)) {
-                onUserAddHimself();
+                onUserAddHimselfCallback();
              };
 
             //If contactUri is already in the current user contact lists, cancel.
             if (this._isContactWithCurrentUser(uriSym)) {
-                onUserAddContactTwice();
+                onUserAddContactTwiceCallback();
             };
 
             // Add contact.

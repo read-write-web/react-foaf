@@ -18,21 +18,26 @@ define(['react', 'mixins', 'reactAddons', 'notify',
 
         componentDidMount: function() {
             var self = this;
-            this._printPotentialFriendNames(this.props.currentUserPG, function(pg) {
+            var onPotentialFriendsFetched = function(pg) {
                 self.setState({
                     pgList: _.union(pg, self.state.pgList)
                 });
-            });
+            }
+
+            this._printPotentialFriendNames(this.props.currentUserPG, onPotentialFriendsFetched);
         },
 
         componentWillReceiveProps: function(nextProps) {
             var self = this;
             this.state.pgList = [];
-            this._printPotentialFriendNames(nextProps.currentUserPG, function(pg) {
+
+            var onPotentialFriendsFetched = function(pg) {
                 self.setState({
                     pgList: _.union(pg, self.state.pgList)
                 });
-            });
+            }
+
+            this._printPotentialFriendNames(nextProps.currentUserPG, onPotentialFriendsFetched);
         },
 
         render: function () {
@@ -100,17 +105,15 @@ define(['react', 'mixins', 'reactAddons', 'notify',
             stream.subscribe(
                 function(pg) {
                     self.log('success');
-                    self.log(pg);
                     callback(pg);
                 },
                 function(error) {
-                    self.log('error')
-                    self.log(error)
+                    self.log('error');
+                    self.log(error);
                     console.error("Unexpected end of stream", error, error.stack);
                 },
-                function(r) {
+                function() {
                     self.log('end')
-                    self.log(r)
                 }
             );
         }
