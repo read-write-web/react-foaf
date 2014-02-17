@@ -61,6 +61,98 @@ var FoafWindow = React.createClass({
         this._initRouter();
     },
 
+    render: function () {
+        var self = this;
+        this.log("render FoafWindow",this.state,this.props);
+
+        if ( !this._isInitialized() ) {
+            return <div>{'LOADING'}</div>;
+        }
+        else {
+            var contentSpace;
+            var currentTab = this._getCurrentTab();
+            this._updateRouteToCurrentState();
+            if ( !currentTab ) {
+                this.debug("No active tab, will display PersonContacts");
+                var content1 = <PersonContacts
+                toolsBarVisible='true'
+                personPG={this.state.personPG}
+                currentUserPG={this.state.personPG}
+                onContactSelected={this._loadOrMaximizeUserProfileFromUrl}
+                onAddContact={this._addContact}
+                onRemoveContact={this._removeContact}
+                />;
+                var content2 = <PersonContactsRecommendation
+                currentUserPG={this.state.personPG}
+                onContactSelected={this._loadOrMaximizeUserProfileFromUrl}
+                onAddContact={this._addContact}
+                />;
+                contentSpace = <ContentSpace
+                clazz="space center"
+                isDefaultTab={this._isDefaultTab}
+                uploadDroppedItems={this._uploadDroppedItems}>
+                                    {content1}
+                                    {content2}
+                </ContentSpace>;
+            }
+            else {
+                //var currentTab = this._getCurrentTab()
+                this.debug("Active tabs have been found, will display tab:",currentTab);
+                var minimizeCurrentTab = this._minimizeTab.bind(this,currentTab);
+                var closeCurrentTab = this._closeTab.bind(this,currentTab);
+                if (!this.state.modeEdit) {
+                    var content = <Person
+                    personPG={currentTab.personPG}
+                    currentUserPG={this.state.personPG}
+                    modeEdit={this.state.modeEdit}
+                    submitEdition={this._submitEdition}
+                    onContactSelected={this._loadOrMaximizeUserProfileFromUrl}
+                    onAddContact={this._addContact}
+                    onRemoveContact={this._removeContact}
+                    handleClickChangeModeEdit={this._handleClickChangeModeEdit}/>
+                } else {
+                    var content = <Person
+                    currentUserPG={this.state.personPG}
+                    personPG={this.state.personPGDeepCopy}
+                    modeEdit={this.state.modeEdit}
+                    submitEdition={this._submitEdition}
+                    onContactSelected={this._loadOrMaximizeUserProfileFromUrl}
+                    handleClickChangeModeEdit={this._handleClickChangeModeEdit}/>
+                }
+                contentSpace = <ContentSpace
+                onMinimize={minimizeCurrentTab}
+                onClose={closeCurrentTab}
+                isDefaultTab={this._isDefaultTab}
+                uploadDroppedItems={this._uploadDroppedItems}>{content}
+                </ContentSpace>;
+            }
+
+            var foafBoxTree =
+                <div className="PersonalProfileDocument">
+                    <MainSearchBox
+                    personPG={this.state.personPG}
+                    currentUserPG={this.state.personPG}
+                    filterText={this.state.filterText}
+                    onUserInput={this._inputInSearchBox}
+                    loadCurrentUserProfileFromUrl={this._loadOrMaximizeUserProfileFromUrl}
+                    loadHome={this._loadHome}
+                    />
+                    <div id="actionNeeded">Action needed</div>
+                    <div className="tabs">
+                        {contentSpace}
+                    </div>
+                    <Footer
+                    activeTabs={this.state.activeTabs}
+                    tabs={this.state.tabs}
+                    onTabClicked={this._toggleTab}
+                    minimizeAllTabs={this._minimizeAllTabs}
+                    closeAllTabs={this._closeAllTabs}
+                    />
+                </div>;
+            return foafBoxTree;
+        } //onDrop={this._handleDrop}
+    },
+
     _isInitialized: function() {
         return this.state.personPG
     },
@@ -78,7 +170,7 @@ var FoafWindow = React.createClass({
                     self.debug("Router: Will init with going to home",self.props.url);
                     self._initState(self.props.url)
                 } else {
-                    self.debug("Router: Already initialialized: won't go to home");
+                    self.debug("Router: Already initialized: won't go to home");
                 }
             },
             onVisitProfile : function(profileURL) {
@@ -86,7 +178,7 @@ var FoafWindow = React.createClass({
                     console.debug("Router: Will init with going to profileURL=",profileURL)
                     self._initState(self.props.url,profileURL);
                 } else {
-                    self.debug("Router: Already initialialized: won't go to profileURL=",profileURL);
+                    self.debug("Router: Already initialized: won't go to profileURL=",profileURL);
                 }
             }
         }
@@ -122,98 +214,6 @@ var FoafWindow = React.createClass({
         } else {
             routeHelper.goToHome();
         }
-    },
-
-    render: function () {
-        var self = this;
-        this.log("render FoafWindow",this.state,this.props);
-
-        if ( !this._isInitialized() ) {
-            return <div>{'LOADING'}</div>;
-        }
-        else {
-            var contentSpace;
-            var currentTab = this._getCurrentTab();
-            this._updateRouteToCurrentState();
-            if ( !currentTab ) {
-                this.debug("No active tab, will display PersonContacts");
-                var content1 = <PersonContacts
-                                    toolsBarVisible='true'
-                                    personPG={this.state.personPG}
-                                    currentUserPG={this.state.personPG}
-                                    onContactSelected={this._loadOrMaximizeUserProfileFromUrl}
-                                    onAddContact={this._addContact}
-                                    onRemoveContact={this._removeContact}
-                                />;
-                var content2 = <PersonContactsRecommendation
-                                    currentUserPG={this.state.personPG}
-                                    onContactSelected={this._loadOrMaximizeUserProfileFromUrl}
-                                    onAddContact={this._addContact}
-                                />;
-                contentSpace = <ContentSpace
-                                    clazz="space center"
-                                    isDefaultTab={this._isDefaultTab}
-                                    uploadDroppedItems={this._uploadDroppedItems}>
-                                    {content1}
-                                    {content2}
-                                </ContentSpace>;
-            }
-            else {
-                //var currentTab = this._getCurrentTab()
-                this.debug("Active tabs have been found, will display tab:",currentTab);
-                var minimizeCurrentTab = this._minimizeTab.bind(this,currentTab);
-                var closeCurrentTab = this._closeTab.bind(this,currentTab);
-                if (!this.state.modeEdit) {
-                    var content = <Person
-                                    personPG={currentTab.personPG}
-                                    currentUserPG={this.state.personPG}
-                                    modeEdit={this.state.modeEdit}
-                                    submitEdition={this._submitEdition}
-                                    onContactSelected={this._loadOrMaximizeUserProfileFromUrl}
-                                    onAddContact={this._addContact}
-                                    onRemoveContact={this._removeContact}
-                                    handleClickChangeModeEdit={this._handleClickChangeModeEdit}/>
-                } else {
-                    var content = <Person
-                                    currentUserPG={this.state.personPG}
-                                    personPG={this.state.personPGDeepCopy}
-                                    modeEdit={this.state.modeEdit}
-                                    submitEdition={this._submitEdition}
-                                    onContactSelected={this._loadOrMaximizeUserProfileFromUrl}
-                                    handleClickChangeModeEdit={this._handleClickChangeModeEdit}/>
-                }
-                contentSpace = <ContentSpace
-                                onMinimize={minimizeCurrentTab}
-                                onClose={closeCurrentTab}
-                                isDefaultTab={this._isDefaultTab}
-                                uploadDroppedItems={this._uploadDroppedItems}>{content}
-                                </ContentSpace>;
-            }
-
-            var foafBoxTree =
-                <div className="PersonalProfileDocument">
-                    <MainSearchBox
-                        personPG={this.state.personPG}
-                        currentUserPG={this.state.personPG}
-                        filterText={this.state.filterText}
-                        onUserInput={this._inputInSearchBox}
-                        loadCurrentUserProfileFromUrl={this._loadOrMaximizeUserProfileFromUrl}
-                        loadHome={this._loadHome}
-                    />
-                    <div id="actionNeeded">Action needed</div>
-                    <div className="tabs">
-                        {contentSpace}
-                    </div>
-                    <Footer
-                        activeTabs={this.state.activeTabs}
-                        tabs={this.state.tabs}
-                        onTabClicked={this._toggleTab}
-                        minimizeAllTabs={this._minimizeAllTabs}
-                        closeAllTabs={this._closeAllTabs}
-                    />
-                </div>;
-            return foafBoxTree;
-        } //onDrop={this._handleDrop}
     },
 
     _handleClickChangeModeEdit: function(bool) {
@@ -360,11 +360,6 @@ var FoafWindow = React.createClass({
     },
 
     _loadOrMaximizeUserProfileFromUrl: function(url) {
-        console.log("************************")
-        console.log("************************")
-        console.log("************************")
-        console.log("************************")
-        console.log("************************")
         this.log("_loadOrMaximizeUserProfileFromUrl ",url);
         var maybeTab = this._getTabOpenForUrl(url);
         if ( maybeTab ) {
