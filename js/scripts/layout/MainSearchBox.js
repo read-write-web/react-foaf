@@ -33,7 +33,7 @@ define(['react', 'mixins', 'foafUtils', 'jsx!Pix','appImages'], function (React,
 
         //
         _loadProfileFromUrl: function() {
-            var profileURL = this.props.personPG.getSymbolPointerUrl();
+            var profileURL = this.props.currentUserPG.getSymbolPointerUrl();
             this.props.loadCurrentUserProfileFromUrl(profileURL);
         },
 
@@ -56,7 +56,7 @@ define(['react', 'mixins', 'foafUtils', 'jsx!Pix','appImages'], function (React,
         },
 
         _getUserImg: function() {
-            var personPG = this.props.personPG; // TODO remove when possible
+            var personPG = this.props.currentUserPG; // TODO remove when possible
             return foafUtils.getFirstValidImg([personPG]) || appImages.avatar;
         }
 

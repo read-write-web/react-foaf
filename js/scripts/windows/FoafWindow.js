@@ -194,6 +194,7 @@ var FoafWindow = React.createClass({
                 <div className="PersonalProfileDocument">
                     <MainSearchBox
                         personPG={this.state.personPG}
+                        currentUserPG={this.state.personPG}
                         filterText={this.state.filterText}
                         onUserInput={this._inputInSearchBox}
                         loadCurrentUserProfileFromUrl={this._loadOrMaximizeUserProfileFromUrl}
@@ -217,9 +218,10 @@ var FoafWindow = React.createClass({
 
     _handleClickChangeModeEdit: function(bool) {
         this.log("_handleClickChangeModeEdit");
+        var currentTab = this._getCurrentTab();
 
         // Create a deep copy of the current PG is needed.
-        var personPGCopy = (bool)? this.state.personPG.deepCopyOfGraph():undefined;
+        var personPGCopy = (bool)? currentTab.personPG.deepCopyOfGraph():undefined;
 
         // Render component with new state.
         this.setState({
@@ -292,10 +294,9 @@ var FoafWindow = React.createClass({
             },
             function error(status, xhr) {
                 notify("error", "Failed to save new contact. Try again later!");
-
-                // If error, restore old store.
                 //TODO Restore current PG ?.
-                self.setState({personPG: currentUserPG});
+                self.log("************** Error");
+                self.log(status);
             }
         )
     },
@@ -327,8 +328,7 @@ var FoafWindow = React.createClass({
                 //TODO Restore current PG ?.
                 self.log("************** Error");
                 self.log(status);
-                // If error, restore old store.
-                self.setState({personPG: currentUserPG});
+
             }
         )
     },
@@ -352,7 +352,6 @@ var FoafWindow = React.createClass({
                 //TODO Restore current PG ?.
                 self.log("************** Error");
                 self.log(status);
-                self.setState({personPG: currentTabPG});
             }
         )
 
