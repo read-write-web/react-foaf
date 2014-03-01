@@ -1,7 +1,7 @@
 react-foaf
 ==========
 
-foaf AddressBook for LDP written with react.js
+foaf AddressBook for LDP written with [Facebook react.js](http://facebook.github.io/react/)
 
 For the moment to run it you need a CORS proxy running, and you need to set
 a pointer to the cors proxy in [scripts/foaf.js](scripts/AppConfig.js). We have
