@@ -99,8 +99,8 @@ AppStarter = {
                 // For now we use the link of github js to be able to stay up to date with the rdflib-stample-pg-extension -->
                 //"rdflib": "https://rawgithub.com/stample/rdflib-pg-extension/master/releases/0.1.0/rdflib-stample-0.1.0",
                 //"rdflib-pg-extension": "https://rawgithub.com/stample/rdflib-pg-extension/master/releases/0.1.0/rdflib-stample-pg-extension-0.1.0",
-                "rdflib": "js/lib/rdflib/rdflib-stample-0.1.0",
-                "rdflib-pg-extension": "js/lib/rdflib/rdflib-stample-pg-extension-0.1.0",
+                "rdflib": "js/lib/rdflib/rdflib-stample-0.1.1",
+                "rdflib-pg-extension": "js/lib/rdflib/rdflib-stample-pg-extension-0.1.1",
 
                 "globalRdfStore": "js/scripts/globalRdfStore",
 
