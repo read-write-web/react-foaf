@@ -19,6 +19,7 @@ function createRouter(onRouteChangeHandler) {
         html5history: false,
         notfound: function() {
             console.error("ROUTE NOT FOUND!, hash="+window.location.hash+" and arguments=" +JSON.stringify(arguments))
+            console.debug("Redirecting to hash /");
             window.location.hash = "/";
         },
         on: function() {
