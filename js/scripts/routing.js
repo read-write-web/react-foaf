@@ -17,8 +17,13 @@ function createRouter(onRouteChangeHandler) {
     var directorRouter = Router(directorRoutes);
     directorRouter.configure({
         html5history: false,
-        notfound: function() { console.error("ROUTE NOT FOUND!, hash="+window.location.hash+" and arguments=" +JSON.stringify(arguments)) },
-        on: function() { console.debug("Route is found, hash="+window.location.hash+" and arguments=" +JSON.stringify(arguments)) }
+        notfound: function() {
+            console.error("ROUTE NOT FOUND!, hash="+window.location.hash+" and arguments=" +JSON.stringify(arguments))
+            window.location.hash = "/";
+        },
+        on: function() {
+            console.debug("Route is found, hash="+window.location.hash+" and arguments=" +JSON.stringify(arguments))
+        }
     });
     directorRouter.init();
     if ( !window.location.hash ) {
