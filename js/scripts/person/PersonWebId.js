@@ -9,7 +9,7 @@ var PersonWebId = React.createClass({
         var webId = this._getWebId();
         return (
             <div id="webid" className="clearfix">
-                <a href="https://edwardsilhol.com/me#card">
+                <a href={webId.webId}>
                     <Pix src={appImages.webIdIcon} alt="Web ID logo" className="float-left"/>
                 </a>
                 <div id="webid-address" class="float-left"><span className="title-case">Web ID </span> {webId.webId}</div>
