@@ -4,8 +4,8 @@ react-foaf
 foaf AddressBook for LDP written with [Facebook react.js](http://facebook.github.io/react/)
 
 For the moment to run it you need a CORS proxy running, and you need to set
-a pointer to the cors proxy in [scripts/foaf.js](scripts/AppConfig.js). We have
-one up usually at this address
+a pointer to the cors proxy in [js/scripts/globalRdfStore.js](js/scripts/globalRdfStore.js). 
+We used to have one up here, and are working on another server: 
 
 ```javascript
 $rdf.Fetcher.crossSiteProxyTemplate = "http://stample.io/srv/cors?url=";
